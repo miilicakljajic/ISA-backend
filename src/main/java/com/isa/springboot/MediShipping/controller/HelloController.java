@@ -1,4 +1,4 @@
-package com.isa.springboot.MediShipping;
+package com.isa.springboot.MediShipping.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RestController
