@@ -1,14 +1,15 @@
 package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.User;
+import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/users")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -30,6 +31,9 @@ public class UserController {
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
+
+    @PostMapping("/login")
+    public Optional<User> login(@RequestBody LoginDto dto) { return userService.login(dto); }
 
     // Update user by ID
     @PutMapping("/{id}")
