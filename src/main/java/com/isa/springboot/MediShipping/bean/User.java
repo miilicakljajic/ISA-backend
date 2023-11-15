@@ -16,6 +16,7 @@ public class User {
     private String phoneNumber;
     private String occupation;
     private String companyInfo;
+    private boolean isVerified;
     private String pictureLink;
 
     public Long getId() {
@@ -96,6 +97,14 @@ public class User {
 
     public void setCompanyInfo(String companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
     public String getPictureLink() {
