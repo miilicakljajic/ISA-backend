@@ -20,11 +20,11 @@ public class Company {
 
     @Column(name="averageRating",nullable = false)
     private Double averageRating;
-    @OneToMany
+    @OneToMany(mappedBy = "companies")
     private Set<EquipmentCollectionAppointment> availableAppointments;
-    @OneToMany
+    @OneToMany(mappedBy = "companies")
     private Set<Equipment> equipment;
-    @OneToMany
+    @OneToMany(mappedBy = "companies")
     private Set<User> companyManagers;
 
     public Long getId() {
