@@ -7,6 +7,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String role;
     private String email;
     private String password;
     private String firstName;
@@ -17,6 +18,7 @@ public class User {
     private String occupation;
     @ManyToOne
     private Company companyInfo;
+    private boolean isVerified;
     private String pictureLink;
 
     public Long getId() {
@@ -25,6 +27,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {
@@ -97,6 +107,14 @@ public class User {
 
     public void setCompanyInfo(Company companyInfo) {
         this.companyInfo = companyInfo;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 
     public String getPictureLink() {

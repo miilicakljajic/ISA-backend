@@ -16,7 +16,7 @@ public class UserController {
 
     // Create a new user
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public Optional<User> createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
