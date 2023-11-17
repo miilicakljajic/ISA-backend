@@ -25,6 +25,7 @@ public class UserService {
     // Create a new user
     public Optional<User> createUser(User user) {
         user.setVerified(false);
+        user.setRole("ROLE_USER");
         String verifyToken = uuid.toString();
         if(GetUserByEmail(user.getEmail()).equals(Optional.empty())) {
             Optional<User> newUser = Optional.of(userRepository.save(user));
