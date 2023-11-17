@@ -15,7 +15,8 @@ public class User {
     private String country;
     private String phoneNumber;
     private String occupation;
-    private String companyInfo;
+    @ManyToOne
+    private Company companyInfo;
     private String pictureLink;
 
     public Long getId() {
@@ -90,11 +91,11 @@ public class User {
         this.occupation = occupation;
     }
 
-    public String getCompanyInfo() {
+    public Company getCompanyInfo() {
         return companyInfo;
     }
 
-    public void setCompanyInfo(String companyInfo) {
+    public void setCompanyInfo(Company companyInfo) {
         this.companyInfo = companyInfo;
     }
 
