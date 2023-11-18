@@ -27,6 +27,9 @@ public class CompanyService {
             existingCompany.setAddress(companyDetails.getAddress());
             existingCompany.setDescription(companyDetails.getDescription());
             existingCompany.setAverageRating(companyDetails.getAverageRating());
+            existingCompany.setAllAppointments(companyDetails.getAllAppointments());
+            existingCompany.setEquipment(companyDetails.getEquipment());
+            existingCompany.setCompanyManagers(companyDetails.getCompanyManagers());
             return companyRepository.save(existingCompany);
         }
         return null;

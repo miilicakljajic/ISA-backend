@@ -21,7 +21,7 @@ public class Company {
     @Column(name="averageRating",nullable = false)
     private Double averageRating;
     @OneToMany(mappedBy = "companies")
-    private Set<EquipmentCollectionAppointment> availableAppointments;
+    private Set<EquipmentCollectionAppointment> allAppointments;
     @OneToMany(mappedBy = "companies")
     private Set<Equipment> equipment;
     @OneToMany(mappedBy = "companies")
@@ -63,12 +63,12 @@ public class Company {
         this.averageRating = averageRating;
     }
 
-    public Set<EquipmentCollectionAppointment> getAvailableAppointments() {
-        return availableAppointments;
+    public Set<EquipmentCollectionAppointment> getAllAppointments() {
+        return allAppointments;
     }
 
-    public void setAvailableAppointments(Set<EquipmentCollectionAppointment> availableAppointments) {
-        this.availableAppointments = availableAppointments;
+    public void setAllAppointments(Set<EquipmentCollectionAppointment> allAppointments) {
+        this.allAppointments = allAppointments;
     }
 
     public Set<Equipment> getEquipment() {
