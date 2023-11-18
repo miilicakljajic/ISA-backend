@@ -16,8 +16,7 @@ public class CompanyController {
     private CompanyService companyService;
 
     @PostMapping
-    public Company createCompany(@RequestBody Company company) { return companyService.createCompany(company); }
-
+    public Company createCompany(@RequestBody Company company) {return companyService.createCompany(company);}
     @GetMapping
     public List<Company> getAllCompanies() { return companyService.getAllCompanies(); }
 

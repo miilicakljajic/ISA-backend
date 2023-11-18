@@ -8,14 +8,9 @@ public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name="name",nullable = false)
     private String name;
-
-    @Column(name = "description",nullable = false)
     private String description;
-
-    @ManyToOne
-    private Company company;
+    private String type;
 
     public long getId() {
         return id;
@@ -34,5 +29,13 @@ public class Equipment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

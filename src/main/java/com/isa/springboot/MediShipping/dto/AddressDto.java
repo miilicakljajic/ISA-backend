@@ -1,12 +1,6 @@
-package com.isa.springboot.MediShipping.bean;
+package com.isa.springboot.MediShipping.dto;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name ="addresses")
-public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AddressDto {
     private long id;
     private String country;
     private String city;
@@ -15,6 +9,10 @@ public class Address {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCountry() {

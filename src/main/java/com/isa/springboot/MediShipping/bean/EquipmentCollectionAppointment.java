@@ -10,11 +10,11 @@ public class EquipmentCollectionAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "equipment_appointment",
+        joinColumns = @JoinColumn(name = "appointment_id"),
+        inverseJoinColumns = @JoinColumn(name = "equipment_id"))
     private Set<Equipment> equipment;
-    @ManyToOne
-    private Company company;
     private String adminFirstname;
     private String adminLastname;
     private LocalDateTime date;
@@ -32,15 +32,6 @@ public class EquipmentCollectionAppointment {
     public void setEquipment(Set<Equipment> equipment) {
         this.equipment = equipment;
     }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
     public String getAdminFirstname() {
         return adminFirstname;
     }

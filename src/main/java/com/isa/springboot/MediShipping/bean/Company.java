@@ -13,18 +13,22 @@ public class Company {
 
     @Column(name="name",nullable = false)
     private String name;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
     private Address address;
     @Column(name="description",nullable = false)
     private String description;
 
     @Column(name="averageRating",nullable = false)
     private Double averageRating;
-    @OneToMany(mappedBy = "companies")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
-    @OneToMany(mappedBy = "companies")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
-    @OneToMany(mappedBy = "companies")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_id")
     private Set<User> companyManagers;
 
     public Long getId() {

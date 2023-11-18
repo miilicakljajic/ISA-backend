@@ -17,6 +17,7 @@ public class User {
     private String phoneNumber;
     private String occupation;
     @ManyToOne
+    @JoinColumn(name = "company_id")
     private Company companyInfo;
     private boolean isVerified;
     private String pictureLink;
