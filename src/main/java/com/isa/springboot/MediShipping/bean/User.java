@@ -16,7 +16,7 @@ public class User {
     private String country;
     private String phoneNumber;
     private String occupation;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company companyInfo;
     private boolean isVerified;

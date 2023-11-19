@@ -21,14 +21,13 @@ public class Company {
 
     @Column(name="averageRating",nullable = false)
     private Double averageRating;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "companyInfo",fetch = FetchType.LAZY)
     private Set<User> companyManagers;
 
     public Long getId() {
