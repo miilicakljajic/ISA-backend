@@ -1,0 +1,106 @@
+@startuml ISA-Model
+class User {
+    + email : String
+    + password : String
+    + firstName : String
+    + lastName : String
+    + phoneNumber : String
+    + occpuation : String
+    + isVerified : Boolean
+}
+
+class RegisteredUser extends User {
+    + penaltyPoints: Int
+    + companyInfo : String
+}
+
+
+class Role {
+    role : String
+}
+
+class Company {
+    + name : String
+    + description : String
+    + averageRating : Double
+    + openingHours : Int
+    + closingHours : Int
+}
+
+class Address {
+    + country : String
+    + city : String
+    + streetName : String
+    + number : Int
+}
+
+class Position {
+    + longitude : Double
+    + latitude : Double
+    + lastUpdated : LocalDateTime
+}
+
+class Appointment {
+    + adminFirstName : String
+    + adminLastName : String
+    + date : LocalDateTime
+    + duration : Int
+    + status : Enum
+    + qrCode : String
+}
+
+class Equipment {
+    + name : String
+    + description : String
+    + type : String
+    + rating : Double
+}
+
+class LoyaltyProgram {
+    + name : String
+    + requiredPoints : Int
+    + discount : Double
+}
+
+
+class Complaint {
+    + comment : String
+    + response : String
+    + creationDate : LocalDateTime
+}
+
+class Rating {
+    + mark : Int
+    + category : String
+}
+
+class Contract {
+    + quantity : Int
+    + equipmentType : String
+    + price : Double
+    + shippingDay: Int
+}
+
+class Hospital {
+    + name : String
+    + address : Address
+}
+
+class DeliveryVehicle {
+    + capacity 
+}
+
+Role "0..*" --o "1" User
+Address "1" -- "1" User
+Company "1" -- "1" Address
+Company "0..*" *-- "1" Equipment
+Appointment "1..*" -* "1..*" Equipment
+Appointment "1" --* "0..*" Company
+Company "0..*" o-- "1" User
+LoyaltyProgram "0..*" --o "1" RegisteredUser
+RegisteredUser "0..*" *-- "1" Complaint 
+RegisteredUser "0..*" o-- "1" Appointment
+Company "0..*" *-- "1" Rating
+Hospital "1" *-- "1" Contract
+Contract "0..*" *-- "1" Appointment 
+@enduml
