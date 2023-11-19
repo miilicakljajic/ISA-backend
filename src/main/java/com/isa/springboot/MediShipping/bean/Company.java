@@ -1,5 +1,7 @@
 package com.isa.springboot.MediShipping.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Set;
@@ -10,25 +12,39 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name="name",nullable = false)
     private String name;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "company_id")
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "address_id")
     private Address address;
-    @Column(name="description",nullable = false)
     private String description;
-
-    @Column(name="averageRating",nullable = false)
     private Double averageRating;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    //@JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "companyInfo",fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "company_id")
     private Set<User> companyManagers;
+    public Company(){}
+    public Company(Long id, String name, Address address, String description, Double averageRating) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.description = description;
+        this.averageRating = averageRating;
+    }
+    public void addUser(User user){
+        companyManagers.add(user);
+    }
+    public void AddEquipment(Equipment equipment){
+        this.equipment.add(equipment);
+    }
 
     public Long getId() {
         return id;

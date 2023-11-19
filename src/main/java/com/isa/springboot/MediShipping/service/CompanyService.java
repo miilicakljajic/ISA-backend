@@ -1,6 +1,7 @@
 package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,4 +39,15 @@ public class CompanyService {
     public void deleteAllCompanies() { companyRepository.deleteAll(); }
 
     public void deleteCompany(Long id) { companyRepository.deleteById(id); }
+
+    public Company findUsingManagerId(long id){
+        for(Company c : getAllCompanies()){
+            for(User u : c.getCompanyManagers()){
+                if(u.getId() == id){
+                    return  c;
+                }
+            }
+        }
+        return  null;
+    }
 }

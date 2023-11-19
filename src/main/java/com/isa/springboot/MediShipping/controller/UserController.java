@@ -1,8 +1,12 @@
 package com.isa.springboot.MediShipping.controller;
+import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
+import com.isa.springboot.MediShipping.service.CompanyService;
 import com.isa.springboot.MediShipping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,12 +17,9 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
-
     // Create a new user
     @PostMapping
-    public Optional<User> createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
+    public Optional<User> createUser(@RequestBody User user) { return userService.createUser(user); }
 
     // Get all users
     @GetMapping

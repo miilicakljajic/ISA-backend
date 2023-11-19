@@ -16,11 +16,18 @@ public class User {
     private String country;
     private String phoneNumber;
     private String occupation;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id")
-    private Company companyInfo;
     private boolean isVerified;
     private String pictureLink;
+
+    private String companyInfo;
+
+    public String getCompanyInfo() {
+        return companyInfo;
+    }
+
+    public void setCompanyInfo(String companyInfo) {
+        this.companyInfo = companyInfo;
+    }
 
     public Long getId() {
         return id;
@@ -97,19 +104,9 @@ public class User {
     public String getOccupation() {
         return occupation;
     }
-
     public void setOccupation(String occupation) {
         this.occupation = occupation;
     }
-
-    public Company getCompanyInfo() {
-        return companyInfo;
-    }
-
-    public void setCompanyInfo(Company companyInfo) {
-        this.companyInfo = companyInfo;
-    }
-
     public boolean isVerified() {
         return isVerified;
     }
