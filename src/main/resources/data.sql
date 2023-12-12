@@ -40,14 +40,6 @@ INSERT INTO public.companies(average_rating, description, name, address_id) VALU
 INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18);
 INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8);
 
-INSERT INTO public.users(
-    city, company_info, country, email, first_name, is_verified, last_name, occupation, password, phone_number, picture_link, role, company_id)
-VALUES ('Novi Sad', 'Company info1', 'Srbija', 'testemail1@medishipping.com', 'Testomir', true, 'Testovic', 'Medicinal worker','sifrasifra', '+381601234567', 'https://www.amnhealthcare.com/siteassets/amn-insights/news-and-features/worker_fatigue.jpg','ROLE_USER', 1);
-
-INSERT INTO public.users(
-    city, company_info, country, email, first_name, is_verified, last_name, occupation, password, phone_number, picture_link, role, company_id)
-VALUES ('Sombor', 'Nice company', 'Srbija', 'testemail2@medishipping.com', 'Debugko', true, 'Debugovic', 'Medicinal worker', 'sifrasifra', '+3811234567', 'https://www.heart.org/-/media/Images/News/2023/January-2023/0105DiverseMedicalWorkforce_SC.jpg', 'ROLE_USER', 2);
-
 INSERT INTO public.equipment(description, name, type) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment');
 INSERT INTO public.equipment(description, name, type) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment');
 INSERT INTO public.equipment(description, name, type) VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment');
@@ -89,3 +81,33 @@ INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (2, 15);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (18, 10);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (15, 17);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (11, 20);
+
+INSERT INTO public.ROLE (name) VALUES ('ROLE_USER');
+INSERT INTO public.ROLE (name) VALUES ('ROLE_SYSTEM_ADMIN');
+INSERT INTO public.ROLE (name) VALUES ('ROLE_COMPANY_ADMIN');
+
+
+INSERT INTO public.users(
+    id, city, company_info, country, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id)
+VALUES (21, 'Novi Sad', 'Changing genes - changing future', 'Serbia', 'user@medishipping.com', true, 'Pera', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$10$XGPf8UO9G5IF8RlJ9LrchO7tivaWkmsEbJuMYq9Yb9XGTFEQHAAca', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1);
+
+INSERT INTO public.users(
+    id, city, company_info, country, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id)
+VALUES (22, 'Novi Sad', 'Changing genes - changing future', 'Serbia', 'systemadmin@medishipping.com', true, 'Pera', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$10$XGPf8UO9G5IF8RlJ9LrchO7tivaWkmsEbJuMYq9Yb9XGTFEQHAAca', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1);
+
+INSERT INTO public.users(
+    id, city, company_info, country, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id)
+VALUES (23, 'Novi Sad', 'Changing genes - changing future', 'Serbia', 'companyadmin@medishipping.com', true, 'Pera', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$10$XGPf8UO9G5IF8RlJ9LrchO7tivaWkmsEbJuMYq9Yb9XGTFEQHAAca', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (21, 1);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (22, 2);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (23, 3);
+

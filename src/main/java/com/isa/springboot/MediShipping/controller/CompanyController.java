@@ -2,6 +2,7 @@ package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.User;
+import com.isa.springboot.MediShipping.service.AuthService;
 import com.isa.springboot.MediShipping.service.CompanyService;
 import com.isa.springboot.MediShipping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,14 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
     @Autowired
-    private UserService userService;
+    private AuthService userService;
     @PostMapping
     public Company createCompany(@RequestBody Company company)
     {
-        for(User u: company.getCompanyManagers()) {
+        //TODO POPRAVI
+        /*for(User u: company.getCompanyManagers()) {
             company.addUser(userService.createUser(u).get());
-        }
+        }*/
         return companyService.createCompany(company);
     }
     @GetMapping

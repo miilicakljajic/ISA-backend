@@ -3,9 +3,10 @@ package com.isa.springboot.MediShipping.service;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.repository.UserRepository;
-import net.bytebuddy.build.BuildLogger;
-import org.hibernate.id.GUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,58 +15,18 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private MailService mailService;
-    private HashMap<String, Long> verifyTokens = new HashMap<String, Long>();
-    UUID uuid = UUID.randomUUID();
-
-    // Create a new user
-    public Optional<User> createUser(User user) {
-        user.setVerified(false);
-        user.setRole("ROLE_USER");
-        String verifyToken = uuid.toString();
-        if(GetUserByEmail(user.getEmail()).equals(Optional.empty())) {
-            Optional<User> newUser = Optional.of(userRepository.save(user));
-            verifyTokens.put(verifyToken, newUser.get().getId());
-            mailService.sendAuthMail(user.getEmail(), verifyToken);
-            return newUser;
-        }
-        return Optional.empty();
-    }
 
     // Get all users
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> GetUserByEmail(String email) {
-        for(User user : getAllUsers()) {
-            if(user.getEmail().equals(email)) {
-                return Optional.of(user);
-            }
-        }
-        return Optional.empty();
-    }
-
     // Get user by ID
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
-    }
-
-    public Optional<User> getUserByVerifyToken(String verifyToken) {
-        return getUserById(verifyTokens.get(verifyToken));
-    }
-
-    public Optional<User> login(LoginDto dto) {
-        for(User user : getAllUsers()) {
-            if(user.getEmail().equals(dto.getEmail()) && user.getPassword().equals(dto.getPassword())) {
-                return Optional.of(user);
-            }
-        }
-        return Optional.empty();
     }
 
     // Update user
@@ -95,6 +56,24 @@ public class UserService {
     // Delete user
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Optional<User> user = GetUserByEmail(email);
+        if( user.isEmpty())
+            throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
+        else
+            return user.get();
+    }
+
+    public Optional<User> GetUserByEmail(String email) {
+        for(User user : getAllUsers()) {
+            if(user.getEmail().equals(email)) {
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
     }
 
     // Other business logic related to users
