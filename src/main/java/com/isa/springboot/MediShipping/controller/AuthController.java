@@ -36,4 +36,9 @@ public class AuthController {
     public LoginResultDto login(@RequestBody LoginDto dto) {
         return authService.login(dto);
     }
+
+    @PutMapping("/{id}")
+    public User updateUser(@PathVariable Long id, @RequestBody RegisterDto userDetails) {
+        return authService.updateUser(id, userDetails);
+    }
 }

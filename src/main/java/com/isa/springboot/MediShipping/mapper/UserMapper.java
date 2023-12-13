@@ -2,6 +2,7 @@ package com.isa.springboot.MediShipping.mapper;
 
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginResultDto;
+import com.isa.springboot.MediShipping.dto.RegisterDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -20,5 +21,7 @@ public class UserMapper {
     public User convertToEntity(LoginResultDto userDetails) {
         return modelMapper.map(userDetails, User.class);
     }
+
+    public User convertToEntity(RegisterDto register) { return modelMapper.map(register, User.class); }
 }
 

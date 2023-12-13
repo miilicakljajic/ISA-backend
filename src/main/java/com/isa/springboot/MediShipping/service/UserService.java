@@ -2,11 +2,14 @@ package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
+import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -27,25 +30,6 @@ public class UserService implements UserDetailsService {
     // Get user by ID
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
-    }
-
-    // Update user
-    public User updateUser(Long id, User userDetails) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            User existingUser = user.get();
-            existingUser.setPassword(userDetails.getPassword());
-            existingUser.setFirstName(userDetails.getFirstName());
-            existingUser.setLastName(userDetails.getLastName());
-            existingUser.setCity(userDetails.getCity());
-            existingUser.setCountry(userDetails.getCountry());
-            existingUser.setPhoneNumber(userDetails.getPhoneNumber());
-            existingUser.setOccupation(userDetails.getOccupation());
-            existingUser.setCompanyInfo(userDetails.getCompanyInfo());
-            existingUser.setPictureLink(userDetails.getPictureLink());
-            return userRepository.save(existingUser);
-        }
-        return null;
     }
 
     // Delete all users

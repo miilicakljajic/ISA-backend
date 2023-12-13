@@ -49,23 +49,15 @@ public class AuthService {
 
     // Create a new user
     public Optional<User> createUser(RegisterDto userdto) {
-        User user = new User();
-        user.setEmail(userdto.getEmail());
+        User user = userMapper.convertToEntity(userdto);
         user.setPassword(passwordEncoder.encode(userdto.getPassword()));
         user.setFirstName(userdto.getFirstName());
-        user.setLastName(userdto.getLastName());
-        user.setCity(userdto.getCity());
-        user.setCountry(userdto.getCountry());
-        user.setPhoneNumber(userdto.getPhoneNumber());
-        user.setOccupation(userdto.getOccupation());
-        user.setCompanyInfo(userdto.getCompanyInfo());
-        user.setPictureLink(userdto.getPictureLink());
         user.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
         user.setEnabled(false);
-
         String verifyToken = uuid.toString();
         List<Role> roles = roleService.findByName("ROLE_USER");
         user.setRoles(roles);
+
         if(GetUserByEmail(user.getEmail()).equals(Optional.empty())) {
             Optional<User> newUser = Optional.of(userRepository.save(user));
             verifyTokens.put(verifyToken, newUser.get().getId());
@@ -79,7 +71,7 @@ public class AuthService {
         Optional<User> user = getUserByVerifyToken(verifyToken);
         if(user.isPresent()) {
             user.get().setEnabled(true);
-            userService.updateUser(user.get().getId(), user.get());
+            userRepository.save(user.get());
             return user;
         }
 
@@ -101,6 +93,24 @@ public class AuthService {
         details = userMapper.convertToUserDetailsDto(user);
         details.setTokenState(new UserTokenState(jwt,expiresIn));
         return  details;
+    }
+    // Update user
+    public User updateUser(Long id, RegisterDto userDetails) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            User existingUser = user.get();
+            existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            existingUser.setFirstName(userDetails.getFirstName());
+            existingUser.setLastName(userDetails.getLastName());
+            existingUser.setCity(userDetails.getCity());
+            existingUser.setCountry(userDetails.getCountry());
+            existingUser.setPhoneNumber(userDetails.getPhoneNumber());
+            existingUser.setOccupation(userDetails.getOccupation());
+            existingUser.setCompanyInfo(userDetails.getCompanyInfo());
+            existingUser.setPictureLink(userDetails.getPictureLink());
+            return userRepository.save(existingUser);
+        }
+        return null;
     }
 
     public Optional<User> GetUserByEmail(String email) {
