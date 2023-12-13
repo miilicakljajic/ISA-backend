@@ -48,14 +48,14 @@ public class AuthService {
     }
 
     // Create a new user
-    public Optional<User> createUser(RegisterDto userdto) {
+    public Optional<User> createUser(RegisterDto userdto, String role, boolean enabled) {
         User user = userMapper.convertToEntity(userdto);
         user.setPassword(passwordEncoder.encode(userdto.getPassword()));
         user.setFirstName(userdto.getFirstName());
         user.setLastPasswordResetDate(new Timestamp(System.currentTimeMillis()));
-        user.setEnabled(false);
+        user.setEnabled(enabled);
         String verifyToken = uuid.toString();
-        List<Role> roles = roleService.findByName("ROLE_USER");
+        List<Role> roles = roleService.findByName(role);
         user.setRoles(roles);
 
         if(GetUserByEmail(user.getEmail()).equals(Optional.empty())) {

@@ -30,7 +30,7 @@ public class AuthController {
 
     // Create a new user
     @PostMapping(value = "/register")
-    public Optional<User> createUser(@RequestBody RegisterDto user) { return authService.createUser(user); }
+    public Optional<User> createUser(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_USER", false); }
 
     @PostMapping("/login")
     public LoginResultDto login(@RequestBody LoginDto dto) {

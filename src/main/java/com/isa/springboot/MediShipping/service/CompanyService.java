@@ -1,11 +1,18 @@
 package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.Role;
 import com.isa.springboot.MediShipping.bean.User;
+import com.isa.springboot.MediShipping.dto.CompanyDto;
+import com.isa.springboot.MediShipping.dto.RegisterDto;
+import com.isa.springboot.MediShipping.mapper.CompanyMapper;
+import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +20,21 @@ import java.util.Optional;
 public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
-
-    public Company createCompany(Company company) { return companyRepository.save(company); }
+    @Autowired
+    private CompanyMapper mapper;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    public Company createCompany(CompanyDto companydto) {
+        Company company = mapper.convertToEntity(companydto);
+        for(User u: company.getCompanyManagers()) {
+            u.setRoles(roleService.findByName("ROLE_COMPANY_ADMIN"));
+            u.setEnabled(true);
+            u.setPassword(passwordEncoder.encode(u.getPassword()));
+        }
+        return companyRepository.save(company);
+    }
 
     public List<Company> getAllCompanies() { return companyRepository.findAll(); }
 
