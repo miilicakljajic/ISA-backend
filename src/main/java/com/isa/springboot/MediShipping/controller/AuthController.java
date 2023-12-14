@@ -32,6 +32,9 @@ public class AuthController {
     @PostMapping(value = "/register")
     public Optional<User> createUser(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_USER", false); }
 
+    @PostMapping(value = "/register-system-admin")
+    public Optional<User> createSystemAdmin(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_SYSTEM_ADMIN", true); }
+
     @PostMapping("/login")
     public LoginResultDto login(@RequestBody LoginDto dto) {
         return authService.login(dto);
