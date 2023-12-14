@@ -6,6 +6,7 @@ import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.dto.RegisterDto;
 import com.isa.springboot.MediShipping.dto.LoginResultDto;
 import com.isa.springboot.MediShipping.dto.UserTokenState;
+import com.isa.springboot.MediShipping.mapper.AddressMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.UserRepository;
 import com.isa.springboot.MediShipping.util.TokenUtils;
@@ -34,6 +35,9 @@ public class AuthService {
     private RoleService roleService;
     private HashMap<String, Long> verifyTokens = new HashMap<String, Long>();
     private final UserMapper userMapper;
+
+    @Autowired
+    private AddressMapper adddressMapper;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -102,8 +106,7 @@ public class AuthService {
             existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
             existingUser.setFirstName(userDetails.getFirstName());
             existingUser.setLastName(userDetails.getLastName());
-            existingUser.setCity(userDetails.getCity());
-            existingUser.setCountry(userDetails.getCountry());
+            existingUser.setAddress(adddressMapper.convertToEntity(userDetails.getAddress()));
             existingUser.setPhoneNumber(userDetails.getPhoneNumber());
             existingUser.setOccupation(userDetails.getOccupation());
             existingUser.setCompanyInfo(userDetails.getCompanyInfo());

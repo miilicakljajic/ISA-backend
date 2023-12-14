@@ -5,8 +5,7 @@ public class RegisterDto {
     private String password;
     private String firstName;
     private String lastName;
-    private String city;
-    private String country;
+    private AddressDto address;
     private String phoneNumber;
     private String occupation;
     private String pictureLink;
@@ -44,20 +43,12 @@ public class RegisterDto {
         this.lastName = lastName;
     }
 
-    public String getCity() {
-        return city;
+    public AddressDto getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(AddressDto address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {

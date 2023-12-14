@@ -88,16 +88,16 @@ INSERT INTO public.ROLE (name) VALUES ('ROLE_COMPANY_ADMIN');
 
 
 INSERT INTO public.users(
-    id, city, company_info, country, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id)
-VALUES (21, 'Novi Sad', 'Changing genes - changing future', 'Serbia', 'user@medishipping.com', true, 'Pera', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$10$XGPf8UO9G5IF8RlJ9LrchO7tivaWkmsEbJuMYq9Yb9XGTFEQHAAca', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1);
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (21, 'Changing genes - changing future', 'usr@m.com', true, 'User', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
 
 INSERT INTO public.users(
-    id, city, company_info, country, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id)
-VALUES (22, 'Novi Sad', 'Changing genes - changing future', 'Serbia', 'systemadmin@medishipping.com', true, 'Pera', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$10$XGPf8UO9G5IF8RlJ9LrchO7tivaWkmsEbJuMYq9Yb9XGTFEQHAAca', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1);
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (22,'Changing genes - changing future', 'sys@m.com', true, 'Sys', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
 
 INSERT INTO public.users(
-    id, city, company_info, country, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id)
-VALUES (23, 'Novi Sad', 'Changing genes - changing future', 'Serbia', 'companyadmin@medishipping.com', true, 'Pera', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$10$XGPf8UO9G5IF8RlJ9LrchO7tivaWkmsEbJuMYq9Yb9XGTFEQHAAca', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1);
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (23, 'Changing genes - changing future', 'comp@m.com', true, 'Com', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
 
 INSERT INTO public.user_role(
     user_id, role_id)

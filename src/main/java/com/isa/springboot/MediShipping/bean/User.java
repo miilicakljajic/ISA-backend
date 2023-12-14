@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -21,8 +22,10 @@ public class User implements UserDetails {
     private String password;
     private String firstName;
     private String lastName;
-    private String city;
-    private String country;
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "address_id")
+    private Address address;
     private String phoneNumber;
     private String occupation;
     private String pictureLink;
@@ -89,20 +92,12 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
-    public String getCity() {
-        return city;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {

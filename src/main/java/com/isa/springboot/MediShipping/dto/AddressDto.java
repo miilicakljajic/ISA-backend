@@ -5,15 +5,7 @@ public class AddressDto {
     private String country;
     private String city;
     private String streetName;
-    private int number;
-
-    public AddressDto(long id, String country, String city, String streetName, int number) {
-        this.id = id;
-        this.country = country;
-        this.city = city;
-        this.streetName = streetName;
-        this.number = number;
-    }
+    private String number;
 
     public long getId() {
         return id;
@@ -47,11 +39,11 @@ public class AddressDto {
         this.streetName = streetName;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 }
