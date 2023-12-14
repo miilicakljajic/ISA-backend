@@ -19,6 +19,7 @@ public class Company {
     private Address address;
     private String description;
     private Double averageRating;
+    private String workingHours;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
@@ -80,6 +81,14 @@ public class Company {
 
     public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public String getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(String workingHours) {
+        this.workingHours = workingHours;
     }
 
     public Set<EquipmentCollectionAppointment> getAllAppointments() {

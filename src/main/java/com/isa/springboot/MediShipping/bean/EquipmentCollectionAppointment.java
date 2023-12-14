@@ -1,5 +1,7 @@
 package com.isa.springboot.MediShipping.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -10,7 +12,8 @@ public class EquipmentCollectionAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinTable(name = "equipment_appointment",
         joinColumns = @JoinColumn(name = "appointment_id"),
         inverseJoinColumns = @JoinColumn(name = "equipment_id"))
