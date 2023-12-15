@@ -1,12 +1,15 @@
 package com.isa.springboot.MediShipping.service;
 
+import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +20,8 @@ public class EquipmentService {
     private EquipmentRepository equipmentRepository;
     @Autowired
     private EquipmentMapper equipmentMapper;
+    @Autowired
+    private CompanyService companyService;
 
     public EquipmentDto create(EquipmentDto equipmentDto){
 
@@ -61,7 +66,23 @@ public class EquipmentService {
         return null;
     }
 
-    public void deleteById(long id){
-        equipmentRepository.deleteById(id);
+    //u opremi cuvaj kompaniju
+    public void deleteById(long companyId,long id){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+        LocalDateTime today = LocalDateTime.now();
+
+        for(EquipmentCollectionAppointment a : company.get().getAllAppointments()){
+
+            if(a.getDate().isAfter(today))
+                continue;
+
+            for(Equipment e : a.getEquipment()){
+                if(e.getId() == id){
+                    equipmentRepository.deleteById(id);
+                    //company.get().getEquipment().remove(e);
+                    //break;
+                }
+            }
+        }
     }
 }

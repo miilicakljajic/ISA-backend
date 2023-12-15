@@ -19,26 +19,27 @@ INSERT INTO addresses(city, country, "number", street_name) VALUES ('Žabalj', '
 INSERT INTO addresses(city, country, "number", street_name) VALUES ('Bačka Palanka', 'Srbija', '22', 'Jovana Dučića');
 INSERT INTO addresses(city, country, "number", street_name) VALUES ('Sombor', 'Srbija', '20', 'Nikole Tesle');
 
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (5.5, 'Providing cutting-edge healthcare solutions and medical services.', 'MediCare', 12);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.2, 'Innovative technology solutions for medical diagnostics and treatment.', 'MedTech Solutions', 5);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.7, 'Specializing in pharmaceutical research and development.', 'Pharma Innovations', 17);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.9, 'Offering comprehensive healthcare products and services.', 'HealthCorp', 3);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.6, 'Global leader in medical equipment manufacturing and distribution.', 'MedEquip', 14);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.3, 'Providing medical expertise and healthcare consulting services.', 'MedConsult', 6);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (3.7, 'Developing state-of-the-art medical software solutions.', 'MediSoft', 4);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.8, 'Focused on medical research and innovative therapies.', 'MediResearch', 19);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.1, 'Delivering high-quality medical supplies and equipment.', 'MedSupply Co.', 7);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (3.5, 'Specializing in medical training programs and education.', 'MedEdu Solutions', 2);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.4, 'Offering advanced medical imaging and diagnostic services.', 'MedImaging', 16);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (3.6, 'Providing healthcare technology solutions and support.', 'MedTech Support', 1);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.0, 'Specialized in medical data management and analytics.', 'MediAnalytics', 10);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.5, 'Developing cutting-edge medical devices and technologies.', 'MedDevices Inc.', 20);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (3.9, 'Committed to providing accessible healthcare solutions.', 'MedAccess', 15);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.2, 'Offering personalized healthcare services and consultations.', 'MediCare Consult', 13);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (3.8, 'Specializing in pharmaceutical manufacturing and distribution.', 'Pharma Solutions', 11);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.7, 'Innovative medical research and drug development.', 'MediPharma Research', 9);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18);
-INSERT INTO public.companies(average_rating, description, name, address_id) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8);
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (5.5, 'Providing cutting-edge healthcare solutions and medical services.', 'MediCare', 12, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.2, 'Innovative technology solutions for medical diagnostics and treatment.', 'MedTech Solutions', 5, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.7, 'Specializing in pharmaceutical research and development.', 'Pharma Innovations', 17, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.9, 'Offering comprehensive healthcare products and services.', 'HealthCorp', 3, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.6, 'Global leader in medical equipment manufacturing and distribution.', 'MedEquip', 14, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing medical expertise and healthcare consulting services.', 'MedConsult', 6, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.7, 'Developing state-of-the-art medical software solutions.', 'MediSoft', 4, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.8, 'Focused on medical research and innovative therapies.', 'MediResearch', 19, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.1, 'Delivering high-quality medical supplies and equipment.', 'MedSupply Co.', 7, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.5, 'Specializing in medical training programs and education.', 'MedEdu Solutions', 2, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.4, 'Offering advanced medical imaging and diagnostic services.', 'MedImaging', 16, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.6, 'Providing healthcare technology solutions and support.', 'MedTech Support', 1, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.0, 'Specialized in medical data management and analytics.', 'MediAnalytics', 10, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.5, 'Developing cutting-edge medical devices and technologies.', 'MedDevices Inc.', 20, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.9, 'Committed to providing accessible healthcare solutions.', 'MedAccess', 15, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.2, 'Offering personalized healthcare services and consultations.', 'MediCare Consult', 13, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.8, 'Specializing in pharmaceutical manufacturing and distribution.', 'Pharma Solutions', 11, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.7, 'Innovative medical research and drug development.', 'MediPharma Research', 9, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16');
+
 
 INSERT INTO public.equipment(description, name, type) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment');
 INSERT INTO public.equipment(description, name, type) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment');
