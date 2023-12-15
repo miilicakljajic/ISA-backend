@@ -20,8 +20,8 @@ public class EquipmentController {
         return equipmentService.update(equipmentDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id){
-        equipmentService.deleteById(id);
+    @DeleteMapping
+    public void deleteById(@RequestParam Long companyId,@RequestParam Long id){
+        equipmentService.deleteById(companyId,id);
     }
 }
