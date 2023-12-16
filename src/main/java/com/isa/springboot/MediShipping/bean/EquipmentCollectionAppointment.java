@@ -28,6 +28,10 @@ public class EquipmentCollectionAppointment {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public Set<Equipment> getEquipment() {
         return equipment;
     }

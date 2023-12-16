@@ -8,6 +8,7 @@ import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
+import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,9 @@ public class EquipmentCollectionAppointmentService {
 
     @Autowired MailService mailService;
 
-    @Autowired UserService userService;
+    @Autowired AuthService authService;
 
+    @Autowired UserMapper userMapper;
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
         if(company.isPresent()){
@@ -109,10 +111,13 @@ public class EquipmentCollectionAppointmentService {
 
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
-        Optional<User> user = userService.getUserById(userid);
+        Optional<User> user = authService.getUserById(userid);
         if(appointment.isPresent() && user.isPresent()){
             try {
                 updatedAppointment.setReserved(true);
+                User updatedUser = user.get();
+                updatedUser.addApointment(appointment.get());
+                authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
