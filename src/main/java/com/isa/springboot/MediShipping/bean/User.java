@@ -33,7 +33,6 @@ public class User implements UserDetails {
     private String companyInfo;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "user_id")
     private Set<EquipmentCollectionAppointment> appointments;
 

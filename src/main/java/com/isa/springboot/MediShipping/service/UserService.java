@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.service;
 
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
@@ -12,10 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -58,6 +56,14 @@ public class UserService implements UserDetailsService {
             }
         }
         return Optional.empty();
+    }
+
+    public List<EquipmentCollectionAppointment> getAppointments(long id)
+    {
+        Optional<User> user = getUserById(id);
+        if(user.isPresent())
+            return user.get().getAppointments().stream().toList();
+        return new ArrayList<EquipmentCollectionAppointment>();
     }
 
     // Other business logic related to users
