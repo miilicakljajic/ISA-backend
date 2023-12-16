@@ -22,7 +22,7 @@ public class EquipmentCollectionAppointment {
     private String adminLastname;
     private LocalDateTime date;
     private int duration;
-    private boolean isReserved;
+    private boolean reserved;
 
     public long getId() {
         return id;
@@ -68,10 +68,10 @@ public class EquipmentCollectionAppointment {
     }
 
     public boolean isReserved() {
-        return isReserved;
+        return reserved;
     }
 
     public void setReserved(boolean reserved) {
-        isReserved = reserved;
+        this.reserved = reserved;
     }
 }

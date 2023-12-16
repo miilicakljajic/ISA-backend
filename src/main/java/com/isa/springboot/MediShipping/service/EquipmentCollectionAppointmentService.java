@@ -91,6 +91,7 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setEquipment(updatedAppointment.getEquipment());
             appointment.get().setDate(updatedAppointment.getDate());
+            appointment.get().setReserved(updatedAppointment.isReserved());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
         }

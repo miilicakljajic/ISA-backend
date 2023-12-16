@@ -113,13 +113,13 @@ INSERT INTO public.user_role(
 VALUES (23, 3);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, is_reserved, company_id)
+    admin_firstname, admin_lastname, date, duration, reserved, company_id)
 VALUES ('Admin', 'Peric', '2023-12-15T10:30:00', '30', false, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, is_reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-15T11:00:00', '30', false, 1);
+    admin_firstname, admin_lastname, date, duration, reserved, company_id)
+VALUES ('Admin', 'Peric', '2023-12-16T11:00:00', '30', false, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, is_reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-15T11:30:00', '30', false, 1);
+    admin_firstname, admin_lastname, date, duration, reserved, company_id)
+VALUES ('Admin', 'Peric', '2023-12-17T11:30:00', '30', false, 1);
