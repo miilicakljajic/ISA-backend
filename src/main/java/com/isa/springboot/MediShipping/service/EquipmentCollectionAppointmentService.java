@@ -176,6 +176,11 @@ public class EquipmentCollectionAppointmentService {
         {
             user.get().addApointment(newApp);
             userRepository.save(user.get());
+            try {
+                mailService.sendAppointmentMail(user.get().getEmail(),newApp);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
         }
         return mapper.convertToDto(newApp);
     }
