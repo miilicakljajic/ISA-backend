@@ -10,6 +10,7 @@ import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapp
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
+import com.isa.springboot.MediShipping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +25,8 @@ import java.util.*;
 public class EquipmentCollectionAppointmentService {
     @Autowired
     private EquipmentCollectionAppointmentRepository equipmentCollectionAppointmentRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private CompanyService companyService;
 
@@ -73,9 +76,45 @@ public class EquipmentCollectionAppointmentService {
                 }
             }
         }
-
         return true;
     }
+
+    private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
+    {
+        for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
+        {
+            if(app.getDate().equals(newApp.getDate()) && app.getAdminFirstname().equals(newApp.getAdminFirstname())
+            && app.getAdminLastname().equals(newApp.getAdminLastname()))
+                for(Equipment eq: app.getEquipment())
+                    for(Equipment eq2: newApp.getEquipment())
+                        if(eq.getId() == eq2.getId())
+                            return true;
+        }
+        return false;
+    }
+
+    private EquipmentCollectionAppointment setAdmin(EquipmentCollectionAppointment newApp)
+    {
+        ArrayList<String> admins = new ArrayList<String>();
+        for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
+        {
+            if(app.getDate().equals(newApp.getDate()))
+                if(!admins.contains(app.getAdminFirstname()+"|"+app.getAdminLastname()))
+                    admins.add(app.getAdminFirstname()+"|"+app.getAdminLastname());
+        }
+
+        for(User user: userRepository.findAll())
+        {
+            if(user.hasRole("ROLE_ADMIN") && !admins.contains(user.getFirstName()+"|"+user.getLastName()))
+            {
+                newApp.setAdminFirstname(user.getFirstName());
+                newApp.setAdminLastname(user.getLastName());
+                return newApp;
+            }
+        }
+        return newApp;
+    }
+
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -107,7 +146,7 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
-    public EquipmentCollectionAppointmentDto finalizeAppointment(@RequestParam long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+    public EquipmentCollectionAppointmentDto finalizeAppointment(long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
@@ -125,6 +164,20 @@ public class EquipmentCollectionAppointmentService {
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(updatedAppointment));
         }
         return  null;
+    }
+
+    public EquipmentCollectionAppointmentDto finalizeEmergencyAppointment(long userid, EquipmentCollectionAppointmentDto dto)
+    {
+        EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
+        Optional<User> user = userRepository.findById(userid);
+        if(!equipmentOverlap(newApp))
+            newApp = setAdmin(newApp);
+        if(user.isPresent())
+        {
+            user.get().addApointment(newApp);
+            userRepository.save(user.get());
+        }
+        return mapper.convertToDto(newApp);
     }
 
     public void deleteById(long id){
