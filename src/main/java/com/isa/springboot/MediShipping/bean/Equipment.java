@@ -65,4 +65,15 @@ public class Equipment {
     public int hashCode() {
         return Objects.hash(id, name, description, type);
     }
+
+    @Override
+    public String toString() {
+        return "Equipment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", appointments=" + appointments +
+                '}';
+    }
 }

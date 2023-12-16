@@ -74,4 +74,17 @@ public class EquipmentCollectionAppointment {
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
     }
+
+    @Override
+    public String toString() {
+        return "EquipmentCollectionAppointment{" +
+                "id=" + id +
+                ", equipment=" + equipment +
+                ", adminFirstname='" + adminFirstname + '\'' +
+                ", adminLastname='" + adminLastname + '\'' +
+                ", date=" + date +
+                ", duration=" + duration +
+                ", reserved=" + reserved +
+                '}';
+    }
 }

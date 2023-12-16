@@ -109,6 +109,17 @@ INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
 VALUES (23, 'Changing genes - changing future', 'comp@m.com', true, 'Com', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
 
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (24, 'Changing genes - changing future', 'ognjenmilojevic2001@gmail.com', true, 'Com', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+
+
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (25, 'Changing genes - changing future', 'milicakljajic1@gmail.com', true, 'Com', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+
+
+
 INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (21, 1);
@@ -120,6 +131,14 @@ VALUES (22, 2);
 INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (23, 3);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (24, 1);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (25, 1);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, reserved, company_id)

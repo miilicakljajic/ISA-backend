@@ -3,6 +3,7 @@ package com.isa.springboot.MediShipping.service;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
+import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
@@ -10,7 +11,9 @@ import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,6 +31,10 @@ public class EquipmentCollectionAppointmentService {
 
     @Autowired
     private EquipmentMapper equipmentMapper;
+
+    @Autowired MailService mailService;
+
+    @Autowired UserService userService;
 
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
@@ -94,6 +101,23 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setReserved(updatedAppointment.isReserved());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
+        }
+        return  null;
+    }
+
+    public EquipmentCollectionAppointmentDto finalizeAppointment(@RequestParam long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+
+        EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
+        Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
+        Optional<User> user = userService.getUserById(userid);
+        if(appointment.isPresent() && user.isPresent()){
+            try {
+                updatedAppointment.setReserved(true);
+                mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(updatedAppointment));
         }
         return  null;
     }

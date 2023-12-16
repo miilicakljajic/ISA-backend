@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class AuthService {
     }
 
     // Create a new user
-    public Optional<User> createUser(RegisterDto userdto, String role, boolean enabled) {
+    public Optional<User> createUser(RegisterDto userdto, String role, boolean enabled) throws MessagingException {
         User user = userMapper.convertToEntity(userdto);
         user.setPassword(passwordEncoder.encode(userdto.getPassword()));
         user.setFirstName(userdto.getFirstName());

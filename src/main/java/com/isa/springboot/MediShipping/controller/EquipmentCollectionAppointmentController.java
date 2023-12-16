@@ -19,6 +19,11 @@ public class EquipmentCollectionAppointmentController {
     public EquipmentCollectionAppointmentDto update(@RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         return  service.update(equipmentCollectionAppointmentDto);
     }
+
+    @PutMapping("/finalize/{id}")
+    public EquipmentCollectionAppointmentDto finalize(@PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        return  service.finalizeAppointment(id, equipmentCollectionAppointmentDto);
+    }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
         service.deleteById(id);
