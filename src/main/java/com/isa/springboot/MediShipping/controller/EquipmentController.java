@@ -6,6 +6,8 @@ import com.isa.springboot.MediShipping.service.EquipmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("api/equipment")
@@ -23,5 +25,10 @@ public class EquipmentController {
     @DeleteMapping
     public void deleteById(@RequestParam Long companyId,@RequestParam Long id){
         equipmentService.deleteById(companyId,id);
+    }
+
+    @GetMapping("/search")
+    public List<EquipmentDto> searchByCompanyEqName(@RequestParam Long companyid, @RequestParam String name){
+        return equipmentService.searchByCompanyEqName(companyid, name);
     }
 }

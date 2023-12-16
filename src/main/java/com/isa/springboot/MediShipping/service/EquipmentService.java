@@ -85,4 +85,16 @@ public class EquipmentService {
             }
         }
     }
+
+    public List<EquipmentDto> searchByCompanyEqName(long companyId, String name)
+    {
+        Optional<Company> company = companyService.getCompanyById(companyId);
+        ArrayList<EquipmentDto> searchedItems = new ArrayList<>();
+        if(company.isPresent())
+            for(Equipment eq : company.get().getEquipment())
+                if(eq.getName().toLowerCase().contains(name.toLowerCase()))
+                    searchedItems.add(equipmentMapper.convertToDto(eq));
+
+        return searchedItems;
+    }
 }

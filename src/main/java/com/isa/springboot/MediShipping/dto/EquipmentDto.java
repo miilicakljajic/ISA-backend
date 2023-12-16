@@ -1,12 +1,13 @@
 package com.isa.springboot.MediShipping.dto;
 
+import java.util.Set;
+
 public class EquipmentDto {
     public long id;
 
     public String name;
     public String description;
     public String type;
-
 
     public long getId() {
         return id;
@@ -39,4 +40,5 @@ public class EquipmentDto {
     public void setType(String type) {
         this.type = type;
     }
+
 }

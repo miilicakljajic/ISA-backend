@@ -67,7 +67,6 @@ INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (8, 3);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (14, 18);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (7, 5);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (10, 14);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 9);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (17, 2);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (6, 7);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (13, 16);
@@ -82,6 +81,16 @@ INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (2, 15);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (18, 10);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (15, 17);
 INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (11, 20);
+
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 1);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 3);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 5);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 6);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 7);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 8);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 9);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 10);
+INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 11);
 
 INSERT INTO public.ROLE (name) VALUES ('ROLE_USER');
 INSERT INTO public.ROLE (name) VALUES ('ROLE_SYSTEM_ADMIN');
