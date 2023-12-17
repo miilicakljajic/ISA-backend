@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.service.CompanyService;
@@ -17,9 +18,6 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
-    // Create a new user
-    @PostMapping
-    public Optional<User> createUser(@RequestBody User user) { return userService.createUser(user); }
 
     // Get all users
     @GetMapping
@@ -28,18 +26,16 @@ public class UserController {
     }
 
     // Get user by ID
-    @GetMapping("/{id}")
+    @GetMapping("/byid/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    @PostMapping("/login")
-    public Optional<User> login(@RequestBody LoginDto dto) { return userService.login(dto); }
-
     // Update user by ID
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        return userService.updateUser(id, userDetails);
+
+    @GetMapping("/appointments/{id}")
+    public List<EquipmentCollectionAppointment> getAppointments(@PathVariable Long id) {
+        return userService.getAppointments(id);
     }
 
     // Delete all users
