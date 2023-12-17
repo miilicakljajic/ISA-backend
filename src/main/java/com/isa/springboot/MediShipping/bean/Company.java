@@ -114,4 +114,6 @@ public class Company {
     public void setCompanyManagers(Set<User> companyManagers) {
         this.companyManagers = companyManagers;
     }
+
+    public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
 }

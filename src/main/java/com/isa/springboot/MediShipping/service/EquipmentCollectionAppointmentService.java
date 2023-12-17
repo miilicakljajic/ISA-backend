@@ -6,9 +6,11 @@ import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
+import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
+import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import com.isa.springboot.MediShipping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +31,13 @@ public class EquipmentCollectionAppointmentService {
     private UserRepository userRepository;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private EquipmentCollectionAppointmentMapper mapper;
+    @Autowired
+    private CompanyMapper companyMapper;
 
     @Autowired
     private EquipmentMapper equipmentMapper;
@@ -166,16 +172,20 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
-    public EquipmentCollectionAppointmentDto finalizeEmergencyAppointment(long userid, EquipmentCollectionAppointmentDto dto)
+    public EquipmentCollectionAppointmentDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
         Optional<User> user = userRepository.findById(userid);
+        Optional<Company> company = companyService.getCompanyById(companyid);
         if(!equipmentOverlap(newApp))
             newApp = setAdmin(newApp);
-        if(user.isPresent())
+        if(user.isPresent() && company.isPresent())
         {
+            newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
             user.get().addApointment(newApp);
-            userRepository.save(user.get());
+            authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
+            company.get().addAppointment(newApp);
+            companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
             try {
                 mailService.sendAppointmentMail(user.get().getEmail(),newApp);
             } catch (MessagingException e) {

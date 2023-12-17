@@ -25,9 +25,9 @@ public class EquipmentCollectionAppointmentController {
         return  service.finalizeAppointment(id, equipmentCollectionAppointmentDto);
     }
 
-    @PostMapping("/emergency/{id}")
-    public EquipmentCollectionAppointmentDto finalizeEmergency(@PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-        return  service.finalizeEmergencyAppointment(id, equipmentCollectionAppointmentDto);
+    @PostMapping("/emergency/{companyid}/{id}")
+    public EquipmentCollectionAppointmentDto finalizeEmergency(@PathVariable long companyid, @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        return  service.finalizeEmergencyAppointment(companyid, id, equipmentCollectionAppointmentDto);
     }
 
     @DeleteMapping("/{id}")
