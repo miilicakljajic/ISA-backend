@@ -1,25 +1,48 @@
 package com.isa.springboot.MediShipping.bean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "USERS")
+public class User implements UserDetails {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String role;
     private String email;
     private String password;
     private String firstName;
     private String lastName;
-    private String city;
-    private String country;
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "address_id")
+    private Address address;
     private String phoneNumber;
     private String occupation;
-    private boolean isVerified;
     private String pictureLink;
-
     private String companyInfo;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Set<EquipmentCollectionAppointment> appointments;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
+    private boolean enabled;
+    private Timestamp lastPasswordResetDate;
 
     public String getCompanyInfo() {
         return companyInfo;
@@ -37,20 +60,17 @@ public class User {
         this.id = id;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles;
     }
 
     public String getPassword() {
@@ -77,20 +97,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getCity() {
-        return city;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     public String getPhoneNumber() {
@@ -107,12 +119,12 @@ public class User {
     public void setOccupation(String occupation) {
         this.occupation = occupation;
     }
-    public boolean isVerified() {
-        return isVerified;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setVerified(boolean verified) {
-        isVerified = verified;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getPictureLink() {
@@ -121,5 +133,61 @@ public class User {
 
     public void setPictureLink(String pictureLink) {
         this.pictureLink = pictureLink;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    public Timestamp getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+    public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<EquipmentCollectionAppointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<EquipmentCollectionAppointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public void addApointment(EquipmentCollectionAppointment app)
+    {
+        this.appointments.add(app);
+    }
+
+    public boolean hasRole(String roleName)
+    {
+        for(Role role : roles)
+            if(role.getName().equals(roleName))
+                return true;
+        return false;
     }
 }
