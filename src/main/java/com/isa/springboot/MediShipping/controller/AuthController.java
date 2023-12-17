@@ -2,6 +2,7 @@ package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
+import com.isa.springboot.MediShipping.dto.PasswordDto;
 import com.isa.springboot.MediShipping.dto.RegisterDto;
 import com.isa.springboot.MediShipping.dto.LoginResultDto;
 import com.isa.springboot.MediShipping.service.AuthService;
@@ -44,5 +45,10 @@ public class AuthController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody RegisterDto userDetails) {
         return authService.updateUser(id, userDetails);
+    }
+
+    @PostMapping("/resetpass/{id}")
+    public Optional<User> resetPassword(@PathVariable Long id, @RequestBody PasswordDto password) {
+        return authService.resetPass(id, password);
     }
 }
