@@ -4,15 +4,15 @@ import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
+import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
+import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EquipmentService {
@@ -22,11 +22,12 @@ public class EquipmentService {
     private EquipmentMapper equipmentMapper;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public EquipmentDto create(EquipmentDto equipmentDto){
 
         Equipment newEquipment = equipmentMapper.convertToEntity(equipmentDto);
-
         return equipmentMapper.convertToDto(equipmentRepository.save(newEquipment));
     }
 
@@ -40,20 +41,12 @@ public class EquipmentService {
         return null;
     }
 
-    public List<EquipmentDto> findByCompanyId(long id){
-        List<Equipment> equipmentList = equipmentRepository.findByCompanyId(id);
-        List<EquipmentDto> equipmentDtos = new ArrayList<EquipmentDto>();
-
-        for(Equipment e : equipmentList){
-            equipmentDtos.add(equipmentMapper.convertToDto(e));
-        }
-
-        return  equipmentDtos;
-    }
-
     public EquipmentDto update(EquipmentDto updatedEquipmentDto){
         Optional<Equipment> equipment = equipmentRepository.findById(updatedEquipmentDto.id);
         Equipment updatedEquipment = equipmentMapper.convertToEntity(updatedEquipmentDto);
+
+        System.out.println(updatedEquipment.getId());
+        System.out.println(updatedEquipmentDto.getId());
 
         if(equipment.isPresent()) {
             Equipment existingEquipment = equipment.get();
@@ -65,25 +58,29 @@ public class EquipmentService {
         }
         return null;
     }
-
-    //u opremi cuvaj kompaniju
+    
     public void deleteById(long companyId,long id){
         Optional<Company> company = companyService.getCompanyById(companyId);
         LocalDateTime today = LocalDateTime.now();
+        Equipment equipmentForDeletion = equipmentMapper.convertToEntity(findEquipmentById(id));
+        equipmentForDeletion.setId(id);
 
-        for(EquipmentCollectionAppointment a : company.get().getAllAppointments()){
+        Set<Equipment> x = new HashSet<Equipment>(company.get().getEquipment());
+
+       for(EquipmentCollectionAppointment a : company.get().getAllAppointments()){
 
             if(a.getDate().isAfter(today))
                 continue;
 
-            for(Equipment e : a.getEquipment()){
-                if(e.getId() == id){
-                    equipmentRepository.deleteById(id);
-                    //company.get().getEquipment().remove(e);
-                    //break;
+            for (Equipment e : x){
+            if(e.getId() == id){
+                company.get().getEquipment().remove(equipmentForDeletion);
+                break;
                 }
             }
         }
+        companyRepository.save(company.get());
+       equipmentRepository.deleteById(id);
     }
 
     public List<EquipmentDto> searchByCompanyEqName(long companyId, String name)
