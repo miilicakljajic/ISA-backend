@@ -2,6 +2,7 @@ package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
+import com.isa.springboot.MediShipping.dto.PasswordDto;
 import com.isa.springboot.MediShipping.dto.RegisterDto;
 import com.isa.springboot.MediShipping.dto.LoginResultDto;
 import com.isa.springboot.MediShipping.service.AuthService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -30,10 +32,10 @@ public class AuthController {
 
     // Create a new user
     @PostMapping(value = "/register")
-    public Optional<User> createUser(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_USER", false); }
+    public Optional<User> createUser(@RequestBody RegisterDto user) throws MessagingException { return authService.createUser(user, "ROLE_USER", false); }
 
     @PostMapping(value = "/register-system-admin")
-    public Optional<User> createSystemAdmin(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_SYSTEM_ADMIN", true); }
+    public Optional<User> createSystemAdmin(@RequestBody RegisterDto user) throws MessagingException { return authService.createUser(user, "ROLE_SYSTEM_ADMIN", true); }
 
     @PostMapping("/login")
     public LoginResultDto login(@RequestBody LoginDto dto) {
@@ -43,5 +45,10 @@ public class AuthController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody RegisterDto userDetails) {
         return authService.updateUser(id, userDetails);
+    }
+
+    @PostMapping("/resetpass/{id}")
+    public Optional<User> resetPassword(@PathVariable Long id, @RequestBody PasswordDto password) {
+        return authService.resetPass(id, password);
     }
 }

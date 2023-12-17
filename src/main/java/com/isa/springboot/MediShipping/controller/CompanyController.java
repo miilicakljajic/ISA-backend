@@ -1,6 +1,7 @@
 package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.Role;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
@@ -38,7 +39,7 @@ public class CompanyController {
     public Optional<Company> getCompanyById(@PathVariable Long id) { return companyService.getCompanyById(id); }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable Long id, @RequestBody Company companyDetails) {
+    public CompanyDto updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDetails) {
         return companyService.updateCompany(id, companyDetails);
     }
     @DeleteMapping
@@ -48,4 +49,9 @@ public class CompanyController {
     }
     @DeleteMapping("/{id}")
     public void deleteCompany(@PathVariable Long id) { companyService.deleteCompany(id); }
+
+    @GetMapping("/appointments/{id}")
+    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(@PathVariable long id) {
+        return companyService.getAppointmentsByCompany(id);
+    }
 }

@@ -1,6 +1,7 @@
 package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.Role;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CompanyService {
@@ -26,8 +28,8 @@ public class CompanyService {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    public Company createCompany(CompanyDto companydto) {
-        Company company = mapper.convertToEntity(companydto);
+    public Company createCompany(CompanyDto companyDto) {
+        Company company = mapper.convertToEntity(companyDto);
         for(User u: company.getCompanyManagers()) {
             u.setRoles(roleService.findByName("ROLE_COMPANY_ADMIN"));
             u.setEnabled(true);
@@ -40,8 +42,9 @@ public class CompanyService {
 
     public Optional<Company> getCompanyById(Long id) { return companyRepository.findById(id); }
 
-    public Company updateCompany(Long id, Company companyDetails) {
+    public CompanyDto updateCompany(Long id, CompanyDto companyDto) {
         Optional<Company> company = companyRepository.findById(id);
+        Company companyDetails = mapper.convertToEntity(companyDto);
         if(company.isPresent()) {
             Company existingCompany = company.get();
             existingCompany.setName(companyDetails.getName());
@@ -51,7 +54,8 @@ public class CompanyService {
             existingCompany.setAllAppointments(companyDetails.getAllAppointments());
             existingCompany.setEquipment(companyDetails.getEquipment());
             existingCompany.setCompanyManagers(companyDetails.getCompanyManagers());
-            return companyRepository.save(existingCompany);
+
+            return mapper.convertToCompanyDto(companyRepository.save(existingCompany));
         }
         return null;
     }
@@ -69,5 +73,13 @@ public class CompanyService {
             }
         }
         return  null;
+    }
+
+    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
+        Optional<Company> company = getCompanyById(id);
+            if(company.isEmpty())
+                return new ArrayList<EquipmentCollectionAppointment>();
+            else
+                return company.get().getAllAppointments().stream().toList();
     }
 }

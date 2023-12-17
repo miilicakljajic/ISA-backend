@@ -19,13 +19,14 @@ public class Company {
     private Address address;
     private String description;
     private Double averageRating;
+    private String workingHours;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    //@JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -82,6 +83,14 @@ public class Company {
         this.averageRating = averageRating;
     }
 
+    public String getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(String workingHours) {
+        this.workingHours = workingHours;
+    }
+
     public Set<EquipmentCollectionAppointment> getAllAppointments() {
         return allAppointments;
     }
@@ -105,4 +114,6 @@ public class Company {
     public void setCompanyManagers(Set<User> companyManagers) {
         this.companyManagers = companyManagers;
     }
+
+    public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
 }

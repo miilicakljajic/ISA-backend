@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -30,6 +31,10 @@ public class User implements UserDetails {
     private String occupation;
     private String pictureLink;
     private String companyInfo;
+
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Set<EquipmentCollectionAppointment> appointments;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
@@ -163,5 +168,26 @@ public class User implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<EquipmentCollectionAppointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(Set<EquipmentCollectionAppointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public void addApointment(EquipmentCollectionAppointment app)
+    {
+        this.appointments.add(app);
+    }
+
+    public boolean hasRole(String roleName)
+    {
+        for(Role role : roles)
+            if(role.getName().equals(roleName))
+                return true;
+        return false;
     }
 }
