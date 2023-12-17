@@ -5,6 +5,9 @@ import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
+import com.isa.springboot.MediShipping.mapper.CompanyMapper;
+import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
+import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EquipmentService {
@@ -23,10 +27,12 @@ public class EquipmentService {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     public EquipmentDto create(EquipmentDto equipmentDto){
 
         Equipment newEquipment = equipmentMapper.convertToEntity(equipmentDto);
-
         return equipmentMapper.convertToDto(equipmentRepository.save(newEquipment));
     }
 
@@ -40,21 +46,10 @@ public class EquipmentService {
         return null;
     }
 
-    public List<EquipmentDto> findByCompanyId(long id){
-        List<Equipment> equipmentList = equipmentRepository.findByCompanyId(id);
-        List<EquipmentDto> equipmentDtos = new ArrayList<EquipmentDto>();
-
-        for(Equipment e : equipmentList){
-            equipmentDtos.add(equipmentMapper.convertToDto(e));
-        }
-
-        return  equipmentDtos;
-    }
 
     public EquipmentDto update(EquipmentDto updatedEquipmentDto){
         Optional<Equipment> equipment = equipmentRepository.findById(updatedEquipmentDto.id);
         Equipment updatedEquipment = equipmentMapper.convertToEntity(updatedEquipmentDto);
-
         if(equipment.isPresent()) {
             Equipment existingEquipment = equipment.get();
             existingEquipment.setName(updatedEquipment.getName());
@@ -66,21 +61,24 @@ public class EquipmentService {
         return null;
     }
 
-    //u opremi cuvaj kompaniju
     public void deleteById(long companyId,long id){
         Optional<Company> company = companyService.getCompanyById(companyId);
         LocalDateTime today = LocalDateTime.now();
+        Equipment equipmentForDeletion = equipmentMapper.convertToEntity(findEquipmentById(id));
+        equipmentForDeletion.setId(id);
 
-        for(EquipmentCollectionAppointment a : company.get().getAllAppointments()){
+        Set<Equipment> x = new HashSet<Equipment>(company.get().getEquipment());
 
+       for(EquipmentCollectionAppointment a : company.get().getAllAppointments()){
             if(a.getDate().isAfter(today))
                 continue;
 
-            for(Equipment e : a.getEquipment()){
+            for (Equipment e : x){
                 if(e.getId() == id){
+                    company.get().getEquipment().remove(equipmentForDeletion);
+                    companyRepository.save(company.get());
                     equipmentRepository.deleteById(id);
-                    //company.get().getEquipment().remove(e);
-                    //break;
+                    break;
                 }
             }
         }
@@ -95,6 +93,19 @@ public class EquipmentService {
                 if(eq.getName().toLowerCase().contains(name.toLowerCase()))
                     searchedItems.add(equipmentMapper.convertToDto(eq));
 
+        return searchedItems;
+    }
+
+    public List<EquipmentDto> search(long companyId,String name,String type){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+        ArrayList<EquipmentDto> searchedItems = new ArrayList<>();
+
+        if(company.isPresent()) {
+            for (Equipment eq : company.get().getEquipment()) {
+                if (eq.getName().toLowerCase().contains(name.toLowerCase()) && eq.getType().toLowerCase().contains(type.toLowerCase()))
+                    searchedItems.add(equipmentMapper.convertToDto(eq));
+            }
+        }
         return searchedItems;
     }
 }

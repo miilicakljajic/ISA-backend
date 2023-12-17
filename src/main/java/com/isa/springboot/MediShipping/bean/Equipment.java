@@ -1,6 +1,7 @@
 package com.isa.springboot.MediShipping.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,10 +18,6 @@ public class Equipment {
     private String description;
     private String type;
 
-    @ManyToMany(mappedBy = "equipment")
-    @JsonIgnore
-    private Set<EquipmentCollectionAppointment> appointments;
-
     public long getId() {
         return id;
     }
@@ -28,7 +25,6 @@ public class Equipment {
     public void setId(long id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }
@@ -58,12 +54,12 @@ public class Equipment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Equipment equipment = (Equipment) o;
-        return id == equipment.id && Objects.equals(name, equipment.name) && Objects.equals(description, equipment.description) && Objects.equals(type, equipment.type);
+        return id == equipment.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, type);
+        return Objects.hash(id);
     }
 
     @Override
@@ -73,7 +69,6 @@ public class Equipment {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
-                ", appointments=" + appointments +
-                '}';
+                ", appointments=" + '}';
     }
 }

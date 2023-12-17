@@ -4,6 +4,7 @@ import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.Role;
 import com.isa.springboot.MediShipping.bean.User;
+import com.isa.springboot.MediShipping.bean.*;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
 import com.isa.springboot.MediShipping.dto.RegisterDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
@@ -59,21 +60,9 @@ public class CompanyService {
         }
         return null;
     }
-
     public void deleteAllCompanies() { companyRepository.deleteAll(); }
 
     public void deleteCompany(Long id) { companyRepository.deleteById(id); }
-
-    public Company findUsingManagerId(long id){
-        for(Company c : getAllCompanies()){
-            for(User u : c.getCompanyManagers()){
-                if(u.getId() == id){
-                    return  c;
-                }
-            }
-        }
-        return  null;
-    }
 
     public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
         Optional<Company> company = getCompanyById(id);
@@ -82,4 +71,5 @@ public class CompanyService {
             else
                 return company.get().getAllAppointments().stream().toList();
     }
+
 }

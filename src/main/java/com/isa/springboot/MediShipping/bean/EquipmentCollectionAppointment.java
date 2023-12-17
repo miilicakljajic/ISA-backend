@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -12,7 +13,9 @@ public class EquipmentCollectionAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+    //proveri za ognjena
+    @ManyToMany(cascade = {CascadeType.ALL,CascadeType.MERGE},fetch = FetchType.LAZY)
+    //@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinTable(name = "equipment_appointment",
         joinColumns = @JoinColumn(name = "appointment_id",referencedColumnName = "id"),
@@ -23,6 +26,12 @@ public class EquipmentCollectionAppointment {
     private LocalDateTime date;
     private int duration;
     private boolean reserved;
+
+    @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     public long getId() {
         return id;
@@ -77,6 +86,14 @@ public class EquipmentCollectionAppointment {
 
     public void setReserved(boolean reserved) {
         this.reserved = reserved;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     @Override

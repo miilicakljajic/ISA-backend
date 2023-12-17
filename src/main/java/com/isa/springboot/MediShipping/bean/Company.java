@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -20,11 +21,11 @@ public class Company {
     private String description;
     private Double averageRating;
     private String workingHours;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "company")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JoinColumn(name = "company_id")
+    //@JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
@@ -116,4 +117,17 @@ public class Company {
     }
 
     public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return Objects.equals(id, company.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

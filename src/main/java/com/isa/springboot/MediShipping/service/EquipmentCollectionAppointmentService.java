@@ -15,11 +15,10 @@ import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointment
 import com.isa.springboot.MediShipping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -33,20 +32,19 @@ public class EquipmentCollectionAppointmentService {
     private CompanyService companyService;
     @Autowired
     private CompanyRepository companyRepository;
-
     @Autowired
     private EquipmentCollectionAppointmentMapper mapper;
     @Autowired
     private CompanyMapper companyMapper;
-
     @Autowired
     private EquipmentMapper equipmentMapper;
+    @Autowired
+    MailService mailService;
+    @Autowired
+    AuthService authService;
+    @Autowired
+    UserMapper userMapper;
 
-    @Autowired MailService mailService;
-
-    @Autowired AuthService authService;
-
-    @Autowired UserMapper userMapper;
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
         if(company.isPresent()){
@@ -67,30 +65,35 @@ public class EquipmentCollectionAppointmentService {
                 return true;
             }
         }
-
         return  false;
     }
 
-    private boolean alreadyExists(long companyId,LocalDateTime appointmentTime){
+
+
+    private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
 
         if(company.isPresent()){
             for (EquipmentCollectionAppointment a : company.get().getAllAppointments()){
-                if(a.getDate().equals(appointmentTime)){
-                    System.out.println("already exists");
-                    return false;
+
+                if(a.getDate().equals(dto.date) && a.getAdminLastname().equals(dto.getAdminLastname())){
+                    System.out.println("Appointment in this timeslot already exists");
+                    return true;
                 }
             }
         }
-        return true;
+
+        return false;
     }
 
     private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
     {
+
         for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
         {
-            if(app.getDate().equals(newApp.getDate()) && app.getAdminFirstname().equals(newApp.getAdminFirstname())
-            && app.getAdminLastname().equals(newApp.getAdminLastname()))
+            boolean upperBound = newApp.getDate().toEpochSecond(ZoneOffset.UTC) < (app.getDate().toEpochSecond(ZoneOffset.UTC) + app.getDuration()*60);
+            boolean lowerBound = app.getDate().toEpochSecond(ZoneOffset.UTC) < newApp.getDate().toEpochSecond(ZoneOffset.UTC);
+            if(app.getDate().equals(newApp.getDate()) || (upperBound && lowerBound))
                 for(Equipment eq: app.getEquipment())
                     for(Equipment eq2: newApp.getEquipment())
                         if(eq.getId() == eq2.getId())
@@ -121,18 +124,22 @@ public class EquipmentCollectionAppointmentService {
         return newApp;
     }
 
+
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
-
+        Optional<Company> company = companyService.getCompanyById(companyId);
         boolean isValid = isDateTimeValid(companyId,equipmentCollectionAppointmentDto.date, equipmentCollectionAppointmentDto.duration);
-        boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto.date);
+        boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
-        if(isValid && alreadyExists) {
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+        if(isValid && !alreadyExists) {
+            appointment.setCompany(company.get());
+            company.get().getAllAppointments().add(appointment);;
+            companyRepository.save(company.get());
+            //return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+            return mapper.convertToDto(appointment);
         }
         else{
-            System.out.println("ne valja datum");
             return null;
         }
     }
@@ -153,15 +160,16 @@ public class EquipmentCollectionAppointmentService {
     }
 
     public EquipmentCollectionAppointmentDto finalizeAppointment(long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-
+        Optional<Company> temp = companyService.getCompanyById((long) 1);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
         Optional<User> user = authService.getUserById(userid);
         if(appointment.isPresent() && user.isPresent()){
             try {
+                updatedAppointment.setCompany(temp.get());
                 updatedAppointment.setReserved(true);
                 User updatedUser = user.get();
-                updatedUser.addApointment(appointment.get());
+                updatedUser.addApointment(updatedAppointment);
                 authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
             } catch (MessagingException e) {
@@ -175,22 +183,24 @@ public class EquipmentCollectionAppointmentService {
     public EquipmentCollectionAppointmentDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
-        Optional<User> user = userRepository.findById(userid);
-        Optional<Company> company = companyService.getCompanyById(companyid);
-        if(!equipmentOverlap(newApp))
+        if(!equipmentOverlap(newApp) && isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration())) {
+            Optional<User> user = userRepository.findById(userid);
+            Optional<Company> company = companyService.getCompanyById(companyid);
             newApp = setAdmin(newApp);
-        if(user.isPresent() && company.isPresent())
-        {
-            newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
-            user.get().addApointment(newApp);
-            authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
-            company.get().addAppointment(newApp);
-            companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
-            try {
-                mailService.sendAppointmentMail(user.get().getEmail(),newApp);
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
+            if (user.isPresent() && company.isPresent()) {
+                //newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
+                newApp.setCompany(company.get());
+                user.get().addApointment(newApp);
+                authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
+                //company.get().addAppointment(newApp);
+                //companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
+                try {
+                    mailService.sendAppointmentMail(user.get().getEmail(), newApp);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            return mapper.convertToDto(newApp);
         }
         return mapper.convertToDto(newApp);
     }
