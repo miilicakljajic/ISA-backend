@@ -61,26 +61,39 @@ public class EquipmentService {
         return null;
     }
 
-    public void deleteById(long companyId,long id){
-        Optional<Company> company = companyService.getCompanyById(companyId);
+
+    public boolean isEquipmentReserved(Company company,long equipmentId){
+
         LocalDateTime today = LocalDateTime.now();
-        Equipment equipmentForDeletion = equipmentMapper.convertToEntity(findEquipmentById(id));
-        equipmentForDeletion.setId(id);
+        Set<Equipment> x = new HashSet<Equipment>(company.getEquipment());
 
-        Set<Equipment> x = new HashSet<Equipment>(company.get().getEquipment());
+        if(company.getAllAppointments().isEmpty()){
+            return false;
+        }
 
-       for(EquipmentCollectionAppointment a : company.get().getAllAppointments()){
-            if(a.getDate().isAfter(today))
+        for(EquipmentCollectionAppointment a : company.getAllAppointments()){
+            if(a.getDate().isBefore(today))
                 continue;
 
             for (Equipment e : x){
-                if(e.getId() == id){
-                    company.get().getEquipment().remove(equipmentForDeletion);
-                    companyRepository.save(company.get());
-                    equipmentRepository.deleteById(id);
-                    break;
+                if(e.getId() == equipmentId){
+                    return true;
                 }
             }
+        }
+
+        return false;
+    }
+
+    public void deleteById(long companyId,long id){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+
+        Equipment equipmentForDeletion = equipmentMapper.convertToEntity(findEquipmentById(id));
+        equipmentForDeletion.setId(id);
+
+        if(!isEquipmentReserved(company.get(),equipmentForDeletion.getId())){
+            company.get().getEquipment().remove(equipmentForDeletion);
+            companyRepository.save(company.get());
         }
     }
 
