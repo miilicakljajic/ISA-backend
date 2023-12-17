@@ -24,12 +24,9 @@ public class Company {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
-    @ManyToMany
-    @JoinTable(
-            name = "companies_equipment", // Naziv tabele koja predstavlja vezu
-            joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id")
-    )
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

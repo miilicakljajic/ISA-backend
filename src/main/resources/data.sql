@@ -41,56 +41,26 @@ INSERT INTO public.companies(average_rating, description, name, address_id, work
 INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16');
 
 
-INSERT INTO public.equipment(description, name, type) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device');
-INSERT INTO public.equipment(description, name, type) VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool');
-INSERT INTO public.equipment(description, name, type) VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Surgical microscope for precise visualization', 'Surgical Microscope', 'Surgical Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Anesthesia machine for administering anesthesia', 'Anesthesia Machine', 'Anesthesia Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Blood pressure monitor for hypertension evaluation', 'Blood Pressure Monitor', 'Diagnostic Device');
-INSERT INTO public.equipment(description, name, type) VALUES ('X-ray machine for radiographic imaging', 'X-ray Machine', 'Radiology Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Ophthalmoscope for eye examinations', 'Ophthalmoscope', 'Diagnostic Tool');
-INSERT INTO public.equipment(description, name, type) VALUES ('Dental chair for dental procedures', 'Dental Chair', 'Dental Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Ventilator for respiratory support', 'Ventilator', 'Life Support Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Surgical scalpel for precise incisions', 'Surgical Scalpel', 'Surgical Instrument');
-INSERT INTO public.equipment(description, name, type) VALUES ('CT scanner for detailed imaging', 'CT Scanner', 'Diagnostic Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Blood glucose meter for monitoring sugar levels', 'Glucose Meter', 'Diagnostic Device');
-INSERT INTO public.equipment(description, name, type) VALUES ('Dialysis machine for renal therapy', 'Dialysis Machine', 'Renal Equipment');
-INSERT INTO public.equipment(description, name, type) VALUES ('Orthopedic drill for bone surgeries', 'Orthopedic Drill', 'Surgical Instrument');
-
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (5, 12);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (8, 3);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (14, 18);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (7, 5);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (10, 14);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (17, 2);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (6, 7);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (13, 16);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (4, 11);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (19, 4);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (12, 19);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (3, 6);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (20, 13);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (9, 1);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (16, 8);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (2, 15);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (18, 10);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (15, 17);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (11, 20);
-
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 1);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 3);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 5);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 6);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 7);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 8);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 9);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 10);
-INSERT INTO public.companies_equipment(company_id, equipment_id) VALUES (1, 11);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Surgical microscope for precise visualization', 'Surgical Microscope', 'Surgical Equipment', 2);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Anesthesia machine for administering anesthesia', 'Anesthesia Machine', 'Anesthesia Equipment', 2);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Blood pressure monitor for hypertension evaluation', 'Blood Pressure Monitor', 'Diagnostic Device', 2);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('X-ray machine for radiographic imaging', 'X-ray Machine', 'Radiology Equipment', 3);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Ophthalmoscope for eye examinations', 'Ophthalmoscope', 'Diagnostic Tool', 3);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Dental chair for dental procedures', 'Dental Chair', 'Dental Equipment', 3);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Ventilator for respiratory support', 'Ventilator', 'Life Support Equipment', 4);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Surgical scalpel for precise incisions', 'Surgical Scalpel', 'Surgical Instrument', 4);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('CT scanner for detailed imaging', 'CT Scanner', 'Diagnostic Equipment', 4);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Blood glucose meter for monitoring sugar levels', 'Glucose Meter', 'Diagnostic Device', 4);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Dialysis machine for renal therapy', 'Dialysis Machine', 'Renal Equipment', 1);
+INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Orthopedic drill for bone surgeries', 'Orthopedic Drill', 'Surgical Instrument', 1);
 
 INSERT INTO public.ROLE (name) VALUES ('ROLE_USER');
 INSERT INTO public.ROLE (name) VALUES ('ROLE_SYSTEM_ADMIN');
@@ -163,12 +133,12 @@ VALUES ('Admin', 'Peric', '2023-12-23T11:30:00', '30', true, 1, 26);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-15T10:30:00', '30', false, 1);
+VALUES ('Admin', 'Peric', '2023-12-23T10:30:00', '30', false, 1);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-16T11:00:00', '30', false, 1);
+VALUES ('Admin', 'Peric', '2023-12-24T11:00:00', '30', false, 1);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-17T11:30:00', '30', false, 1);
+VALUES ('Admin', 'Peric', '2023-12-25T11:30:00', '30', false, 1);
