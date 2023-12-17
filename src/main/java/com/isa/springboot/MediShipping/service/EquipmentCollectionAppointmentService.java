@@ -7,6 +7,7 @@ import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
+import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class EquipmentCollectionAppointmentService {
     private EquipmentCollectionAppointmentRepository equipmentCollectionAppointmentRepository;
     @Autowired
     private CompanyService companyService;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Autowired
     private EquipmentCollectionAppointmentMapper mapper;
@@ -33,6 +36,7 @@ public class EquipmentCollectionAppointmentService {
         Optional<Company> company = companyService.getCompanyById(id);
         if(company.isPresent()){
             String[] workingHours = company.get().getWorkingHours().split("-");
+
             return workingHours;
         }
         return null;
@@ -49,36 +53,38 @@ public class EquipmentCollectionAppointmentService {
                 return true;
             }
         }
-
         return  false;
     }
 
-    private boolean alreadyExists(long companyId,LocalDateTime appointmentTime){
+    private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
 
         if(company.isPresent()){
             for (EquipmentCollectionAppointment a : company.get().getAllAppointments()){
-                if(a.getDate().equals(appointmentTime)){
-                    System.out.println("already exists");
-                    return false;
+
+                if(a.getDate().equals(dto.date) && a.getAdminLastname().equals(dto.getAdminLastname())){
+                    System.out.println("Appointment in this timeslot already exists");
+                    return true;
                 }
             }
         }
 
-        return true;
+        return false;
     }
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
-
+        Optional<Company> company = companyService.getCompanyById(companyId);
         boolean isValid = isDateTimeValid(companyId,equipmentCollectionAppointmentDto.date, equipmentCollectionAppointmentDto.duration);
-        boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto.date);
+        boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
-        if(isValid && alreadyExists) {
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+        if(isValid && !alreadyExists) {
+            company.get().getAllAppointments().add(appointment);
+            companyRepository.save(company.get());
+            //return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+            return mapper.convertToDto(appointment);
         }
         else{
-            System.out.println("ne valja datum");
             return null;
         }
     }

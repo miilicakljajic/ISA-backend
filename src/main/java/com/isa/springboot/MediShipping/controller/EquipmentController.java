@@ -31,4 +31,9 @@ public class EquipmentController {
     public List<EquipmentDto> searchByCompanyEqName(@RequestParam Long companyid, @RequestParam String name){
         return equipmentService.searchByCompanyEqName(companyid, name);
     }
+
+    @GetMapping("/rlly")
+    public List<EquipmentDto> search(@RequestParam Long companyId,@RequestParam String name,@RequestParam String type){
+        return  equipmentService.search(companyId,name,type);
+    }
 }

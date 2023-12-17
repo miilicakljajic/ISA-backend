@@ -73,14 +73,14 @@ public class EquipmentService {
                 continue;
 
             for (Equipment e : x){
-            if(e.getId() == id){
-                company.get().getEquipment().remove(equipmentForDeletion);
-                break;
+                if(e.getId() == id){
+                    company.get().getEquipment().remove(equipmentForDeletion);
+                    companyRepository.save(company.get());
+                    equipmentRepository.deleteById(id);
+                    break;
                 }
             }
         }
-        companyRepository.save(company.get());
-       equipmentRepository.deleteById(id);
     }
 
     public List<EquipmentDto> searchByCompanyEqName(long companyId, String name)
@@ -92,6 +92,19 @@ public class EquipmentService {
                 if(eq.getName().toLowerCase().contains(name.toLowerCase()))
                     searchedItems.add(equipmentMapper.convertToDto(eq));
 
+        return searchedItems;
+    }
+
+    public List<EquipmentDto> search(long companyId,String name,String type){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+        ArrayList<EquipmentDto> searchedItems = new ArrayList<>();
+
+        if(company.isPresent()) {
+            for (Equipment eq : company.get().getEquipment()) {
+                if (eq.getName().toLowerCase().contains(name.toLowerCase()) && eq.getType().toLowerCase().contains(type.toLowerCase()))
+                    searchedItems.add(equipmentMapper.convertToDto(eq));
+            }
+        }
         return searchedItems;
     }
 }
