@@ -159,8 +159,8 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
-    public EquipmentCollectionAppointmentDto finalizeAppointment(long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-        Optional<Company> temp = companyService.getCompanyById((long) 1);
+    public EquipmentCollectionAppointmentDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        Optional<Company> temp = companyService.getCompanyById(companyid);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
         Optional<User> user = authService.getUserById(userid);
