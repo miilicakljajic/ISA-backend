@@ -68,8 +68,6 @@ public class EquipmentCollectionAppointmentService {
         return  false;
     }
 
-
-
     private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
 
@@ -88,7 +86,6 @@ public class EquipmentCollectionAppointmentService {
 
     private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
     {
-
         for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
         {
             boolean upperBound = newApp.getDate().toEpochSecond(ZoneOffset.UTC) < (app.getDate().toEpochSecond(ZoneOffset.UTC) + app.getDuration()*60);
@@ -207,25 +204,5 @@ public class EquipmentCollectionAppointmentService {
 
     public void deleteById(long id){
         equipmentCollectionAppointmentRepository.deleteById(id);
-    }
-
-
-    //nisam testirao ne znam da li radi
-    public EquipmentCollectionAppointmentDto scheduleAppointment(long id, List<EquipmentDto> equipmentDtos){
-        Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(id);
-        Set<Equipment> equipment = new HashSet<>();
-
-        if(appointment.isPresent()){
-
-            for (EquipmentDto e : equipmentDtos){
-                equipment.add(equipmentMapper.convertToEntity(e));
-            }
-
-            appointment.get().setReserved(true);
-            appointment.get().setEquipment(equipment);
-
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
-        }
-        return  null;
     }
 }

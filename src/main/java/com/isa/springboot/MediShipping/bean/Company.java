@@ -1,9 +1,11 @@
 package com.isa.springboot.MediShipping.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,9 +25,8 @@ public class Company {
     private String workingHours;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "company")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    //@JoinColumn(name = "company_id")
     private Set<EquipmentCollectionAppointment> allAppointments;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<Equipment> equipment;
@@ -33,13 +34,16 @@ public class Company {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<User> companyManagers;
-    public Company(){}
+    public Company(){
+        this.equipment = new HashSet<>();
+    }
     public Company(Long id, String name, Address address, String description, Double averageRating) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.averageRating = averageRating;
+        this.equipment = new HashSet<>();
     }
     public void addUser(User user){
         companyManagers.add(user);
@@ -105,7 +109,10 @@ public class Company {
     }
 
     public void setEquipment(Set<Equipment> equipment) {
-        this.equipment = equipment;
+        this.equipment.clear();
+        if(equipment != null) {
+            this.equipment.addAll(equipment);
+        }
     }
 
     public Set<User> getCompanyManagers() {

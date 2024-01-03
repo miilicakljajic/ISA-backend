@@ -13,9 +13,7 @@ public class EquipmentCollectionAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    //proveri za ognjena
     @ManyToMany(cascade = {CascadeType.ALL,CascadeType.MERGE},fetch = FetchType.LAZY)
-    //@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinTable(name = "equipment_appointment",
         joinColumns = @JoinColumn(name = "appointment_id",referencedColumnName = "id"),
