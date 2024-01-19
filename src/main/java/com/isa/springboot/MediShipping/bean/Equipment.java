@@ -20,6 +20,8 @@ public class Equipment {
 
     private Double price;
 
+    private Integer count;
+
     public long getId() {
         return id;
     }
@@ -57,6 +59,14 @@ public class Equipment {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     @Override

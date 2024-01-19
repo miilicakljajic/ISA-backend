@@ -11,6 +11,8 @@ public class EquipmentDto {
 
     public Double price;
 
+    public Integer count;
+
     public long getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class EquipmentDto {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }
