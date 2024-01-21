@@ -9,7 +9,7 @@ public class EquipmentCollectionAppointmentDto {
     public String adminLastname;
     public LocalDateTime date;
 
-    public Set<EquipmentDto> equipment;
+    public Set<OrderItemDto> items;
     public int duration;
 
     public boolean reserved;
@@ -55,12 +55,12 @@ public class EquipmentCollectionAppointmentDto {
         this.date = date;
     }
 
-    public Set<EquipmentDto> getEquipment() {
-        return equipment;
+    public Set<OrderItemDto> getItems() {
+        return items;
     }
 
-    public void setEquipment(Set<EquipmentDto> equipment) {
-        this.equipment = equipment;
+    public void setItems(Set<OrderItemDto> items) {
+        this.items = items;
     }
 
     public int getDuration() {

@@ -15,10 +15,10 @@ public class EquipmentCollectionAppointment {
     private long id;
     @ManyToMany(cascade = {CascadeType.ALL,CascadeType.MERGE},fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JoinTable(name = "equipment_appointment",
+    @JoinTable(name = "appointment_items",
         joinColumns = @JoinColumn(name = "appointment_id",referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
-    private Set<Equipment> equipment;
+        inverseJoinColumns = @JoinColumn(name = "orderitem_id", referencedColumnName = "id"))
+    private Set<OrderItem> items;
     private String adminFirstname;
     private String adminLastname;
     private LocalDateTime date;
@@ -39,13 +39,14 @@ public class EquipmentCollectionAppointment {
         this.id = id;
     }
 
-    public Set<Equipment> getEquipment() {
-        return equipment;
+    public Set<OrderItem> getItems() {
+        return items;
     }
 
-    public void setEquipment(Set<Equipment> equipment) {
-        this.equipment = equipment;
+    public void setItems(Set<OrderItem> items) {
+        this.items = items;
     }
+
     public String getAdminFirstname() {
         return adminFirstname;
     }
@@ -98,7 +99,7 @@ public class EquipmentCollectionAppointment {
     public String toString() {
         return "EquipmentCollectionAppointment{" +
                 "id=" + id +
-                ", equipment=" + equipment +
+                ", equipment=" + items +
                 ", adminFirstname='" + adminFirstname + '\'' +
                 ", adminLastname='" + adminLastname + '\'' +
                 ", date=" + date +

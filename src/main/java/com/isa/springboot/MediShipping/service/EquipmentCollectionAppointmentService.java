@@ -6,6 +6,7 @@ import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
+import com.isa.springboot.MediShipping.dto.ResponseDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
@@ -14,6 +15,8 @@ import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import com.isa.springboot.MediShipping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import java.time.DayOfWeek;
@@ -86,6 +89,8 @@ public class EquipmentCollectionAppointmentService {
 
     private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
     {
+        //FIX LATER
+        /*
         for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
         {
             boolean upperBound = newApp.getDate().toEpochSecond(ZoneOffset.UTC) < (app.getDate().toEpochSecond(ZoneOffset.UTC) + app.getDuration()*60);
@@ -95,7 +100,7 @@ public class EquipmentCollectionAppointmentService {
                     for(Equipment eq2: newApp.getEquipment())
                         if(eq.getId() == eq2.getId())
                             return true;
-        }
+        }*/
         return false;
     }
 
@@ -129,7 +134,7 @@ public class EquipmentCollectionAppointmentService {
         boolean isValid = isDateTimeValid(companyId,equipmentCollectionAppointmentDto.date, equipmentCollectionAppointmentDto.duration);
         boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
-        if(isValid && !alreadyExists) {
+        if(isValid && !alreadyExists && company.isPresent()) {
             appointment.setCompany(company.get());
             company.get().getAllAppointments().add(appointment);;
             companyRepository.save(company.get());
@@ -147,7 +152,7 @@ public class EquipmentCollectionAppointmentService {
         if(appointment.isPresent()){
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
-            appointment.get().setEquipment(updatedAppointment.getEquipment());
+            appointment.get().setItems(updatedAppointment.getItems());
             appointment.get().setDate(updatedAppointment.getDate());
             appointment.get().setReserved(updatedAppointment.isReserved());
 
@@ -156,7 +161,7 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
-    public EquipmentCollectionAppointmentDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+    public ResponseDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         Optional<Company> temp = companyService.getCompanyById(companyid);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
@@ -172,15 +177,17 @@ public class EquipmentCollectionAppointmentService {
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(updatedAppointment));
+            return new ResponseDto(200, "OK");
         }
-        return  null;
+        return new ResponseDto(400, "Unknown error");
     }
 
-    public EquipmentCollectionAppointmentDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
+    public ResponseDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
-        if(!equipmentOverlap(newApp) && isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration())) {
+        boolean overlap = equipmentOverlap(newApp);
+        boolean dateValid = isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration());
+        if(!overlap && dateValid) {
             Optional<User> user = userRepository.findById(userid);
             Optional<Company> company = companyService.getCompanyById(companyid);
             newApp = setAdmin(newApp);
@@ -197,9 +204,14 @@ public class EquipmentCollectionAppointmentService {
                     throw new RuntimeException(e);
                 }
             }
-            return mapper.convertToDto(newApp);
+            return new ResponseDto(200, "OK");
         }
-        return mapper.convertToDto(newApp);
+        if(overlap)
+            return new ResponseDto(400, "Failed: overlaps with existing appointment");
+        else if(!dateValid)
+            return new ResponseDto(400, "Company not available at that time");
+        else
+            return new ResponseDto(400,"Unknown error");
     }
 
     public void deleteById(long id){
