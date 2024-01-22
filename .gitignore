@@ -1,4 +1,5 @@
 HELP.md
+qr.png
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
