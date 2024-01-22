@@ -9,6 +9,7 @@ import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapp
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +98,7 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setEquipment(updatedAppointment.getEquipment());
             appointment.get().setDate(updatedAppointment.getDate());
-            appointment.get().setReserved(updatedAppointment.isReserved());
+            appointment.get().setStatus(updatedAppointment.getStatus());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
         }
@@ -120,7 +121,7 @@ public class EquipmentCollectionAppointmentService {
                 equipment.add(equipmentMapper.convertToEntity(e));
             }
 
-            appointment.get().setReserved(true);
+            appointment.get().setStatus(AppointmentStatus.RESERVED);
             appointment.get().setEquipment(equipment);
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));

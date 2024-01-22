@@ -1,6 +1,7 @@
 package com.isa.springboot.MediShipping.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class EquipmentCollectionAppointment {
     private String adminLastname;
     private LocalDateTime date;
     private int duration;
-    private boolean reserved;
+    private AppointmentStatus status;
 
     public long getId() {
         return id;
@@ -67,11 +68,11 @@ public class EquipmentCollectionAppointment {
         this.duration = duration;
     }
 
-    public boolean isReserved() {
-        return reserved;
+    public AppointmentStatus getStatus() {
+        return status;
     }
 
-    public void setReserved(boolean reserved) {
-        this.reserved = reserved;
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
     }
 }
