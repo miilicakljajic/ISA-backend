@@ -1,9 +1,13 @@
 package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
+import com.isa.springboot.MediShipping.dto.ResponseDto;
 import com.isa.springboot.MediShipping.service.EquipmentCollectionAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -20,13 +24,13 @@ public class EquipmentCollectionAppointmentController {
         return  service.update(equipmentCollectionAppointmentDto);
     }
     @PutMapping("/finalize/{companyid}/{id}")
-    public EquipmentCollectionAppointmentDto finalize(@PathVariable long companyid,  @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+    public ResponseDto finalize(@PathVariable long companyid,  @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         return  service.finalizeAppointment(companyid, id, equipmentCollectionAppointmentDto);
     }
 
     @PostMapping("/emergency/{companyid}/{id}")
-    public EquipmentCollectionAppointmentDto finalizeEmergency(@PathVariable long companyid, @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-        return  service.finalizeEmergencyAppointment(companyid, id, equipmentCollectionAppointmentDto);
+    public ResponseDto finalizeEmergency(@PathVariable long companyid, @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        return service.finalizeEmergencyAppointment(companyid, id, equipmentCollectionAppointmentDto);
     }
 
     @DeleteMapping("/{id}")
