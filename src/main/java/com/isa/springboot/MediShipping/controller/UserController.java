@@ -33,13 +33,10 @@ public class UserController {
 
     // Update user by ID
 
-<<<<<<< HEAD
-=======
     @GetMapping("/appointments/{id}")
     public List<EquipmentCollectionAppointment> getAppointments(@PathVariable Long id) {
         return userService.getAppointments(id);
     }
->>>>>>> develop
 
     // Delete all users
     @DeleteMapping

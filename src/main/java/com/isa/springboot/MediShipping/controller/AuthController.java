@@ -2,10 +2,7 @@ package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
-<<<<<<< HEAD
-=======
 import com.isa.springboot.MediShipping.dto.PasswordDto;
->>>>>>> develop
 import com.isa.springboot.MediShipping.dto.RegisterDto;
 import com.isa.springboot.MediShipping.dto.LoginResultDto;
 import com.isa.springboot.MediShipping.service.AuthService;
@@ -35,17 +32,10 @@ public class AuthController {
 
     // Create a new user
     @PostMapping(value = "/register")
-<<<<<<< HEAD
-    public Optional<User> createUser(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_USER", false); }
-
-    @PostMapping(value = "/register-system-admin")
-    public Optional<User> createSystemAdmin(@RequestBody RegisterDto user) { return authService.createUser(user, "ROLE_SYSTEM_ADMIN", true); }
-=======
     public Optional<User> createUser(@RequestBody RegisterDto user) throws MessagingException { return authService.createUser(user, "ROLE_USER", false); }
 
     @PostMapping(value = "/register-system-admin")
     public Optional<User> createSystemAdmin(@RequestBody RegisterDto user) throws MessagingException { return authService.createUser(user, "ROLE_SYSTEM_ADMIN", true); }
->>>>>>> develop
 
     @PostMapping("/login")
     public LoginResultDto login(@RequestBody LoginDto dto) {
@@ -56,12 +46,9 @@ public class AuthController {
     public User updateUser(@PathVariable Long id, @RequestBody RegisterDto userDetails) {
         return authService.updateUser(id, userDetails);
     }
-<<<<<<< HEAD
-=======
 
     @PostMapping("/resetpass/{id}")
     public Optional<User> resetPassword(@PathVariable Long id, @RequestBody PasswordDto password) {
         return authService.resetPass(id, password);
     }
->>>>>>> develop
 }
