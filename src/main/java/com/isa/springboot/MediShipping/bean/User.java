@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String pictureLink;
     private String companyInfo;
 
+    private int penaltyPoints;
+
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Set<EquipmentCollectionAppointment> appointments;
@@ -160,6 +162,14 @@ public class User implements UserDetails {
     }
     public void setLastPasswordResetDate(Timestamp lastPasswordResetDate) {
         this.lastPasswordResetDate = lastPasswordResetDate;
+    }
+
+    public int getPenaltyPoints() {
+        return penaltyPoints;
+    }
+
+    public void setPenaltyPoints(int penaltyPoints) {
+        this.penaltyPoints = penaltyPoints;
     }
 
     public List<Role> getRoles() {
