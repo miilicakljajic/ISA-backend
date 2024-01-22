@@ -19,6 +19,19 @@ public class EquipmentCollectionAppointmentController {
     public EquipmentCollectionAppointmentDto update(@RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         return  service.update(equipmentCollectionAppointmentDto);
     }
+<<<<<<< HEAD
+=======
+    @PutMapping("/finalize/{companyid}/{id}")
+    public EquipmentCollectionAppointmentDto finalize(@PathVariable long companyid,  @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        return  service.finalizeAppointment(companyid, id, equipmentCollectionAppointmentDto);
+    }
+
+    @PostMapping("/emergency/{companyid}/{id}")
+    public EquipmentCollectionAppointmentDto finalizeEmergency(@PathVariable long companyid, @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        return  service.finalizeEmergencyAppointment(companyid, id, equipmentCollectionAppointmentDto);
+    }
+
+>>>>>>> develop
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id){
         service.deleteById(id);

@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.service.CompanyService;
@@ -32,6 +33,13 @@ public class UserController {
 
     // Update user by ID
 
+<<<<<<< HEAD
+=======
+    @GetMapping("/appointments/{id}")
+    public List<EquipmentCollectionAppointment> getAppointments(@PathVariable Long id) {
+        return userService.getAppointments(id);
+    }
+>>>>>>> develop
 
     // Delete all users
     @DeleteMapping

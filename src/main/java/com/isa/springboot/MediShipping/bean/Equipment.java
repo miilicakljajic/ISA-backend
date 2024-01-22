@@ -17,6 +17,11 @@ public class Equipment {
     private String name;
     private String description;
     private String type;
+
+    private Double price;
+
+    private Integer count;
+
     public long getId() {
         return id;
     }
@@ -47,6 +52,23 @@ public class Equipment {
     public void setType(String type) {
         this.type = type;
     }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,5 +80,15 @@ public class Equipment {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Equipment{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", appointments=" + '}';
     }
 }

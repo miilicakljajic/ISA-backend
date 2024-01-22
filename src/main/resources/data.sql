@@ -41,26 +41,34 @@ INSERT INTO public.companies(average_rating, description, name, address_id, work
 INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16');
 
 
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Surgical microscope for precise visualization', 'Surgical Microscope', 'Surgical Equipment', 2);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Anesthesia machine for administering anesthesia', 'Anesthesia Machine', 'Anesthesia Equipment', 2);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Blood pressure monitor for hypertension evaluation', 'Blood Pressure Monitor', 'Diagnostic Device', 2);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('X-ray machine for radiographic imaging', 'X-ray Machine', 'Radiology Equipment', 3);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Ophthalmoscope for eye examinations', 'Ophthalmoscope', 'Diagnostic Tool', 3);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Dental chair for dental procedures', 'Dental Chair', 'Dental Equipment', 3);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Ventilator for respiratory support', 'Ventilator', 'Life Support Equipment', 4);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Surgical scalpel for precise incisions', 'Surgical Scalpel', 'Surgical Instrument', 4);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('CT scanner for detailed imaging', 'CT Scanner', 'Diagnostic Equipment', 4);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Blood glucose meter for monitoring sugar levels', 'Glucose Meter', 'Diagnostic Device', 4);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Dialysis machine for renal therapy', 'Dialysis Machine', 'Renal Equipment', 1);
-INSERT INTO public.equipment(description, name, type, company_id) VALUES ('Orthopedic drill for bone surgeries', 'Orthopedic Drill', 'Surgical Instrument', 1);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 1, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Surgical microscope for precise visualization', 'Surgical Microscope', 'Surgical Equipment', 2, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Anesthesia machine for administering anesthesia', 'Anesthesia Machine', 'Anesthesia Equipment', 2, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Blood pressure monitor for hypertension evaluation', 'Blood Pressure Monitor', 'Diagnostic Device', 2, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('X-ray machine for radiographic imaging', 'X-ray Machine', 'Radiology Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Ophthalmoscope for eye examinations', 'Ophthalmoscope', 'Diagnostic Tool', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Dental chair for dental procedures', 'Dental Chair', 'Dental Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Ventilator for respiratory support', 'Ventilator', 'Life Support Equipment', 4, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Surgical scalpel for precise incisions', 'Surgical Scalpel', 'Surgical Instrument', 4, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('CT scanner for detailed imaging', 'CT Scanner', 'Diagnostic Equipment', 4, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Blood glucose meter for monitoring sugar levels', 'Glucose Meter', 'Diagnostic Device', 4, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Dialysis machine for renal therapy', 'Dialysis Machine', 'Renal Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Orthopedic drill for bone surgeries', 'Orthopedic Drill', 'Surgical Instrument', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 3, 1000);
+INSERT INTO public.equipment(description, name, type, company_id, price) VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 3, 1000);
 
 
 INSERT INTO public.ROLE (name) VALUES ('ROLE_USER');
@@ -70,15 +78,35 @@ INSERT INTO public.ROLE (name) VALUES ('ROLE_COMPANY_ADMIN');
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
-VALUES (21, 'Changing genes - changing future', 'usr@m.com', true, 'User', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+VALUES (21, 'Changing genes - changing future', 'usr@m.com', true, 'User', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1);
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
-VALUES (22,'Changing genes - changing future', 'sys@m.com', true, 'Sys', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+VALUES (22,'Changing genes - changing future', 'sys@m.com', true, 'Sys', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1);
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
-VALUES (23, 'Changing genes - changing future', 'comp@m.com', true, 'Com', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+VALUES (23, 'Changing genes - changing future', 'comp@m.com', true, 'Admin1', 'Kompanijski1', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (24, 'Changing genes - changing future', 'comp2@m.com', true, 'Admin2', 'Kompanijski2', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (25, 'Changing genes - changing future', 'comp2@m.com', true, 'Admin3', 'Kompanijski3', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1);
+
+
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (26, 'Changing genes - changing future', 'ognjenmilojevic2001@gmail.com', true, 'Ognjen', 'Milojevic', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1);
+
+
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id)
+VALUES (27, 'Changing genes - changing future', 'milicakljajic1@gmail.com', true, 'Milica', 'Kljajic', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1);
+
+
 
 INSERT INTO public.user_role(
     user_id, role_id)
@@ -92,14 +120,34 @@ INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (23, 3);
 
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (24, 3);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (25, 3);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (26, 1);
+
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (27, 1);
+
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-15T10:30:00', '30', false, 1);
+    admin_firstname, admin_lastname, date, duration, reserved, company_id, user_id)
+VALUES ('Admin', 'Peric', '2023-12-23T11:30:00', '30', true, 1, 26);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-16T11:00:00', '30', false, 1);
+VALUES ('Admin', 'Peric', '2023-12-23T10:30:00', '30', false, 3);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-17T11:30:00', '30', false, 1);
+VALUES ('Admin', 'Peric', '2023-12-24T11:00:00', '30', false, 3);
+
+INSERT INTO public.appointments(
+    admin_firstname, admin_lastname, date, duration, reserved, company_id)
+VALUES ('Admin', 'Peric', '2023-12-25T11:30:00', '30', false, 3);

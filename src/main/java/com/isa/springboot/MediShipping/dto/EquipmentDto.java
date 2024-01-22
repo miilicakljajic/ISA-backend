@@ -9,6 +9,13 @@ public class EquipmentDto {
     public String description;
     public String type;
 
+<<<<<<< HEAD
+=======
+    public Double price;
+
+    public Integer count;
+
+>>>>>>> develop
     public long getId() {
         return id;
     }
@@ -41,4 +48,22 @@ public class EquipmentDto {
         this.type = type;
     }
 
+<<<<<<< HEAD
+=======
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+>>>>>>> develop
 }

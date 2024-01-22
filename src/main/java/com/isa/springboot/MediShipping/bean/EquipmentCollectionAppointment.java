@@ -1,7 +1,7 @@
 package com.isa.springboot.MediShipping.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.isa.springboot.MediShipping.util.AppointmentStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,20 +13,30 @@ public class EquipmentCollectionAppointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.ALL,CascadeType.MERGE},fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinTable(name = "equipment_appointment",
-        joinColumns = @JoinColumn(name = "appointment_id"),
-        inverseJoinColumns = @JoinColumn(name = "equipment_id"))
+            joinColumns = @JoinColumn(name = "appointment_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "equipment_id", referencedColumnName = "id"))
     private Set<Equipment> equipment;
     private String adminFirstname;
     private String adminLastname;
     private LocalDateTime date;
     private int duration;
-    private AppointmentStatus status;
+    private boolean reserved;
+
+    @ManyToOne
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Set<Equipment> getEquipment() {
@@ -68,11 +78,32 @@ public class EquipmentCollectionAppointment {
         this.duration = duration;
     }
 
-    public AppointmentStatus getStatus() {
-        return status;
+    public boolean isReserved() {
+        return reserved;
     }
 
-    public void setStatus(AppointmentStatus status) {
-        this.status = status;
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    @Override
+    public String toString() {
+        return "EquipmentCollectionAppointment{" +
+                "id=" + id +
+                ", equipment=" + equipment +
+                ", adminFirstname='" + adminFirstname + '\'' +
+                ", adminLastname='" + adminLastname + '\'' +
+                ", date=" + date +
+                ", duration=" + duration +
+                ", reserved=" + reserved +
+                '}';
     }
 }

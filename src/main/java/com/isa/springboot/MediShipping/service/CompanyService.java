@@ -1,5 +1,9 @@
 package com.isa.springboot.MediShipping.service;
 
+import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
+import com.isa.springboot.MediShipping.bean.Role;
+import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.bean.*;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
 import com.isa.springboot.MediShipping.dto.RegisterDto;
@@ -62,9 +66,10 @@ public class CompanyService {
 
     public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
         Optional<Company> company = getCompanyById(id);
-            if(company.isEmpty())
-                return new ArrayList<EquipmentCollectionAppointment>();
-            else
-                return company.get().getAllAppointments().stream().toList();
+        if(company.isEmpty())
+            return new ArrayList<EquipmentCollectionAppointment>();
+        else
+            return company.get().getAllAppointments().stream().toList();
     }
+
 }

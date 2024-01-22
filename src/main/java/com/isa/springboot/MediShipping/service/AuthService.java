@@ -2,10 +2,7 @@ package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Role;
 import com.isa.springboot.MediShipping.bean.User;
-import com.isa.springboot.MediShipping.dto.LoginDto;
-import com.isa.springboot.MediShipping.dto.RegisterDto;
-import com.isa.springboot.MediShipping.dto.LoginResultDto;
-import com.isa.springboot.MediShipping.dto.UserTokenState;
+import com.isa.springboot.MediShipping.dto.*;
 import com.isa.springboot.MediShipping.mapper.AddressMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.UserRepository;
@@ -15,9 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -52,7 +51,7 @@ public class AuthService {
     }
 
     // Create a new user
-    public Optional<User> createUser(RegisterDto userdto, String role, boolean enabled) {
+    public Optional<User> createUser(RegisterDto userdto, String role, boolean enabled) throws MessagingException {
         User user = userMapper.convertToEntity(userdto);
         user.setPassword(passwordEncoder.encode(userdto.getPassword()));
         user.setFirstName(userdto.getFirstName());
@@ -131,5 +130,18 @@ public class AuthService {
 
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
+    }
+
+    public Optional<User> resetPass(long id, PasswordDto dto)
+    {
+        Optional<User> user = getUserById(id);
+        if(user.isPresent())
+        {
+            if(dto.getNewPassword().equals(dto.getNewPasswordCheck())) {
+                user.get().setPassword(passwordEncoder.encode(dto.getNewPassword()));
+                userRepository.save(user.get());
+            }
+        }
+        return user;
     }
 }

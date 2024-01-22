@@ -3,18 +3,22 @@ package com.isa.springboot.MediShipping.service;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
+import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
+import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
+import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
-import com.isa.springboot.MediShipping.util.AppointmentStatus;
+import com.isa.springboot.MediShipping.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import javax.mail.MessagingException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -23,21 +27,28 @@ public class EquipmentCollectionAppointmentService {
     @Autowired
     private EquipmentCollectionAppointmentRepository equipmentCollectionAppointmentRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private CompanyService companyService;
     @Autowired
     private CompanyRepository companyRepository;
-
     @Autowired
     private EquipmentCollectionAppointmentMapper mapper;
-
+    @Autowired
+    private CompanyMapper companyMapper;
     @Autowired
     private EquipmentMapper equipmentMapper;
+    @Autowired
+    MailService mailService;
+    @Autowired
+    AuthService authService;
+    @Autowired
+    UserMapper userMapper;
 
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
         if(company.isPresent()){
             String[] workingHours = company.get().getWorkingHours().split("-");
-
             return workingHours;
         }
         return null;
@@ -72,6 +83,45 @@ public class EquipmentCollectionAppointmentService {
 
         return false;
     }
+
+    private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
+    {
+        for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
+        {
+            boolean upperBound = newApp.getDate().toEpochSecond(ZoneOffset.UTC) < (app.getDate().toEpochSecond(ZoneOffset.UTC) + app.getDuration()*60);
+            boolean lowerBound = app.getDate().toEpochSecond(ZoneOffset.UTC) < newApp.getDate().toEpochSecond(ZoneOffset.UTC);
+            if(app.getDate().equals(newApp.getDate()) || (upperBound && lowerBound))
+                for(Equipment eq: app.getEquipment())
+                    for(Equipment eq2: newApp.getEquipment())
+                        if(eq.getId() == eq2.getId())
+                            return true;
+        }
+        return false;
+    }
+
+    private EquipmentCollectionAppointment setAdmin(EquipmentCollectionAppointment newApp)
+    {
+        ArrayList<String> admins = new ArrayList<String>();
+        for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
+        {
+            if(app.getDate().equals(newApp.getDate()))
+                if(!admins.contains(app.getAdminFirstname()+"|"+app.getAdminLastname()))
+                    admins.add(app.getAdminFirstname()+"|"+app.getAdminLastname());
+        }
+
+        for(User user: userRepository.findAll())
+        {
+            if(user.hasRole("ROLE_ADMIN") && !admins.contains(user.getFirstName()+"|"+user.getLastName()))
+            {
+                newApp.setAdminFirstname(user.getFirstName());
+                newApp.setAdminLastname(user.getLastName());
+                return newApp;
+            }
+        }
+        return newApp;
+    }
+
+
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -80,7 +130,8 @@ public class EquipmentCollectionAppointmentService {
         boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
         if(isValid && !alreadyExists) {
-            company.get().getAllAppointments().add(appointment);
+            appointment.setCompany(company.get());
+            company.get().getAllAppointments().add(appointment);;
             companyRepository.save(company.get());
             //return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
             return mapper.convertToDto(appointment);
@@ -98,34 +149,60 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setEquipment(updatedAppointment.getEquipment());
             appointment.get().setDate(updatedAppointment.getDate());
-            appointment.get().setStatus(updatedAppointment.getStatus());
+            appointment.get().setReserved(updatedAppointment.isReserved());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
         }
         return  null;
+    }
+
+    public EquipmentCollectionAppointmentDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+        Optional<Company> temp = companyService.getCompanyById(companyid);
+        EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
+        Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
+        Optional<User> user = authService.getUserById(userid);
+        if(appointment.isPresent() && user.isPresent()){
+            try {
+                updatedAppointment.setCompany(temp.get());
+                updatedAppointment.setReserved(true);
+                User updatedUser = user.get();
+                updatedUser.addApointment(updatedAppointment);
+                authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));
+                mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(updatedAppointment));
+        }
+        return  null;
+    }
+
+    public EquipmentCollectionAppointmentDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
+    {
+        EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
+        if(!equipmentOverlap(newApp) && isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration())) {
+            Optional<User> user = userRepository.findById(userid);
+            Optional<Company> company = companyService.getCompanyById(companyid);
+            newApp = setAdmin(newApp);
+            if (user.isPresent() && company.isPresent()) {
+                //newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
+                newApp.setCompany(company.get());
+                user.get().addApointment(newApp);
+                authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
+                //company.get().addAppointment(newApp);
+                //companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
+                try {
+                    mailService.sendAppointmentMail(user.get().getEmail(), newApp);
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return mapper.convertToDto(newApp);
+        }
+        return mapper.convertToDto(newApp);
     }
 
     public void deleteById(long id){
         equipmentCollectionAppointmentRepository.deleteById(id);
-    }
-
-
-    //nisam testirao ne znam da li radi
-    public EquipmentCollectionAppointmentDto scheduleAppointment(long id, List<EquipmentDto> equipmentDtos){
-        Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(id);
-        Set<Equipment> equipment = new HashSet<>();
-
-        if(appointment.isPresent()){
-
-            for (EquipmentDto e : equipmentDtos){
-                equipment.add(equipmentMapper.convertToEntity(e));
-            }
-
-            appointment.get().setStatus(AppointmentStatus.RESERVED);
-            appointment.get().setEquipment(equipment);
-
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
-        }
-        return  null;
     }
 }

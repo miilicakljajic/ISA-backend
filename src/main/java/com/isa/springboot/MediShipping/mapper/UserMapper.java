@@ -18,6 +18,10 @@ public class UserMapper {
         return modelMapper.map(user, LoginResultDto.class);
     }
 
+<<<<<<< HEAD
+=======
+    public RegisterDto convertToRegisterDto(User user) { return modelMapper.map(user, RegisterDto.class);}
+>>>>>>> develop
     public User convertToEntity(LoginResultDto userDetails) {
         return modelMapper.map(userDetails, User.class);
     }

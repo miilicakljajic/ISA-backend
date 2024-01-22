@@ -4,6 +4,7 @@ import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
+import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.*;
 
 @Service
@@ -22,6 +26,7 @@ public class EquipmentService {
     private EquipmentMapper equipmentMapper;
     @Autowired
     private CompanyService companyService;
+
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -41,13 +46,10 @@ public class EquipmentService {
         return null;
     }
 
+
     public EquipmentDto update(EquipmentDto updatedEquipmentDto){
         Optional<Equipment> equipment = equipmentRepository.findById(updatedEquipmentDto.id);
         Equipment updatedEquipment = equipmentMapper.convertToEntity(updatedEquipmentDto);
-
-        System.out.println(updatedEquipment.getId());
-        System.out.println(updatedEquipmentDto.getId());
-
         if(equipment.isPresent()) {
             Equipment existingEquipment = equipment.get();
             existingEquipment.setName(updatedEquipment.getName());
