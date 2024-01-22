@@ -137,17 +137,17 @@ INSERT INTO public.user_role(
 VALUES (27, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, reserved, company_id, user_id)
-VALUES ('Admin', 'Peric', '2023-12-23T11:30:00', '30', true, 1, 26);
+    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
+VALUES ('Admin', 'Peric', '2023-12-23T11:30:00', '30', 1, 1, 26);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-23T10:30:00', '30', false, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2023-12-23T10:30:00', '30', 0, 3);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-24T11:00:00', '30', false, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2023-12-24T11:00:00', '30', 0, 3);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, reserved, company_id)
-VALUES ('Admin', 'Peric', '2023-12-25T11:30:00', '30', false, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2023-12-25T11:30:00', '30', 0, 3);

@@ -13,6 +13,7 @@ import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import com.isa.springboot.MediShipping.repository.UserRepository;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
@@ -149,7 +150,7 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setEquipment(updatedAppointment.getEquipment());
             appointment.get().setDate(updatedAppointment.getDate());
-            appointment.get().setReserved(updatedAppointment.isReserved());
+            appointment.get().setStatus(updatedAppointment.getStatus());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
         }
@@ -164,7 +165,7 @@ public class EquipmentCollectionAppointmentService {
         if(appointment.isPresent() && user.isPresent()){
             try {
                 updatedAppointment.setCompany(temp.get());
-                updatedAppointment.setReserved(true);
+                updatedAppointment.setStatus(AppointmentStatus.RESERVED);
                 User updatedUser = user.get();
                 updatedUser.addApointment(updatedAppointment);
                 authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));

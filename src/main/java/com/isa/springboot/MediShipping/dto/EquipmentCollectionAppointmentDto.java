@@ -1,5 +1,7 @@
 package com.isa.springboot.MediShipping.dto;
 
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -12,16 +14,15 @@ public class EquipmentCollectionAppointmentDto {
     public Set<EquipmentDto> equipment;
     public int duration;
 
-    public boolean reserved;
+    public AppointmentStatus status;
 
-    public boolean isReserved() {
-        return reserved;
+    public AppointmentStatus getStatus() {
+        return status;
     }
 
-    public void setReserved(boolean reserved) {
-        this.reserved = reserved;
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
     }
-
 
     public long getId() {
         return id;
