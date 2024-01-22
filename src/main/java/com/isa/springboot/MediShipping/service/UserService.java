@@ -2,9 +2,12 @@ package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
+import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.LoginDto;
+import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.UserRepository;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,12 +16,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EquipmentCollectionAppointmentMapper appointmentMapper;
 
     // Get all users
     public List<User> getAllUsers() {
@@ -64,6 +73,35 @@ public class UserService implements UserDetailsService {
         if(user.isPresent())
             return user.get().getAppointments().stream().toList();
         return new ArrayList<EquipmentCollectionAppointment>();
+    }
+
+    public void cancelAppointment(long id, EquipmentCollectionAppointmentDto appointment)
+    {
+        Optional<User> user = getUserById(id);
+        LocalDateTime today = LocalDateTime.now();
+
+        if(user.isPresent())
+        {
+            for(EquipmentCollectionAppointment app : user.get().getAppointments())
+            {
+                if(app.getId() == appointment.getId())
+                {
+                    app.setStatus(AppointmentStatus.AVALIABLE);
+                    userRepository.save(user.get());
+                    user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
+                    if((Duration.between(appointment.getDate(), today)).toHours() < 24)
+                    {
+                        user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 2);
+                    }
+                    else
+                    {
+                        user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 1);
+                    }
+                    userRepository.save(user.get());
+                    return;
+                }
+            }
+        }
     }
 
     // Other business logic related to users

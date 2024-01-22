@@ -2,6 +2,7 @@ package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
+import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.service.CompanyService;
 import com.isa.springboot.MediShipping.service.UserService;
@@ -49,5 +50,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    @PostMapping("/appointments/cancel/{id}")
+    public void cancelAppointment(@PathVariable Long id, @RequestBody EquipmentCollectionAppointmentDto appointment)
+    {
+        userService.cancelAppointment(id, appointment);
     }
 }

@@ -193,6 +193,17 @@ public class User implements UserDetails {
         this.appointments.add(app);
     }
 
+    public void removeAppointment(EquipmentCollectionAppointment app) {
+        for(EquipmentCollectionAppointment a : this.appointments)
+        {
+            if(a.getId() == app.getId())
+            {
+                this.appointments.remove(a);
+                return;
+            }
+        }
+    }
+
     public boolean hasRole(String roleName)
     {
         for(Role role : roles)
