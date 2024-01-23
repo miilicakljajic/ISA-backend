@@ -13,6 +13,7 @@ public class OrderItemDto {
 
     public Integer count;
 
+    public long equipmentId;
     public long getId() {
         return id;
     }
@@ -59,5 +60,13 @@ public class OrderItemDto {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public long getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(long equipmentId) {
+        this.equipmentId = equipmentId;
     }
 }

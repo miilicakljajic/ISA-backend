@@ -102,7 +102,8 @@ public class AuthService {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             User existingUser = user.get();
-            existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+            //TODO, PROMENA SIFRE POSEBNO!
+            //existingUser.setPassword(passwordEncoder.encode(userDetails.getPassword()));
             existingUser.setFirstName(userDetails.getFirstName());
             existingUser.setLastName(userDetails.getLastName());
             existingUser.setAddress(adddressMapper.convertToEntity(userDetails.getAddress()));

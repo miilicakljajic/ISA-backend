@@ -22,6 +22,8 @@ public class OrderItem {
 
     private Integer count;
 
+    private long equipmentId;
+
     public long getId() {
         return id;
     }
@@ -67,6 +69,14 @@ public class OrderItem {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public long getEquipmentId() {
+        return equipmentId;
+    }
+
+    public void setEquipmentId(long equipmentId) {
+        this.equipmentId = equipmentId;
     }
 
     @Override

@@ -167,6 +167,8 @@ public class EquipmentCollectionAppointmentService {
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
         Optional<User> user = authService.getUserById(userid);
+        if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
+            return new ResponseDto(400, "Too many penalty points!");
         if(appointment.isPresent() && user.isPresent()){
             try {
                 updatedAppointment.setCompany(temp.get());
@@ -190,6 +192,8 @@ public class EquipmentCollectionAppointmentService {
         boolean dateValid = isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration());
         if(!overlap && dateValid) {
             Optional<User> user = userRepository.findById(userid);
+            if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
+                return new ResponseDto(400, "Too many penalty points!");
             Optional<Company> company = companyService.getCompanyById(companyid);
             newApp = setAdmin(newApp);
             if (user.isPresent() && company.isPresent()) {
