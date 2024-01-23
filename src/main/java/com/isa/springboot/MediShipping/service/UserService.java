@@ -1,11 +1,15 @@
 package com.isa.springboot.MediShipping.service;
 
+import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
+import com.isa.springboot.MediShipping.bean.OrderItem;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.LoginDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
+import com.isa.springboot.MediShipping.repository.EquipmentRepository;
+import com.isa.springboot.MediShipping.repository.OrderItemRepository;
 import com.isa.springboot.MediShipping.repository.UserRepository;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +29,12 @@ import java.util.*;
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private EquipmentCollectionAppointmentMapper appointmentMapper;
+    @Autowired
+    private EquipmentRepository equipmentRepository;
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     // Get all users
     public List<User> getAllUsers() {
@@ -86,10 +93,18 @@ public class UserService implements UserDetailsService {
             {
                 if(app.getId() == appointment.getId())
                 {
+                    for(OrderItem oi : app.getItems())
+                    {
+                        Equipment equipment = equipmentRepository.getById(oi.getEquipmentId());
+                        equipment.setCount(equipment.getCount() + oi.getCount());
+                        equipmentRepository.save(equipment);
+                        orderItemRepository.delete(oi);
+                    }
+
                     app.setStatus(AppointmentStatus.AVALIABLE);
                     userRepository.save(user.get());
                     user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
-                    if((Duration.between(appointment.getDate(), today)).toHours() < 24)
+                    if((Duration.between(today, appointment.getDate())).toHours() < 24)
                     {
                         user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 2);
                     }
