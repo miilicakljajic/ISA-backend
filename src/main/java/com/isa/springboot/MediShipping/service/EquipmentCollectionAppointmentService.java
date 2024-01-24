@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.service;
 
+import com.google.zxing.WriterException;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -171,6 +173,13 @@ public class EquipmentCollectionAppointmentService {
             return new ResponseDto(400, "Too many penalty points!");
         if(appointment.isPresent() && user.isPresent()){
             try {
+                try {
+                    updatedAppointment.setQr(QrService.getQRCodeImage(updatedAppointment.toString(), 300, 300));
+                } catch (WriterException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 updatedAppointment.setCompany(temp.get());
                 updatedAppointment.setStatus(AppointmentStatus.RESERVED);
                 User updatedUser = user.get();
@@ -198,6 +207,13 @@ public class EquipmentCollectionAppointmentService {
             newApp = setAdmin(newApp);
             if (user.isPresent() && company.isPresent()) {
                 //newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
+                try {
+                    newApp.setQr(QrService.getQRCodeImage(newApp.toString(), 300, 300));
+                } catch (WriterException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
                 newApp.setCompany(company.get());
                 user.get().addApointment(newApp);
                 authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));

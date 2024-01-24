@@ -25,6 +25,7 @@ public class EquipmentCollectionAppointment {
     private LocalDateTime date;
     private int duration;
     private AppointmentStatus status;
+    private byte[] qr;
 
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -94,6 +95,14 @@ public class EquipmentCollectionAppointment {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public byte[] getQr() {
+        return qr;
+    }
+
+    public void setQr(byte[] qr) {
+        this.qr = qr;
     }
 
     @Override

@@ -16,6 +16,8 @@ public class EquipmentCollectionAppointmentDto {
 
     public AppointmentStatus status;
 
+    public byte[] qr;
+
     public AppointmentStatus getStatus() {
         return status;
     }
@@ -72,4 +74,11 @@ public class EquipmentCollectionAppointmentDto {
         this.duration = duration;
     }
 
+    public byte[] getQr() {
+        return qr;
+    }
+
+    public void setQr(byte[] qr) {
+        this.qr = qr;
+    }
 }
