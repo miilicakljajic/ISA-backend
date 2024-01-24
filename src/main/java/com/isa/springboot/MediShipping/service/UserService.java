@@ -101,7 +101,7 @@ public class UserService implements UserDetailsService {
                         orderItemRepository.delete(oi);
                     }
 
-                    app.setStatus(AppointmentStatus.AVALIABLE);
+                    app.setStatus(AppointmentStatus.AVAILABLE);
                     userRepository.save(user.get());
                     user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
                     if((Duration.between(today, appointment.getDate())).toHours() < 24)

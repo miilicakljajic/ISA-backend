@@ -2,14 +2,12 @@ package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
-import com.isa.springboot.MediShipping.bean.Role;
 import com.isa.springboot.MediShipping.bean.User;
-import com.isa.springboot.MediShipping.bean.*;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
-import com.isa.springboot.MediShipping.dto.RegisterDto;
+import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
-import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CompanyService {
@@ -29,6 +26,9 @@ public class CompanyService {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
         for(User u: company.getCompanyManagers()) {
@@ -70,6 +70,29 @@ public class CompanyService {
             return new ArrayList<EquipmentCollectionAppointment>();
         else
             return company.get().getAllAppointments().stream().toList();
+    }
+
+    public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
+        Optional<Company> company = getCompanyById(companyId);
+        List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
+        if(company.isEmpty())
+            return new ArrayList<UserAppointmentDto>();
+        else{
+            for(User u : userService.getAllUsers()){
+                for(EquipmentCollectionAppointment appointment : u.getAppointments()){
+                    if(appointment.getStatus() != AppointmentStatus.RESERVED) continue;
+
+                    if(appointment.getCompany().getId() == companyId){
+                        UserAppointmentDto x = new UserAppointmentDto();
+                        x.setFirstName(u.getFirstName());
+                        x.setLastName(u.getLastName());
+                        usersWithAppointments.add(x);
+                    }
+                }
+            }
+
+            return  usersWithAppointments;
+        }
     }
 
 }
