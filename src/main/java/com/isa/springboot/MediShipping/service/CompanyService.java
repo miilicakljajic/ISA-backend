@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,9 +28,9 @@ public class CompanyService {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private UserService userService;
+
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
         for(User u: company.getCompanyManagers()) {
@@ -70,29 +72,6 @@ public class CompanyService {
             return new ArrayList<EquipmentCollectionAppointment>();
         else
             return company.get().getAllAppointments().stream().toList();
-    }
-
-    public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
-        Optional<Company> company = getCompanyById(companyId);
-        List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
-        if(company.isEmpty())
-            return new ArrayList<UserAppointmentDto>();
-        else{
-            for(User u : userService.getAllUsers()){
-                for(EquipmentCollectionAppointment appointment : u.getAppointments()){
-                    if(appointment.getStatus() != AppointmentStatus.RESERVED) continue;
-
-                    if(appointment.getCompany().getId() == companyId){
-                        UserAppointmentDto x = new UserAppointmentDto();
-                        x.setFirstName(u.getFirstName());
-                        x.setLastName(u.getLastName());
-                        usersWithAppointments.add(x);
-                    }
-                }
-            }
-
-            return  usersWithAppointments;
-        }
     }
 
 }

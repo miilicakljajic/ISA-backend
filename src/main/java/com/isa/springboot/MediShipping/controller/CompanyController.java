@@ -45,8 +45,4 @@ public class CompanyController {
     public List<EquipmentCollectionAppointment> getAppointmentsByCompany(@PathVariable long id) {
         return companyService.getAppointmentsByCompany(id);
     }
-    @GetMapping("/x/{id}")
-    public List<UserAppointmentDto> getUsersWithUpcomingAppointments(@PathVariable long id){
-        return companyService.getUsersWithUpcomingAppointments(id);
-    }
 }

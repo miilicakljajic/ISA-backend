@@ -73,7 +73,6 @@ public class UserService implements UserDetailsService {
         }
         return Optional.empty();
     }
-
     public List<EquipmentCollectionAppointment> getAppointments(long id)
     {
         Optional<User> user = getUserById(id);
@@ -119,5 +118,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    // Other business logic related to users
+    public String getUserEmail(long appointmentId){
+        for(User u : getAllUsers()){
+            for(EquipmentCollectionAppointment appointment : u.getAppointments()){
+                if(appointment.getId() == appointmentId){
+                    return  u.getEmail();
+                }
+            }
+        }
+        return "";
+    }
 }
