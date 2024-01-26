@@ -154,14 +154,6 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setItems(updatedAppointment.getItems());
             appointment.get().setDate(updatedAppointment.getDate());
             appointment.get().setStatus(updatedAppointment.getStatus());
-            if(updatedAppointment.getStatus() == AppointmentStatus.DONE) {
-                try {
-                    mailService.sendAppointmentMail(userService.getUserEmail(appointment.get().getId()), updatedAppointment);
-                }
-                catch (MessagingException e){
-                    throw new RuntimeException(e);
-                }
-            }
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
         }

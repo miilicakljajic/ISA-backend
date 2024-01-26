@@ -1,6 +1,8 @@
 package com.isa.springboot.MediShipping.service;
 import com.google.zxing.WriterException;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
+import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,6 +21,8 @@ import java.util.Properties;
 public class MailService {
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private UserService userService;
     private static final String verifyMessage = """
             Hello, welcome to MediShipping application.
             Please verify your account here: http://localhost:4333/api/auth/""";
@@ -53,10 +57,12 @@ public class MailService {
             throw new RuntimeException(e);
         }
     }
-    public void sendCollectionMail(String to,EquipmentCollectionAppointment appointment) throws  MessagingException{
+    public void sendCollectionMail(long userId, EquipmentCollectionAppointmentDto appointmentDto) throws  MessagingException{
         try{
-            QrService.generateQRCodeImage(appointment.toString(),300,300, "qr.png");
-            sendEmail(to,"You have collected your equipment",appointmentMessage,"qr.png");
+            if(appointmentDto.getStatus() != AppointmentStatus.DONE){ return;}
+            String emailAddress = userService.getUserById(userId).get().getEmail();
+            QrService.generateQRCodeImage(appointmentDto.toString(),300,300, "qr.png");
+            sendEmail(emailAddress,"You have collected your equipment",appointmentMessage,"qr.png");
         }catch (WriterException | IOException e){
             throw  new RuntimeException(e);
         }
