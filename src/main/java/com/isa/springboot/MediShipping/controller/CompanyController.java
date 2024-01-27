@@ -2,19 +2,13 @@ package com.isa.springboot.MediShipping.controller;
 
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
-import com.isa.springboot.MediShipping.bean.Role;
-import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
-import com.isa.springboot.MediShipping.dto.RegisterDto;
-import com.isa.springboot.MediShipping.mapper.CompanyMapper;
+import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.service.AuthService;
 import com.isa.springboot.MediShipping.service.CompanyService;
-import com.isa.springboot.MediShipping.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,9 +18,6 @@ import java.util.Optional;
 public class CompanyController {
     @Autowired
     private CompanyService companyService;
-    @Autowired
-    private AuthService userService;
-
     @PostMapping
     public Company createCompany(@RequestBody CompanyDto companydto)
     {

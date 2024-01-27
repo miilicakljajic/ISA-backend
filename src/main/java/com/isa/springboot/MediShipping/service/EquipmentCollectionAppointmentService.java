@@ -5,9 +5,7 @@ import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
-import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
-import com.isa.springboot.MediShipping.dto.EquipmentDto;
-import com.isa.springboot.MediShipping.dto.ResponseDto;
+import com.isa.springboot.MediShipping.dto.*;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
@@ -41,13 +39,11 @@ public class EquipmentCollectionAppointmentService {
     @Autowired
     private EquipmentCollectionAppointmentMapper mapper;
     @Autowired
-    private CompanyMapper companyMapper;
-    @Autowired
-    private EquipmentMapper equipmentMapper;
-    @Autowired
     MailService mailService;
     @Autowired
     AuthService authService;
+    @Autowired
+    UserService userService;
     @Autowired
     UserMapper userMapper;
 
@@ -148,11 +144,13 @@ public class EquipmentCollectionAppointmentService {
             return null;
         }
     }
-    public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
+    public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto,long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
 
         if(appointment.isPresent()){
+            Optional<Company> company = companyService.getCompanyById(companyId);
+            appointment.get().setCompany(company.get());
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setItems(updatedAppointment.getItems());
@@ -237,5 +235,47 @@ public class EquipmentCollectionAppointmentService {
 
     public void deleteById(long id){
         equipmentCollectionAppointmentRepository.deleteById(id);
+    }
+
+    public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+        List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        if(company.isEmpty())
+            return new ArrayList<UserAppointmentDto>();
+        else{
+            for(User u : userRepository.findAll()){
+                for(EquipmentCollectionAppointment appointment : u.getAppointments()){
+                    if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
+
+                    if(checkAppointmentExpirationDate(appointment)) {
+                        appointment.setStatus(AppointmentStatus.EXPIRED);
+                        update(mapper.convertToDto(appointment),appointment.getCompany().getId());
+                        u.setPenaltyPoints(u.getPenaltyPoints() + 2);
+                        userRepository.save(u);
+                    }
+
+                    if(appointment.getCompany().getId() == companyId){
+                        UserAppointmentDto x = new UserAppointmentDto();
+                        x.setAppointmentId(appointment.getId());
+                        x.setFirstName(u.getFirstName());
+                        x.setLastName(u.getLastName());
+                        x.setDate(formatter.format(appointment.getDate()));
+                        x.setStatus(appointment.getStatus());
+                        usersWithAppointments.add(x);
+                    }
+                }
+            }
+
+            return  usersWithAppointments;
+        }
+    }
+
+    public Boolean checkAppointmentExpirationDate(EquipmentCollectionAppointment appointment){
+        if(appointment.getStatus() != AppointmentStatus.EXPIRED && appointment.getDate().isBefore(LocalDateTime.now())){
+            return  true;
+        }
+
+        return false;
     }
 }

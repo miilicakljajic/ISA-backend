@@ -73,7 +73,6 @@ public class UserService implements UserDetailsService {
         }
         return Optional.empty();
     }
-
     public List<EquipmentCollectionAppointment> getAppointments(long id)
     {
         Optional<User> user = getUserById(id);
@@ -101,7 +100,7 @@ public class UserService implements UserDetailsService {
                         orderItemRepository.delete(oi);
                     }
 
-                    app.setStatus(AppointmentStatus.AVALIABLE);
+                    app.setStatus(AppointmentStatus.AVAILABLE);
                     userRepository.save(user.get());
                     user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
                     if((Duration.between(today, appointment.getDate())).toHours() < 24)
@@ -119,5 +118,14 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    // Other business logic related to users
+    public String getUserEmail(long appointmentId){
+        for(User u : getAllUsers()){
+            for(EquipmentCollectionAppointment appointment : u.getAppointments()){
+                if(appointment.getId() == appointmentId){
+                    return  u.getEmail();
+                }
+            }
+        }
+        return "";
+    }
 }

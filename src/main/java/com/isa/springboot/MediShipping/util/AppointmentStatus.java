@@ -1,7 +1,7 @@
 package com.isa.springboot.MediShipping.util;
 
 public enum AppointmentStatus {
-    AVALIABLE,
+    AVAILABLE,
     RESERVED,
     EXPIRED,
     DONE
