@@ -19,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
+import javax.swing.text.html.Option;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -103,26 +105,43 @@ public class EquipmentCollectionAppointmentService {
         return false;
     }
 
-    private EquipmentCollectionAppointment setAdmin(EquipmentCollectionAppointment newApp)
+    //Dobavi prvog admina koji se slobodan za taj termin, ili vrati null ako nema
+    private void setAvailableAdmin(EquipmentCollectionAppointment newApp, Company company)
     {
-        ArrayList<String> admins = new ArrayList<String>();
+        ArrayList<User> allAdmins = new ArrayList<User>(company.getCompanyManagers());
+        ArrayList<User> busyAdmins = new ArrayList<User>();
+        ArrayList<EquipmentCollectionAppointment> sameTime = new ArrayList<EquipmentCollectionAppointment>();
         for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
-        {
             if(app.getDate().equals(newApp.getDate()))
-                if(!admins.contains(app.getAdminFirstname()+"|"+app.getAdminLastname()))
-                    admins.add(app.getAdminFirstname()+"|"+app.getAdminLastname());
-        }
+                sameTime.add(app);
 
-        for(User user: userRepository.findAll())
+        for(EquipmentCollectionAppointment app : sameTime)
+            for(User admin : allAdmins)
+                if(app.getAdminFirstname().equals(admin.getFirstName()) && app.getAdminLastname().equals(admin.getLastName()))
+                    busyAdmins.add(admin);
+
+        System.out.println("All admins:" + allAdmins);
+        for(User potentialAdmin: allAdmins)
         {
-            if(user.hasRole("ROLE_ADMIN") && !admins.contains(user.getFirstName()+"|"+user.getLastName()))
+            boolean found = false;
+            for (User admin : busyAdmins)
             {
-                newApp.setAdminFirstname(user.getFirstName());
-                newApp.setAdminLastname(user.getLastName());
-                return newApp;
+                if(admin.getFirstName().equals(potentialAdmin.getFirstName()) && admin.getLastName().equals(potentialAdmin.getLastName())) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+            {
+                System.out.println("Found admin:" + potentialAdmin.getFirstName() + " " + potentialAdmin.getLastName());
+                newApp.setAdminFirstname(potentialAdmin.getFirstName());
+                newApp.setAdminLastname(potentialAdmin.getLastName());
+                return;
             }
         }
-        return newApp;
+
+        newApp.setAdminFirstname(null);
+        newApp.setAdminLastname(null);
     }
 
 
@@ -199,11 +218,17 @@ public class EquipmentCollectionAppointmentService {
         boolean dateValid = isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration());
         if(!overlap && dateValid) {
             Optional<User> user = userRepository.findById(userid);
+            Optional<Company> company = companyService.getCompanyById(companyid);
+
             if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
                 return new ResponseDto(400, "Too many penalty points!");
-            Optional<Company> company = companyService.getCompanyById(companyid);
-            newApp = setAdmin(newApp);
+
             if (user.isPresent() && company.isPresent()) {
+
+                setAvailableAdmin(newApp, company.get());
+                if(newApp.getAdminFirstname() == null)
+                    return new ResponseDto(400, "No available admins at that time");
+
                 //newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
                 try {
                     newApp.setQr(QrService.getQRCodeImage(newApp.toString(), 300, 300));

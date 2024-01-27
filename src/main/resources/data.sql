@@ -216,7 +216,7 @@ VALUES ('Petar', 'CompanyAdmin1', '2024-02-26T12:00:00', '30', 1, 1, 21);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Petar', 'CompanyAdmin1', '2023-02-27T12:30:00', '30', 1, 1, 21);
+VALUES ('Petar', 'CompanyAdmin1', '2069-02-27T12:30:00', '30', 1, 1, 21);
 
 INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
 VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 500, 9, 3);
