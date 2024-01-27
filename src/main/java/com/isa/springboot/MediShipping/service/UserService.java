@@ -117,15 +117,4 @@ public class UserService implements UserDetailsService {
             }
         }
     }
-
-    public String getUserEmail(long appointmentId){
-        for(User u : getAllUsers()){
-            for(EquipmentCollectionAppointment appointment : u.getAppointments()){
-                if(appointment.getId() == appointmentId){
-                    return  u.getEmail();
-                }
-            }
-        }
-        return "";
-    }
 }

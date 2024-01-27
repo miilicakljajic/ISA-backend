@@ -7,13 +7,12 @@ import com.isa.springboot.MediShipping.dto.CompanyDto;
 import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
+import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +28,7 @@ public class CompanyService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private UserService userService;
+    private EquipmentCollectionAppointmentRepository appointmentRepository;
 
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
@@ -45,20 +44,25 @@ public class CompanyService {
 
     public Optional<Company> getCompanyById(Long id) { return companyRepository.findById(id); }
 
-    public CompanyDto updateCompany(Long id, CompanyDto companyDto) {
-        Optional<Company> company = companyRepository.findById(id);
-        Company companyDetails = mapper.convertToEntity(companyDto);
-        if(company.isPresent()) {
-            Company existingCompany = company.get();
-            existingCompany.setName(companyDetails.getName());
-            existingCompany.setAddress(companyDetails.getAddress());
-            existingCompany.setDescription(companyDetails.getDescription());
-            existingCompany.setAverageRating(companyDetails.getAverageRating());
-            existingCompany.setAllAppointments(companyDetails.getAllAppointments());
-            existingCompany.setEquipment(companyDetails.getEquipment());
-            existingCompany.setCompanyManagers(companyDetails.getCompanyManagers());
 
-            return mapper.convertToCompanyDto(companyRepository.save(existingCompany));
+    //promenio sam ovo
+    public CompanyDto updateCompany(Long id, CompanyDto companyDto) {
+        Optional<Company> existingCompany = getCompanyById(id);
+        Company updatedCompany = mapper.convertToEntity(companyDto);
+        if(existingCompany.get() != null) {
+            System.out.println(updatedCompany.toString());
+            existingCompany.get().setName(updatedCompany.getName());
+            existingCompany.get().setAddress(updatedCompany.getAddress());
+            existingCompany.get().setDescription(updatedCompany.getDescription());
+            existingCompany.get().setAverageRating(updatedCompany.getAverageRating());
+            existingCompany.get().setAllAppointments(updatedCompany.getAllAppointments());
+            existingCompany.get().setEquipment(updatedCompany.getEquipment());
+            existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
+            for(EquipmentCollectionAppointment a : existingCompany.get().getAllAppointments()){
+                a.setCompany(updatedCompany);
+            }
+
+            return mapper.convertToCompanyDto(companyRepository.save(existingCompany.get()));
         }
         return null;
     }
@@ -72,6 +76,18 @@ public class CompanyService {
             return new ArrayList<EquipmentCollectionAppointment>();
         else
             return company.get().getAllAppointments().stream().toList();
+    }
+
+    public Company getByManagerId(long id){
+        for(Company c : getAllCompanies()){
+            for(User u : c.getCompanyManagers()){
+                if(u.getId() == id){
+                    return c;
+                }
+            }
+        }
+
+        return null;
     }
 
 }

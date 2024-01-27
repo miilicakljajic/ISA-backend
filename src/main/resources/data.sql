@@ -192,19 +192,19 @@ VALUES (27, 1);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Admin', 'Peric', '2023-12-23T11:30:00', '30', 1, 1, 26);
+VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 1, 1, 26);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2023-12-23T10:30:00', '30', 0, 3);
+VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 0, 3);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2023-12-24T11:00:00', '30', 0, 3);
+VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2023-12-25T11:30:00', '30', 0, 3);
+VALUES ('Admin', 'Peric', '2024-12-25T11:30:00', '30', 0, 3);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
@@ -228,10 +228,10 @@ INSERT INTO public.orderitem(description, name, type, price, count, equipment_id
 VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 2000, 5, 5);
 
 INSERT INTO public.appointment_items(appointment_id, orderitem_id)
-VALUES (7, 1);
+VALUES (1, 1);
 
 INSERT INTO public.appointment_items(appointment_id, orderitem_id)
-VALUES (7, 2);
+VALUES (1, 2);
 
 INSERT INTO public.appointment_items(appointment_id, orderitem_id)
-VALUES (7, 3);
+VALUES (1, 3);

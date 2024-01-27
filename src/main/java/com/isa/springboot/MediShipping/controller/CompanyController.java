@@ -45,4 +45,9 @@ public class CompanyController {
     public List<EquipmentCollectionAppointment> getAppointmentsByCompany(@PathVariable long id) {
         return companyService.getAppointmentsByCompany(id);
     }
+
+    @GetMapping("/manager/{id}")
+    public Company getByManagerId(@PathVariable long id){
+        return  companyService.getByManagerId(id);
+    }
 }

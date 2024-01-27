@@ -2,6 +2,7 @@ package com.isa.springboot.MediShipping.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class Company {
     private Set<User> companyManagers;
     public Company(){
         this.equipment = new HashSet<>();
+       // this.allAppointments = new HashSet<>();
     }
     public Company(Long id, String name, Address address, String description, Double averageRating) {
         this.id = id;
@@ -44,14 +46,8 @@ public class Company {
         this.description = description;
         this.averageRating = averageRating;
         this.equipment = new HashSet<>();
+       // this.allAppointments = new HashSet<>();
     }
-    public void addUser(User user){
-        companyManagers.add(user);
-    }
-    public void AddEquipment(Equipment equipment){
-        this.equipment.add(equipment);
-    }
-
     public Long getId() {
         return id;
     }
@@ -124,6 +120,21 @@ public class Company {
     }
 
     public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address=" + address +
+                ", description='" + description + '\'' +
+                ", averageRating=" + averageRating +
+                ", workingHours='" + workingHours + '\'' +
+                ", allAppointments=" + allAppointments +
+                ", equipment=" + equipment +
+                ", companyManagers=" + companyManagers +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {
