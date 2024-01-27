@@ -44,11 +44,10 @@ public class CompanyService {
 
     public Optional<Company> getCompanyById(Long id) { return companyRepository.findById(id); }
 
-
-    //promenio sam ovo
     public CompanyDto updateCompany(Long id, CompanyDto companyDto) {
         Optional<Company> existingCompany = getCompanyById(id);
         Company updatedCompany = mapper.convertToEntity(companyDto);
+
         if(existingCompany.get() != null) {
             System.out.println(updatedCompany.toString());
             existingCompany.get().setName(updatedCompany.getName());

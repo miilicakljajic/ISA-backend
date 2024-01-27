@@ -37,7 +37,7 @@ public class Company {
     private Set<User> companyManagers;
     public Company(){
         this.equipment = new HashSet<>();
-       // this.allAppointments = new HashSet<>();
+        this.allAppointments = new HashSet<>();
     }
     public Company(Long id, String name, Address address, String description, Double averageRating) {
         this.id = id;
@@ -46,12 +46,15 @@ public class Company {
         this.description = description;
         this.averageRating = averageRating;
         this.equipment = new HashSet<>();
-       // this.allAppointments = new HashSet<>();
+        this.allAppointments = new HashSet<>();
     }
     public Long getId() {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
@@ -97,7 +100,10 @@ public class Company {
     }
 
     public void setAllAppointments(Set<EquipmentCollectionAppointment> allAppointments) {
-        this.allAppointments = allAppointments;
+        this.allAppointments.clear();
+        if(allAppointments != null){
+            this.allAppointments.addAll(allAppointments);
+        }
     }
 
     public Set<Equipment> getEquipment() {
@@ -118,8 +124,6 @@ public class Company {
     public void setCompanyManagers(Set<User> companyManagers) {
         this.companyManagers = companyManagers;
     }
-
-    public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
 
     @Override
     public String toString() {
