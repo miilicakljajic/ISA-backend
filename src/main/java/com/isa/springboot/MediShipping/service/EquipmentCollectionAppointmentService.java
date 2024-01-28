@@ -27,10 +27,6 @@ public class EquipmentCollectionAppointmentService {
     @Autowired
     private CompanyService companyService;
     @Autowired
-    private CompanyRepository companyRepository;
-    @Autowired
-    private CompanyMapper companyMapper;
-    @Autowired
     private EquipmentCollectionAppointmentMapper mapper;
     @Autowired
     private EquipmentRepository equipmentRepository;
@@ -161,15 +157,13 @@ public class EquipmentCollectionAppointmentService {
         boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
         if(isValid && !alreadyExists && company.isPresent()) {
-            companyRepository.save(company.get());
-            //return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
-            return mapper.convertToDto(appointment);
+            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
         }
         else{
             return null;
         }
     }
-    public EquipmentCollectionAppointmentDto update1(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
+    public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
 
@@ -285,11 +279,10 @@ public class EquipmentCollectionAppointmentService {
                 if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
 
                 if(checkAppointmentExpirationDate(appointment)) {
-                    System.out.println(appointment.toString());
                     appointment.setStatus(AppointmentStatus.EXPIRED);
                     int currentPoints = appointment.getUser().getPenaltyPoints();
                     appointment.getUser().setPenaltyPoints(currentPoints + 2);
-                    //update(mapper.convertToDto(appointment),appointment.getCompany().getId());
+                    update(mapper.convertToDto(appointment),appointment.getCompany().getId());
                 }
 
                 UserAppointmentDto x = new UserAppointmentDto();

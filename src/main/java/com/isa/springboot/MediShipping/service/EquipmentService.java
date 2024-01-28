@@ -3,6 +3,8 @@ package com.isa.springboot.MediShipping.service;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
+import com.isa.springboot.MediShipping.bean.OrderItem;
+import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.EquipmentDto;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
@@ -24,10 +26,11 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
     @Autowired
+    private EquipmentCollectionAppointmentService appointmentService;
+    @Autowired
     private EquipmentMapper equipmentMapper;
     @Autowired
     private CompanyService companyService;
-
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -65,29 +68,30 @@ public class EquipmentService {
         return null;
     }
 
-
-    /*public boolean isEquipmentReserved(Company company,long equipmentId){
+    public boolean isEquipmentReserved(Company company,long equipmentId){
 
         LocalDateTime today = LocalDateTime.now();
         Set<Equipment> x = new HashSet<Equipment>(company.getEquipment());
+        ArrayList<EquipmentCollectionAppointment> list = new ArrayList<EquipmentCollectionAppointment>();
+        list.addAll(appointmentService.getAppointmentsByCompany(company.getId()));
 
-        if(company.getAllAppointments().isEmpty()){
+        if(list.isEmpty()){
             return false;
         }
 
-        for(EquipmentCollectionAppointment a : company.getAllAppointments()){
+        for(EquipmentCollectionAppointment a : list){
             if(a.getDate().isBefore(today))
                 continue;
 
-            for (Equipment e : x){
-                if(e.getId() == equipmentId){
+            for(OrderItem o : a.getItems()){
+                if(o.getEquipmentId() == equipmentId){
                     return true;
                 }
             }
         }
 
         return false;
-    }*/
+    }
 
     public void deleteById(long companyId,long id){
         Optional<Company> company = companyService.getCompanyById(companyId);
@@ -95,10 +99,10 @@ public class EquipmentService {
         Equipment equipmentForDeletion = equipmentMapper.convertToEntity(findEquipmentById(id));
         System.out.println(equipmentForDeletion);
 
-      //  if(!isEquipmentReserved(company.get(),equipmentForDeletion.getId())){
+        if(!isEquipmentReserved(company.get(),equipmentForDeletion.getId())){
             company.get().getEquipment().remove(equipmentForDeletion);
             companyRepository.save(company.get());
-       // }
+        }
     }
 
     public List<EquipmentDto> searchByCompanyEqName(long companyId, String name)

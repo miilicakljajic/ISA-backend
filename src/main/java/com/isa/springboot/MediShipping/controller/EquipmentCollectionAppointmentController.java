@@ -27,7 +27,7 @@ public class EquipmentCollectionAppointmentController {
     }
     @PutMapping("/{companyId}")
     public EquipmentCollectionAppointmentDto update(@PathVariable long companyId,@RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-        return  service.update1(equipmentCollectionAppointmentDto,companyId);
+        return  service.update(equipmentCollectionAppointmentDto,companyId);
     }
     @PutMapping("/finalize/{companyid}/{id}")
     public ResponseDto finalize(@PathVariable long companyid,  @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
