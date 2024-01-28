@@ -5,22 +5,16 @@ import com.isa.springboot.MediShipping.bean.*;
 import com.isa.springboot.MediShipping.dto.*;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapper;
-import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.*;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
-import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -93,8 +87,9 @@ public class EquipmentCollectionAppointmentService {
         ArrayList<EquipmentCollectionAppointment> found = new ArrayList<EquipmentCollectionAppointment>();
         for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll())
         {
-            if(a.getUser().getId() == userId)
-                found.add(a);
+            if(a.getUser() != null)
+                if(a.getUser().getId() == userId)
+                    found.add(a);
         }
         return found;
     }
@@ -173,7 +168,7 @@ public class EquipmentCollectionAppointmentService {
             return null;
         }
     }
-    public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto,long companyId){
+    public EquipmentCollectionAppointmentDto update1(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
 
@@ -190,7 +185,7 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
-    public void update(EquipmentCollectionAppointment app)
+    public void update1(EquipmentCollectionAppointment app)
     {
         equipmentCollectionAppointmentRepository.save(app);
     }
@@ -216,7 +211,7 @@ public class EquipmentCollectionAppointmentService {
                 //updatedUser.addApointment(updatedAppointment);
                 //authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));
                 temp.get().addAppointment(updatedAppointment);
-                companyService.updateCompany(temp.get().getId(), companyMapper.convertToCompanyDto(temp.get()));
+                companyService.updateCompanyRegular(temp.get().getId(), temp.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
@@ -250,15 +245,17 @@ public class EquipmentCollectionAppointmentService {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+                newApp.setUser(user.get());
                 //user.get().addApointment(newApp);
                 //authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
                 company.get().addAppointment(newApp);
-                companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
-                try {
+                //companyService.updateCompanyRegular(companyid, company.get());
+                equipmentCollectionAppointmentRepository.save(newApp);
+                /*try {
                     mailService.sendAppointmentMail(user.get().getEmail(), newApp);
                 } catch (MessagingException e) {
                     throw new RuntimeException(e);
-                }
+                }*/
             }
             return new ResponseDto(200, "OK");
         }
@@ -351,7 +348,7 @@ public class EquipmentCollectionAppointmentService {
                     app.setUser(null);
                     //userRepository.save(user.get());
                     //user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
-                    update(app);
+                    update1(app);
                     if((Duration.between(today, appointment.getDate())).toHours() < 24)
                     {
                         user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 2);

@@ -3,14 +3,11 @@ package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.ResponseDto;
-import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.service.EquipmentCollectionAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -24,7 +21,7 @@ public class EquipmentCollectionAppointmentController {
     }
     @PutMapping("/{companyId}")
     public EquipmentCollectionAppointmentDto update(@PathVariable long companyId,@RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-        return  service.update(equipmentCollectionAppointmentDto,companyId);
+        return  service.update1(equipmentCollectionAppointmentDto,companyId);
     }
     @PutMapping("/finalize/{companyid}/{id}")
     public ResponseDto finalize(@PathVariable long companyid,  @PathVariable long id, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){

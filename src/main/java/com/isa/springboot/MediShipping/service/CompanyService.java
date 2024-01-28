@@ -57,6 +57,24 @@ public class CompanyService {
         }
         return null;
     }
+
+    public Company updateCompanyRegular(Long id, Company company) {
+        Optional<Company> existingCompany = getCompanyById(id);
+
+        if(existingCompany.isPresent()) {
+            existingCompany.get().setName(company.getName());
+            existingCompany.get().setAddress(company.getAddress());
+            existingCompany.get().setDescription(company.getDescription());
+            existingCompany.get().setAverageRating(company.getAverageRating());
+            existingCompany.get().setAllAppointments(company.getAllAppointments());
+            existingCompany.get().setEquipment(company.getEquipment());
+            existingCompany.get().setCompanyManagers(company.getCompanyManagers());
+
+            return companyRepository.save(company);
+        }
+        return null;
+    }
+
     public void deleteAllCompanies() { companyRepository.deleteAll(); }
 
     public void deleteCompany(Long id) { companyRepository.deleteById(id); }
