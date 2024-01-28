@@ -118,6 +118,8 @@ public class Company {
         }
     }
 
+    public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
+
     public Set<User> getCompanyManagers() {
         return companyManagers;
     }

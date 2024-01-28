@@ -34,10 +34,6 @@ public class User implements UserDetails {
 
     private int penaltyPoints;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private Set<EquipmentCollectionAppointment> appointments;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -178,30 +174,6 @@ public class User implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
-    }
-
-    public Set<EquipmentCollectionAppointment> getAppointments() {
-        return appointments;
-    }
-
-    public void setAppointments(Set<EquipmentCollectionAppointment> appointments) {
-        this.appointments = appointments;
-    }
-
-    public void addApointment(EquipmentCollectionAppointment app)
-    {
-        this.appointments.add(app);
-    }
-
-    public void removeAppointment(EquipmentCollectionAppointment app) {
-        for(EquipmentCollectionAppointment a : this.appointments)
-        {
-            if(a.getId() == app.getId())
-            {
-                this.appointments.remove(a);
-                return;
-            }
-        }
     }
 
     public boolean hasRole(String roleName)

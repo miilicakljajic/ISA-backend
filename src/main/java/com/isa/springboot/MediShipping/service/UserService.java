@@ -31,10 +31,6 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     @Autowired
     private EquipmentCollectionAppointmentMapper appointmentMapper;
-    @Autowired
-    private EquipmentRepository equipmentRepository;
-    @Autowired
-    private OrderItemRepository orderItemRepository;
 
     // Get all users
     public List<User> getAllUsers() {
@@ -73,56 +69,13 @@ public class UserService implements UserDetailsService {
         }
         return Optional.empty();
     }
-    public List<EquipmentCollectionAppointment> getAppointments(long id)
-    {
-        Optional<User> user = getUserById(id);
-        if(user.isPresent())
-            return user.get().getAppointments().stream().toList();
-        return new ArrayList<EquipmentCollectionAppointment>();
-    }
 
-    public void cancelAppointment(long id, EquipmentCollectionAppointmentDto appointment)
-    {
-        Optional<User> user = getUserById(id);
-        LocalDateTime today = LocalDateTime.now();
-
-        if(user.isPresent())
-        {
-            for(EquipmentCollectionAppointment app : user.get().getAppointments())
-            {
-                if(app.getId() == appointment.getId())
-                {
-                    for(OrderItem oi : app.getItems())
-                    {
-                        Equipment equipment = equipmentRepository.getById(oi.getEquipmentId());
-                        equipment.setCount(equipment.getCount() + oi.getCount());
-                        equipmentRepository.save(equipment);
-                        orderItemRepository.delete(oi);
-                    }
-
-                    app.setStatus(AppointmentStatus.AVAILABLE);
-                    userRepository.save(user.get());
-                    user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
-                    if((Duration.between(today, appointment.getDate())).toHours() < 24)
-                    {
-                        user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 2);
-                    }
-                    else
-                    {
-                        user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 1);
-                    }
-                    userRepository.save(user.get());
-                    return;
-                }
-            }
-        }
-    }
 
     public void update(User updatedUser){
         Optional<User> currentUser = getUserById(updatedUser.getId());
 
         if(currentUser.isPresent()){
-            currentUser.get().setAppointments(updatedUser.getAppointments());
+
             currentUser.get().setPenaltyPoints(updatedUser.getPenaltyPoints());
 
             userRepository.save(currentUser.get());

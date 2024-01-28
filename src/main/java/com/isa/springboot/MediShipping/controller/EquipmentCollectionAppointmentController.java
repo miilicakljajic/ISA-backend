@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.controller;
 
+import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.ResponseDto;
 import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
@@ -40,8 +41,21 @@ public class EquipmentCollectionAppointmentController {
         service.deleteById(id);
     }
 
-    @GetMapping("/byCompany/{id}")
+    /*@GetMapping("/byCompany/{id}")
     public List<UserAppointmentDto> getUsersWithUpcomingAppointments(@PathVariable long id){
         return service.getUsersWithUpcomingAppointments(id);
+    }*/
+
+    //TODO FRONT
+    @GetMapping("/byUser/{id}")
+    public List<EquipmentCollectionAppointment> getAppointments(@PathVariable Long id) {
+        return service.getAppointments(id);
+    }
+
+    //TODO FRONT
+    @PostMapping("/byUser/cancel/{id}")
+    public void cancelAppointment(@PathVariable Long id, @RequestBody EquipmentCollectionAppointmentDto appointment)
+    {
+        service.cancelAppointment(id, appointment);
     }
 }

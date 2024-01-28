@@ -20,15 +20,18 @@ public class EquipmentCollectionAppointment {
     @JoinTable(name = "appointment_items",
         joinColumns = @JoinColumn(name = "appointment_id",referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "orderitem_id", referencedColumnName = "id"))
+
     private Set<OrderItem> items;
     private String adminFirstname;
     private String adminLastname;
     private LocalDateTime date;
     private int duration;
     private AppointmentStatus status;
+    private byte[] qr;
+
     @ManyToOne
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "user_id",  referencedColumnName = "id")
+    private  User user;
 
     public long getId() {
         return id;
@@ -92,6 +95,14 @@ public class EquipmentCollectionAppointment {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public byte[] getQr() {
+        return qr;
+    }
+
+    public void setQr(byte[] qr) {
+        this.qr = qr;
     }
 
     @Override
