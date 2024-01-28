@@ -230,7 +230,7 @@ public class EquipmentCollectionAppointmentService {
         else{
             for(User u : userRepository.findAll()){
                 for(EquipmentCollectionAppointment appointment : u.getAppointments()){
-                    if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
+                    if(appointment == null || appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
 
                     if(checkAppointmentExpirationDate(appointment)) {
                         appointment.setStatus(AppointmentStatus.EXPIRED);
@@ -239,7 +239,7 @@ public class EquipmentCollectionAppointmentService {
                         userRepository.save(u);
                     }
 
-                    if(appointment.getCompany().getId() == companyId){
+                    if(appointment.getCompany() != null && appointment.getCompany().getId() == companyId){
                         UserAppointmentDto x = new UserAppointmentDto();
                         x.setAppointmentId(appointment.getId());
                         x.setFirstName(u.getFirstName());

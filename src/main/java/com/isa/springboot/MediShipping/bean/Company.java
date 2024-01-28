@@ -124,22 +124,6 @@ public class Company {
     public void setCompanyManagers(Set<User> companyManagers) {
         this.companyManagers = companyManagers;
     }
-
-    @Override
-    public String toString() {
-        return "Company{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", address=" + address +
-                ", description='" + description + '\'' +
-                ", averageRating=" + averageRating +
-                ", workingHours='" + workingHours + '\'' +
-                ", allAppointments=" + allAppointments +
-                ", equipment=" + equipment +
-                ", companyManagers=" + companyManagers +
-                '}';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

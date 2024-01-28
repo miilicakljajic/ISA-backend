@@ -55,6 +55,8 @@ public class EquipmentService {
             existingEquipment.setName(updatedEquipment.getName());
             existingEquipment.setDescription(updatedEquipment.getDescription());
             existingEquipment.setType(updatedEquipment.getType());
+            existingEquipment.setCount(updatedEquipment.getCount());
+            existingEquipment.setPrice(updatedEquipment.getPrice());
 
             return  equipmentMapper.convertToDto(equipmentRepository.save(existingEquipment));
         }
@@ -89,12 +91,12 @@ public class EquipmentService {
         Optional<Company> company = companyService.getCompanyById(companyId);
 
         Equipment equipmentForDeletion = equipmentMapper.convertToEntity(findEquipmentById(id));
-        equipmentForDeletion.setId(id);
+        System.out.println(equipmentForDeletion);
 
-        if(!isEquipmentReserved(company.get(),equipmentForDeletion.getId())){
+      //  if(!isEquipmentReserved(company.get(),equipmentForDeletion.getId())){
             company.get().getEquipment().remove(equipmentForDeletion);
             companyRepository.save(company.get());
-        }
+       // }
     }
 
     public List<EquipmentDto> searchByCompanyEqName(long companyId, String name)

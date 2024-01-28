@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,8 +49,7 @@ public class CompanyService {
         Optional<Company> existingCompany = getCompanyById(id);
         Company updatedCompany = mapper.convertToEntity(companyDto);
 
-        if(existingCompany.get() != null) {
-            System.out.println(updatedCompany.toString());
+        if(existingCompany.isPresent()) {
             existingCompany.get().setName(updatedCompany.getName());
             existingCompany.get().setAddress(updatedCompany.getAddress());
             existingCompany.get().setDescription(updatedCompany.getDescription());
@@ -57,7 +57,9 @@ public class CompanyService {
             existingCompany.get().setAllAppointments(updatedCompany.getAllAppointments());
             existingCompany.get().setEquipment(updatedCompany.getEquipment());
             existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
-            for(EquipmentCollectionAppointment a : existingCompany.get().getAllAppointments()){
+
+            for(Iterator<EquipmentCollectionAppointment> iterator = existingCompany.get().getAllAppointments().iterator(); iterator.hasNext();){
+                EquipmentCollectionAppointment a = iterator.next();
                 a.setCompany(updatedCompany);
             }
 

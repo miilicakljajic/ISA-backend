@@ -89,6 +89,8 @@ public class Equipment {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
-                ", appointments=" + '}';
+                ", price=" + price +
+                ", count=" + count +
+                '}';
     }
 }
