@@ -211,12 +211,8 @@ public class EquipmentCollectionAppointmentService {
                 updatedAppointment.setUser(user.get());
                 updatedAppointment.setCompany(comp.get());
                 equipmentCollectionAppointmentRepository.save(updatedAppointment);
-                //updatedUser.addApointment(updatedAppointment);
-                //authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));
-
-                //newApp.setCompany DODATI
-                //companyService.updateCompany(temp.get().getId(), companyMapper.convertToCompanyDto(temp.get()));
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
+
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
