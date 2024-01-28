@@ -27,10 +27,8 @@ public class EquipmentCollectionAppointment {
     private int duration;
     private AppointmentStatus status;
     @ManyToOne
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JsonIgnore
-    @JoinColumn(name = "company_id")
-    private Company company;
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    private User user;
 
     public long getId() {
         return id;
@@ -88,25 +86,21 @@ public class EquipmentCollectionAppointment {
         this.status = status;
     }
 
-    public Company getCompany() {
-        return company;
+    public User getUser() {
+        return user;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public String toString() {
         return "EquipmentCollectionAppointment{" +
                 "id=" + id +
-                ", equipment=" + items +
                 ", adminFirstname='" + adminFirstname + '\'' +
-                ", adminLastname='" + adminLastname + '\'' +
-                ", date=" + date +
-                ", duration=" + duration +
                 ", status=" + status +
-                ", company=" + company +
+                ", user=" + user +
                 '}';
     }
 }

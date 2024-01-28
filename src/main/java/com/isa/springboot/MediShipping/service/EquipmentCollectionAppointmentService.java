@@ -132,7 +132,6 @@ public class EquipmentCollectionAppointmentService {
         boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
         if(isValid && !alreadyExists && company.isPresent()) {
-            appointment.setCompany(company.get());
             company.get().getAllAppointments().add(appointment);;
             companyRepository.save(company.get());
             //return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
@@ -148,7 +147,6 @@ public class EquipmentCollectionAppointmentService {
 
         if(appointment.isPresent()){
             Optional<Company> company = companyService.getCompanyById(companyId);
-            appointment.get().setCompany(company.get());
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setItems(updatedAppointment.getItems());
@@ -169,7 +167,6 @@ public class EquipmentCollectionAppointmentService {
             return new ResponseDto(400, "Too many penalty points!");
         if(appointment.isPresent() && user.isPresent()){
             try {
-                updatedAppointment.setCompany(temp.get());
                 updatedAppointment.setStatus(AppointmentStatus.RESERVED);
                 User updatedUser = user.get();
                 updatedUser.addApointment(updatedAppointment);
@@ -196,7 +193,6 @@ public class EquipmentCollectionAppointmentService {
             newApp = setAdmin(newApp);
             if (user.isPresent() && company.isPresent()) {
                 //newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
-                newApp.setCompany(company.get());
                 user.get().addApointment(newApp);
                 authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
                 //company.get().addAppointment(newApp);
@@ -229,27 +225,24 @@ public class EquipmentCollectionAppointmentService {
         if(company.isEmpty())
             return new ArrayList<UserAppointmentDto>();
         else{
-            for(User u : userRepository.findAll()){
-                for(EquipmentCollectionAppointment appointment : u.getAppointments()){
-                    if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
 
-                    if(checkAppointmentExpirationDate(appointment)) {
-                        appointment.setStatus(AppointmentStatus.EXPIRED);
-                        //update(mapper.convertToDto(appointment),appointment.getCompany().getId());
-                        u.setPenaltyPoints(u.getPenaltyPoints() + 2);
-                        userService.update(u);
-                    }
+            for(EquipmentCollectionAppointment appointment : company.get().getAllAppointments()){
+                if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
 
-                    if(appointment.getCompany() != null && appointment.getCompany().getId() == companyId){
-                        UserAppointmentDto x = new UserAppointmentDto();
-                        x.setAppointmentId(appointment.getId());
-                        x.setFirstName(u.getFirstName());
-                        x.setLastName(u.getLastName());
-                        x.setDate(formatter.format(appointment.getDate()));
-                        x.setStatus(appointment.getStatus());
-                        usersWithAppointments.add(x);
-                    }
+                if(checkAppointmentExpirationDate(appointment)) {
+                    appointment.setStatus(AppointmentStatus.EXPIRED);
+                    //int currentPoints = appointment.getUser().getPenaltyPoints();
+                    //appointment.getUser().setPenaltyPoints(currentPoints + 2);
+                    //update(mapper.convertToDto(appointment),appointment.getCompany().getId());
                 }
+                    System.out.println(appointment.toString());
+                    UserAppointmentDto x = new UserAppointmentDto();
+                    x.setAppointmentId(appointment.getId());
+                    x.setFirstName(appointment.getUser().getFirstName());
+                    x.setLastName(appointment.getUser().getLastName());
+                    x.setDate(formatter.format(appointment.getDate()));
+                    x.setStatus(appointment.getStatus());
+                    usersWithAppointments.add(x);
             }
 
             return usersWithAppointments;

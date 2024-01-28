@@ -53,10 +53,6 @@ public class CompanyService {
             existingCompany.get().setEquipment(updatedCompany.getEquipment());
             existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
 
-            for (EquipmentCollectionAppointment a : existingCompany.get().getAllAppointments()) {
-                a.setCompany(updatedCompany);
-            }
-
             return mapper.convertToCompanyDto(companyRepository.save(existingCompany.get()));
         }
         return null;
