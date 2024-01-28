@@ -70,7 +70,7 @@ public class EquipmentCollectionAppointmentService {
         Optional<Company> company = companyService.getCompanyById(companyId);
 
         if(company.isPresent()){
-            for (EquipmentCollectionAppointment a : company.get().getAllAppointments()){
+            for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
 
                 if(a.getDate().equals(dto.date) && a.getAdminLastname().equals(dto.getAdminLastname())){
                     System.out.println("Appointment in this timeslot already exists");
@@ -150,7 +150,9 @@ public class EquipmentCollectionAppointmentService {
         newApp.setAdminLastname(null);
     }
 
-
+    public EquipmentCollectionAppointmentDto getById(long appointmentId){
+        return mapper.convertToDto(equipmentCollectionAppointmentRepository.findById(appointmentId).get());
+    }
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -159,7 +161,6 @@ public class EquipmentCollectionAppointmentService {
         boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
         if(isValid && !alreadyExists && company.isPresent()) {
-            company.get().getAllAppointments().add(appointment);;
             companyRepository.save(company.get());
             //return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
             return mapper.convertToDto(appointment);
@@ -191,13 +192,13 @@ public class EquipmentCollectionAppointmentService {
     }
 
     public ResponseDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
-        Optional<Company> temp = companyService.getCompanyById(companyid);
+        Optional<Company> comp = companyService.getCompanyById(companyid);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
         Optional<User> user = authService.getUserById(userid);
         if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
             return new ResponseDto(400, "Too many penalty points!");
-        if(appointment.isPresent() && user.isPresent()){
+        if(appointment.isPresent() && user.isPresent() && comp.isPresent()){
             try {
                 try {
                     updatedAppointment.setQr(QrService.getQRCodeImage(updatedAppointment.toString(), 300, 300));
@@ -207,11 +208,14 @@ public class EquipmentCollectionAppointmentService {
                     throw new RuntimeException(e);
                 }
                 updatedAppointment.setStatus(AppointmentStatus.RESERVED);
-                User updatedUser = user.get();
+                updatedAppointment.setUser(user.get());
+                updatedAppointment.setCompany(comp.get());
+                equipmentCollectionAppointmentRepository.save(updatedAppointment);
                 //updatedUser.addApointment(updatedAppointment);
                 //authService.updateUser(updatedUser.getId(), userMapper.convertToRegisterDto(updatedUser));
-                temp.get().addAppointment(updatedAppointment);
-                companyService.updateCompanyRegular(temp.get().getId(), temp.get());
+
+                //newApp.setCompany DODATI
+                //companyService.updateCompany(temp.get().getId(), companyMapper.convertToCompanyDto(temp.get()));
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
@@ -245,17 +249,18 @@ public class EquipmentCollectionAppointmentService {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-                newApp.setUser(user.get());
                 //user.get().addApointment(newApp);
                 //authService.updateUser(userid, userMapper.convertToRegisterDto(user.get()));
-                company.get().addAppointment(newApp);
-                //companyService.updateCompanyRegular(companyid, company.get());
+
+                newApp.setCompany(company.get());
+                newApp.setUser(user.get());
+                //companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
                 equipmentCollectionAppointmentRepository.save(newApp);
-                /*try {
+                try {
                     mailService.sendAppointmentMail(user.get().getEmail(), newApp);
                 } catch (MessagingException e) {
                     throw new RuntimeException(e);
-                }*/
+                }
             }
             return new ResponseDto(200, "OK");
         }
@@ -271,7 +276,7 @@ public class EquipmentCollectionAppointmentService {
         equipmentCollectionAppointmentRepository.deleteById(id);
     }
 
-    /*public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
+    public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
         Optional<Company> company = companyService.getCompanyById(companyId);
         List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
@@ -280,28 +285,29 @@ public class EquipmentCollectionAppointmentService {
             return new ArrayList<UserAppointmentDto>();
         else{
 
-            for(EquipmentCollectionAppointment appointment : company.get().getAllAppointments()){
+            for(EquipmentCollectionAppointment appointment : getAppointmentsByCompany(companyId)){
                 if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
 
                 if(checkAppointmentExpirationDate(appointment)) {
+                    System.out.println(appointment.toString());
                     appointment.setStatus(AppointmentStatus.EXPIRED);
-                    //int currentPoints = appointment.getUser().getPenaltyPoints();
-                    //appointment.getUser().setPenaltyPoints(currentPoints + 2);
+                    int currentPoints = appointment.getUser().getPenaltyPoints();
+                    appointment.getUser().setPenaltyPoints(currentPoints + 2);
                     //update(mapper.convertToDto(appointment),appointment.getCompany().getId());
                 }
-                    System.out.println(appointment.toString());
-                    UserAppointmentDto x = new UserAppointmentDto();
-                    x.setAppointmentId(appointment.getId());
-                    x.setFirstName(appointment.getUser().getFirstName());
-                    x.setLastName(appointment.getUser().getLastName());
-                    x.setDate(formatter.format(appointment.getDate()));
-                    x.setStatus(appointment.getStatus());
-                    usersWithAppointments.add(x);
+
+                UserAppointmentDto x = new UserAppointmentDto();
+                x.setAppointmentId(appointment.getId());
+                x.setFirstName(appointment.getUser().getFirstName());
+                x.setLastName(appointment.getUser().getLastName());
+                x.setDate(formatter.format(appointment.getDate()));
+                x.setStatus(appointment.getStatus());
+                usersWithAppointments.add(x);
             }
 
             return usersWithAppointments;
         }
-    }*/
+    }
 
     public Boolean checkAppointmentExpirationDate(EquipmentCollectionAppointment appointment){
         if(appointment.getStatus() != AppointmentStatus.EXPIRED && appointment.getDate().isBefore(LocalDateTime.now())){
@@ -313,17 +319,8 @@ public class EquipmentCollectionAppointmentService {
 
     public List<EquipmentCollectionAppointment> getAppointments(long id)
     {
-            return findByUser(id);
+        return findByUser(id);
     }
-
-    /*public String getUserEmail(long appointmentId){
-            for(EquipmentCollectionAppointment appointment : equipmentCollectionAppointmentRepository.findAll()) {
-                if (appointment.getId() == appointmentId) {
-                    return appointment.getUser().getEmail();
-                }
-            }
-        return "";
-    }*/
 
     public void cancelAppointment(long id, EquipmentCollectionAppointmentDto appointment)
     {
@@ -362,5 +359,17 @@ public class EquipmentCollectionAppointmentService {
                 }
             }
         }
+    }
+
+    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
+        ArrayList<EquipmentCollectionAppointment> list = new ArrayList<EquipmentCollectionAppointment>();
+
+        for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll()){
+            if(a.getCompany().getId() == id){
+                list.add(a);
+            }
+        }
+
+        return  list;
     }
 }

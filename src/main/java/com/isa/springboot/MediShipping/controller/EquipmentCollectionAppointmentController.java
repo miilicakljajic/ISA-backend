@@ -3,6 +3,7 @@ package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.EquipmentCollectionAppointmentDto;
 import com.isa.springboot.MediShipping.dto.ResponseDto;
+import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.service.EquipmentCollectionAppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,11 @@ import java.util.List;
 public class EquipmentCollectionAppointmentController {
     @Autowired
     private EquipmentCollectionAppointmentService service;
+
+    @GetMapping("/getById/{id}")
+    public EquipmentCollectionAppointmentDto getById(@PathVariable long id){
+        return service.getById(id);
+    }
     @PostMapping("/{companyId}")
     public EquipmentCollectionAppointmentDto create(@PathVariable Long companyId, @RequestBody EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         return service.create(companyId,equipmentCollectionAppointmentDto);
@@ -38,10 +44,10 @@ public class EquipmentCollectionAppointmentController {
         service.deleteById(id);
     }
 
-    /*@GetMapping("/byCompany/{id}")
+    @GetMapping("/byCompany/{id}")
     public List<UserAppointmentDto> getUsersWithUpcomingAppointments(@PathVariable long id){
         return service.getUsersWithUpcomingAppointments(id);
-    }*/
+    }
 
     //TODO FRONT
     @GetMapping("/byUser/{id}")
@@ -54,5 +60,10 @@ public class EquipmentCollectionAppointmentController {
     public void cancelAppointment(@PathVariable Long id, @RequestBody EquipmentCollectionAppointmentDto appointment)
     {
         service.cancelAppointment(id, appointment);
+    }
+
+    @GetMapping("/get/{id}")
+    public List<EquipmentCollectionAppointment> getCompanyAppointments(@PathVariable long id) {
+        return service.getAppointmentsByCompany(id);
     }
 }

@@ -28,10 +28,13 @@ public class EquipmentCollectionAppointment {
     private int duration;
     private AppointmentStatus status;
     private byte[] qr;
-
     @ManyToOne
     @JoinColumn(name = "user_id",  referencedColumnName = "id")
-    private  User user;
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="company_id", referencedColumnName = "id")
+    private Company company;
 
     public long getId() {
         return id;
@@ -89,6 +92,14 @@ public class EquipmentCollectionAppointment {
         this.status = status;
     }
 
+    public byte[] getQr() {
+        return qr;
+    }
+
+    public void setQr(byte[] qr) {
+        this.qr = qr;
+    }
+
     public User getUser() {
         return user;
     }
@@ -97,12 +108,12 @@ public class EquipmentCollectionAppointment {
         this.user = user;
     }
 
-    public byte[] getQr() {
-        return qr;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setQr(byte[] qr) {
-        this.qr = qr;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     @Override

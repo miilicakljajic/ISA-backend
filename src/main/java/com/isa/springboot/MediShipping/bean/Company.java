@@ -24,10 +24,6 @@ public class Company {
     private String description;
     private Double averageRating;
     private String workingHours;
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    private Set<EquipmentCollectionAppointment> allAppointments = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,orphanRemoval = true)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
@@ -40,14 +36,13 @@ public class Company {
         this.equipment = new HashSet<>();
         //this.allAppointments = new HashSet<>();
     }
-    public Company(Long id, String name, Address address, String description, Double averageRating,Set<EquipmentCollectionAppointment> allAppointments) {
+    public Company(Long id, String name, Address address, String description, Double averageRating) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.description = description;
         this.averageRating = averageRating;
         this.equipment = new HashSet<>();
-        this.allAppointments = allAppointments;
     }
     public Long getId() {
         return id;
@@ -96,17 +91,6 @@ public class Company {
         this.workingHours = workingHours;
     }
 
-    public Set<EquipmentCollectionAppointment> getAllAppointments() {
-        return allAppointments;
-    }
-
-    public void setAllAppointments(Set<EquipmentCollectionAppointment> allAppointments) {
-        this.allAppointments.clear();
-        if(allAppointments != null){
-            this.allAppointments.addAll(allAppointments);
-        }
-    }
-
     public Set<Equipment> getEquipment() {
         return equipment;
     }
@@ -117,8 +101,6 @@ public class Company {
             this.equipment.addAll(equipment);
         }
     }
-
-    public void addAppointment(EquipmentCollectionAppointment app) { this.allAppointments.add(app);}
 
     public Set<User> getCompanyManagers() {
         return companyManagers;
