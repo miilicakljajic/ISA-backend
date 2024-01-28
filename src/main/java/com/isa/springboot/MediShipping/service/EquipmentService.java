@@ -9,6 +9,7 @@ import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.mapper.EquipmentMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import com.isa.springboot.MediShipping.repository.EquipmentRepository;
+import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,7 @@ public class EquipmentService {
     public EquipmentDto update(EquipmentDto updatedEquipmentDto){
         Optional<Equipment> equipment = equipmentRepository.findById(updatedEquipmentDto.id);
         Equipment updatedEquipment = equipmentMapper.convertToEntity(updatedEquipmentDto);
+
         if(equipment.isPresent()) {
             Equipment existingEquipment = equipment.get();
             existingEquipment.setName(updatedEquipment.getName());

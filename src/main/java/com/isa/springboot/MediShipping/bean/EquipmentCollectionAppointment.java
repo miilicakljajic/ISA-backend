@@ -26,7 +26,6 @@ public class EquipmentCollectionAppointment {
     private LocalDateTime date;
     private int duration;
     private AppointmentStatus status;
-
     @ManyToOne
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore

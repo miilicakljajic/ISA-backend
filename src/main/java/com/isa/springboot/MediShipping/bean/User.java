@@ -211,4 +211,14 @@ public class User implements UserDetails {
                 return true;
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", penaltyPoints=" + penaltyPoints +
+                ", appointments=" + appointments +
+                '}';
+    }
 }

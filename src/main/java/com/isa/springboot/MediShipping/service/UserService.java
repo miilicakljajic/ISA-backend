@@ -117,4 +117,15 @@ public class UserService implements UserDetailsService {
             }
         }
     }
+
+    public void update(User updatedUser){
+        Optional<User> currentUser = getUserById(updatedUser.getId());
+
+        if(currentUser.isPresent()){
+            currentUser.get().setAppointments(updatedUser.getAppointments());
+            currentUser.get().setPenaltyPoints(updatedUser.getPenaltyPoints());
+
+            userRepository.save(currentUser.get());
+        }
+    }
 }

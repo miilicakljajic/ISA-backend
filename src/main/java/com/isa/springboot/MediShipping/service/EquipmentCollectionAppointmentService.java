@@ -225,18 +225,19 @@ public class EquipmentCollectionAppointmentService {
         Optional<Company> company = companyService.getCompanyById(companyId);
         List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
         if(company.isEmpty())
             return new ArrayList<UserAppointmentDto>();
         else{
             for(User u : userRepository.findAll()){
                 for(EquipmentCollectionAppointment appointment : u.getAppointments()){
-                    if(appointment == null || appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
+                    if(appointment.getStatus() == AppointmentStatus.AVAILABLE) continue;
 
                     if(checkAppointmentExpirationDate(appointment)) {
                         appointment.setStatus(AppointmentStatus.EXPIRED);
-                        update(mapper.convertToDto(appointment),appointment.getCompany().getId());
+                        //update(mapper.convertToDto(appointment),appointment.getCompany().getId());
                         u.setPenaltyPoints(u.getPenaltyPoints() + 2);
-                        userRepository.save(u);
+                        userService.update(u);
                     }
 
                     if(appointment.getCompany() != null && appointment.getCompany().getId() == companyId){
@@ -251,7 +252,7 @@ public class EquipmentCollectionAppointmentService {
                 }
             }
 
-            return  usersWithAppointments;
+            return usersWithAppointments;
         }
     }
 

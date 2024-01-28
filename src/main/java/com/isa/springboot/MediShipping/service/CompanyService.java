@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CompanyService {
@@ -28,8 +25,6 @@ public class CompanyService {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private EquipmentCollectionAppointmentRepository appointmentRepository;
 
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
@@ -58,8 +53,7 @@ public class CompanyService {
             existingCompany.get().setEquipment(updatedCompany.getEquipment());
             existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
 
-            for(Iterator<EquipmentCollectionAppointment> iterator = existingCompany.get().getAllAppointments().iterator(); iterator.hasNext();){
-                EquipmentCollectionAppointment a = iterator.next();
+            for (EquipmentCollectionAppointment a : existingCompany.get().getAllAppointments()) {
                 a.setCompany(updatedCompany);
             }
 
