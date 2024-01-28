@@ -28,8 +28,6 @@ public class CompanyService {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserService userService;
 
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);

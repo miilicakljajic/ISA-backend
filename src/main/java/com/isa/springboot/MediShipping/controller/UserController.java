@@ -34,10 +34,7 @@ public class UserController {
 
     // Update user by ID
 
-    @GetMapping("/appointments/{id}")
-    public List<EquipmentCollectionAppointment> getAppointments(@PathVariable Long id) {
-        return userService.getAppointments(id);
-    }
+
 
     // Delete all users
     @DeleteMapping
@@ -52,9 +49,4 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @PostMapping("/appointments/cancel/{id}")
-    public void cancelAppointment(@PathVariable Long id, @RequestBody EquipmentCollectionAppointmentDto appointment)
-    {
-        userService.cancelAppointment(id, appointment);
-    }
 }

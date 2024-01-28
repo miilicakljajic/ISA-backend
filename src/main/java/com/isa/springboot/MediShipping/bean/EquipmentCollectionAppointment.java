@@ -19,6 +19,7 @@ public class EquipmentCollectionAppointment {
     @JoinTable(name = "appointment_items",
         joinColumns = @JoinColumn(name = "appointment_id",referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "orderitem_id", referencedColumnName = "id"))
+
     private Set<OrderItem> items;
     private String adminFirstname;
     private String adminLastname;
@@ -32,6 +33,10 @@ public class EquipmentCollectionAppointment {
     @JsonIgnore
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id",  referencedColumnName = "id")
+    private  User user;
 
     public long getId() {
         return id;
@@ -95,6 +100,14 @@ public class EquipmentCollectionAppointment {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public byte[] getQr() {
