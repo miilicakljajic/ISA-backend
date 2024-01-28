@@ -17,7 +17,6 @@ public class CompanyDto {
 
     public Set<EquipmentDto> equipment;
     public Set<RegisterDto> companyManagers;
-    public Set<EquipmentCollectionAppointmentDto> allAppointments;
     public Double averageRating;
     public String workingHours;
     public String description;
@@ -60,14 +59,6 @@ public class CompanyDto {
 
     public void setCompanyManagers(Set<RegisterDto> companyManagers) {
         this.companyManagers = companyManagers;
-    }
-
-    public Set<EquipmentCollectionAppointmentDto> getAllAppointments() {
-        return allAppointments;
-    }
-
-    public void setAllAppointments(Set<EquipmentCollectionAppointmentDto> allAppointments) {
-        this.allAppointments = allAppointments;
     }
 
     public Double getAverageRating() {

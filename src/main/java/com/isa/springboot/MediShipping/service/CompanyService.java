@@ -49,7 +49,6 @@ public class CompanyService {
             existingCompany.get().setAddress(updatedCompany.getAddress());
             existingCompany.get().setDescription(updatedCompany.getDescription());
             existingCompany.get().setAverageRating(updatedCompany.getAverageRating());
-            existingCompany.get().setAllAppointments(updatedCompany.getAllAppointments());
             existingCompany.get().setEquipment(updatedCompany.getEquipment());
             existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
 
@@ -61,13 +60,6 @@ public class CompanyService {
 
     public void deleteCompany(Long id) { companyRepository.deleteById(id); }
 
-    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
-        Optional<Company> company = getCompanyById(id);
-        if(company.isEmpty())
-            return new ArrayList<EquipmentCollectionAppointment>();
-        else
-            return company.get().getAllAppointments().stream().toList();
-    }
 
     public Company getByManagerId(long id){
         for(Company c : getAllCompanies()){

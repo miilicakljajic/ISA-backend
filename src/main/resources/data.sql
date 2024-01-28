@@ -132,23 +132,23 @@ INSERT INTO public.ROLE (name) VALUES ('ROLE_COMPANY_ADMIN');
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
-VALUES (21, 'Changing genes - changing future', 'usr@m.com', true, 'Mirko', 'User1', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 1);
+VALUES (21, 'Changing genes - changing future', 'usr@m.com', true, 'User', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 1);
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
-VALUES (22,'Changing genes - changing future', 'sys@m.com', true, 'Zeljko', 'SystemAdmin1', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 0);
+VALUES (22,'Changing genes - changing future', 'sys@m.com', true, 'Sys', 'Peric', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 0);
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
-VALUES (23, 'Changing genes - changing future', 'comp@m.com', true, 'Petar', 'CompanyAdmin1', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1, 0);
+VALUES (23, 'Changing genes - changing future', 'comp@m.com', true, 'Admin1', 'Kompanijski1', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1, 0);
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
-VALUES (24, 'Changing genes - changing future', 'comp2@m.com', true, 'Vuk', 'CompanyAdmin2', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1, 0);
+VALUES (24, 'Changing genes - changing future', 'comp2@m.com', true, 'Admin2', 'Kompanijski2', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1, 0);
 
 INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
-VALUES (25, 'Changing genes - changing future', 'comp2@m.com', true, 'Sima', 'CompanyAdmin3', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1, 0);
+VALUES (25, 'Changing genes - changing future', 'comp2@m.com', true, 'Admin3', 'Kompanijski3', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', 1, 1, 0);
 
 
 INSERT INTO public.users(
@@ -191,16 +191,32 @@ INSERT INTO public.user_role(
 VALUES (27, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id,user_id)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1,23);
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id,user_id)
-VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 0, 3,23);
+    admin_firstname, admin_lastname, date, duration, status,company_id,user_id)
+VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 1, 1,26);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id,user_id)
-VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3,23);
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3);
+
+INSERT INTO public.appointments(
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2024-12-25T11:30:00', '30', 0, 3);
+
+INSERT INTO public.appointments(
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1);
+
+INSERT INTO public.appointments(
+    admin_firstname, admin_lastname, date, duration, status, company_id)
+VALUES ('Admin', 'Peric', '2024-12-23T12:00:00', '30', 0, 1);
+
+INSERT INTO public.appointments(
+    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
+VALUES ('Admin', 'Peric', '2023-12-23T12:30:00', '30', 1, 1, 21);
 
 INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
 VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 500, 9, 3);

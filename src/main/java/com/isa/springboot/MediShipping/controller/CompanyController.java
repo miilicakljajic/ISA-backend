@@ -41,11 +41,6 @@ public class CompanyController {
     @DeleteMapping("/{id}")
     public void deleteCompany(@PathVariable Long id) { companyService.deleteCompany(id); }
 
-    @GetMapping("/appointments/{id}")
-    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(@PathVariable long id) {
-        return companyService.getAppointmentsByCompany(id);
-    }
-
     @GetMapping("/manager/{id}")
     public Company getByManagerId(@PathVariable long id){
         return  companyService.getByManagerId(id);

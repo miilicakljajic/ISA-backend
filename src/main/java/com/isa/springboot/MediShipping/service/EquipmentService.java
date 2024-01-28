@@ -66,7 +66,7 @@ public class EquipmentService {
     }
 
 
-    public boolean isEquipmentReserved(Company company,long equipmentId){
+    /*public boolean isEquipmentReserved(Company company,long equipmentId){
 
         LocalDateTime today = LocalDateTime.now();
         Set<Equipment> x = new HashSet<Equipment>(company.getEquipment());
@@ -87,7 +87,7 @@ public class EquipmentService {
         }
 
         return false;
-    }
+    }*/
 
     public void deleteById(long companyId,long id){
         Optional<Company> company = companyService.getCompanyById(companyId);
