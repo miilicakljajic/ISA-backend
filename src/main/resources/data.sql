@@ -191,7 +191,6 @@ INSERT INTO public.user_role(
 VALUES (27, 1);
 
 INSERT INTO public.appointments(
-<<<<<<< HEAD
     admin_firstname, admin_lastname, date, duration, status, company_id,user_id)
 VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1,23);
 
@@ -202,34 +201,6 @@ VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 0, 3,23);
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id,user_id)
 VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3,23);
-=======
-    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Petar', 'CompanyAdmin1', '2024-02-23T11:30:00', '30', 1, 1, 26);
-
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Petar', 'CompanyAdmin1', '2024-02-23T10:30:00', '30', 0, 3);
-
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Petar', 'CompanyAdmin1', '2024-02-23T11:00:00', '30', 0, 3);
-
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Petar', 'CompanyAdmin1', '2024-02-24T11:30:00', '30', 0, 3);
-
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Petar', 'CompanyAdmin1', '2024-02-25T11:30:00', '30', 1, 1, 21);
-
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Petar', 'CompanyAdmin1', '2024-02-26T12:00:00', '30', 1, 1, 21);
-
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Petar', 'CompanyAdmin1', '2069-02-27T12:30:00', '30', 1, 1, 21);
->>>>>>> 4e92fa2b93b26e4fc90830443ef8c63eea464d35
 
 INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
 VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 500, 9, 3);

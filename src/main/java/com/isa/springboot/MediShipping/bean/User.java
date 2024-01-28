@@ -190,7 +190,6 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", penaltyPoints=" + penaltyPoints +
-                ", appointments=" + appointments +
                 '}';
     }
 }
