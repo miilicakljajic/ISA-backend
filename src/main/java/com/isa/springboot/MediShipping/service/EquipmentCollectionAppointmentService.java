@@ -191,7 +191,7 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
-    public void update(EquipmentCollectionAppointment app)
+    public void update1(EquipmentCollectionAppointment app)
     {
         equipmentCollectionAppointmentRepository.save(app);
     }
@@ -346,7 +346,7 @@ public class EquipmentCollectionAppointmentService {
                     app.setUser(null);
                     //userRepository.save(user.get());
                     //user.get().removeAppointment(appointmentMapper.convertToEntity(appointment));
-                    update(app);
+                    update1(app);
                     if((Duration.between(today, appointment.getDate())).toHours() < 24)
                     {
                         user.get().setPenaltyPoints(user.get().getPenaltyPoints() + 2);

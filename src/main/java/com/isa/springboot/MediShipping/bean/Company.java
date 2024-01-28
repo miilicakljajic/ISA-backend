@@ -34,7 +34,6 @@ public class Company {
     private Set<User> companyManagers;
     public Company(){
         this.equipment = new HashSet<>();
-        //this.allAppointments = new HashSet<>();
     }
     public Company(Long id, String name, Address address, String description, Double averageRating) {
         this.id = id;

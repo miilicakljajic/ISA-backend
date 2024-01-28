@@ -7,8 +7,6 @@ import com.isa.springboot.MediShipping.dto.CompanyDto;
 import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
-import com.isa.springboot.MediShipping.repository.EquipmentCollectionAppointmentRepository;
-import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
