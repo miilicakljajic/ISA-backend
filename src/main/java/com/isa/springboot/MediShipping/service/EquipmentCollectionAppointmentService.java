@@ -71,8 +71,8 @@ public class EquipmentCollectionAppointmentService {
                 if(a.getDate().equals(dto.date)){
                     return true;
                 }else{
-                    
-                    return !isTimeOverlaped(dto,a);
+                    return false;
+                    //return !isTimeOverlaped(dto,a);
                 }
             }
         }
@@ -179,8 +179,10 @@ public class EquipmentCollectionAppointmentService {
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
-
         if(appointment.isPresent()){
+            if(appointment.get().getStatus() == AppointmentStatus.RESERVED){
+                return null;
+            }
             Optional<Company> company = companyService.getCompanyById(companyId);
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
