@@ -1,6 +1,8 @@
 package com.isa.springboot.HospitalSimulator;
 
 import com.isa.springboot.HospitalSimulator.bean.Contract;
+import com.isa.springboot.HospitalSimulator.controller.ProducerController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,7 +15,8 @@ import java.util.Scanner;
 
 @SpringBootApplication
 public class HospitalSimulator implements CommandLineRunner {
-
+    @Autowired
+    ProducerController controller;
     public static void main(String[] args) {
         SpringApplication.run(HospitalSimulator.class, args);
 
@@ -21,7 +24,7 @@ public class HospitalSimulator implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        ArrayList<Contract> contracts = new ArrayList<Contract>();
+        //ArrayList<Contract> contracts = new ArrayList<Contract>();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Enter a company id");
@@ -44,8 +47,9 @@ public class HospitalSimulator implements CommandLineRunner {
         scanner.close();
 
         Contract newContract = new Contract(Long.parseLong(companyId),orderItems,deliveryDate);
-        
+
         System.out.println(newContract.toString());
-        contracts.add(newContract);
+        //contracts.add(newContract);
+        controller.produce(newContract);
     }
 }

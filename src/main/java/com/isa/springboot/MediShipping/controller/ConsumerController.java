@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,11 +25,20 @@ public class ConsumerController {
     @GetMapping("/get/{companyId}")
     public ContractDto getMessages(@PathVariable long companyId) throws JsonProcessingException {
         List<String> jsonMessages = myTopicConsumer.getMessages();
+        if(jsonMessages.isEmpty())
+            return null;
         ObjectMapper objectMapper = new ObjectMapper();
+        ArrayList<ContractDto> contracts = new ArrayList<ContractDto>();
 
-        String jsonActiveContract = jsonMessages.get(jsonMessages.size() - 1);
-        ContractDto contractDto = objectMapper.readValue(jsonActiveContract,ContractDto.class);
+        for(String message: jsonMessages)
+        {
+            ContractDto c = objectMapper.readValue(message,ContractDto.class);
+            if(c.companyId == companyId)
+            {
+                contracts.add(c);
+            }
+        }
 
-        return contractDto;
+        return contracts.get(contracts.size() - 1);
     }
 }
