@@ -24,32 +24,40 @@ public class HospitalSimulator implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //ArrayList<Contract> contracts = new ArrayList<Contract>();
+        ArrayList<Contract> contracts = new ArrayList<Contract>();
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter a company id");
-        String companyId = scanner.nextLine();
+        while(true) {
+            System.out.println("Enter a company id");
+            String companyId = scanner.nextLine();
 
-        System.out.println("Enter a delivery date dd-mm-yyyy");
-        String deliveryDate = scanner.nextLine();
+            System.out.println("Enter a delivery date dd-mm-yyyy");
+            String deliveryDate = scanner.nextLine();
 
-        System.out.println("Enter equipment and quantity press c when u're done");
-        ArrayList<String> orderItems = new ArrayList<String>();
-        while(true){
-            String input = scanner.nextLine();
-            if(input.equalsIgnoreCase("c")){
+            System.out.println("Enter equipment and quantity press c when u're done");
+            ArrayList<String> orderItems = new ArrayList<String>();
+            while (true) {
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("c")) {
+                    break;
+                } else {
+                    orderItems.add(input);
+                }
+            }
+            Contract newContract = new Contract(Long.parseLong(companyId),orderItems,deliveryDate);
+            System.out.println(newContract.toString());
+            contracts.add(newContract);
+
+            System.out.println("One more round y/n");
+            String stamina = scanner.nextLine();
+            if(stamina.equalsIgnoreCase("n")){
+                scanner.close();
                 break;
-            }else{
-               orderItems.add(input);
             }
         }
 
-        scanner.close();
-
-        Contract newContract = new Contract(Long.parseLong(companyId),orderItems,deliveryDate);
-
-        System.out.println(newContract.toString());
-        //contracts.add(newContract);
-        controller.produce(newContract);
+        for(Contract c : contracts){
+            controller.produce(c);
+        }
     }
 }
