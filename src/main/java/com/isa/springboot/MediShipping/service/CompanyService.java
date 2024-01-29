@@ -1,9 +1,11 @@
 package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Company;
+import com.isa.springboot.MediShipping.bean.Equipment;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
+import com.isa.springboot.MediShipping.dto.ContractDto;
 import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
@@ -88,4 +90,24 @@ public class CompanyService {
         return null;
     }
 
+    //ako je true onda je poslato, false nije
+    public boolean sendEquipment(ContractDto contractDto) {
+        Optional<Company> company = getCompanyById(contractDto.getCompanyId());
+        if(company.isPresent()) {
+            for (String s : contractDto.getItems()) {
+                String eqName = s.split(";")[0];
+                Integer eqQuantity = Integer.parseInt(s.split(";")[1]);
+                for (Equipment e : company.get().getEquipment()) {
+                    if (e.getName() == eqName && e.getCount() >= eqQuantity) {
+                        //salji position simulatoru
+                        return true;
+                    } else {
+                        //salji poruku ovom da nema
+                        return false;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 }

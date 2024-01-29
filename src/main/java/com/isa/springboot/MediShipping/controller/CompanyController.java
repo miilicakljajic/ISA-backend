@@ -3,6 +3,7 @@ package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
+import com.isa.springboot.MediShipping.dto.ContractDto;
 import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.service.AuthService;
 import com.isa.springboot.MediShipping.service.CompanyService;
@@ -44,5 +45,10 @@ public class CompanyController {
     @GetMapping("/manager/{id}")
     public Company getByManagerId(@PathVariable long id){
         return  companyService.getByManagerId(id);
+    }
+
+    @PostMapping("/sendEquipment")
+    public boolean sendEquipment(@RequestBody ContractDto contractDto){
+         return companyService.sendEquipment(contractDto);
     }
 }

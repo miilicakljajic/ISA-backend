@@ -31,4 +31,10 @@ public class ContractDto {
     public void setDeliveryDate(String deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+
+    public ContractDto(long companyId, List<String> items, String deliveryDate) {
+        this.companyId = companyId;
+        this.items = items;
+        this.deliveryDate = deliveryDate;
+    }
 }

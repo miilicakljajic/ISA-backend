@@ -26,7 +26,9 @@ public class ConsumerController {
     public ContractDto getMessages(@PathVariable long companyId) throws JsonProcessingException {
         List<String> jsonMessages = myTopicConsumer.getMessages();
         if(jsonMessages.isEmpty())
+        {
             return null;
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<ContractDto> contracts = new ArrayList<ContractDto>();
 
@@ -38,7 +40,10 @@ public class ConsumerController {
                 contracts.add(c);
             }
         }
-
-        return contracts.get(contracts.size() - 1);
+        List<String> dummyList = new ArrayList<>();
+        dummyList.add("item;1");
+        dummyList.add("item;2");
+        return new ContractDto(1,dummyList,"23-5-2024");
+        //return contracts.get(contracts.size() - 1);
     }
 }

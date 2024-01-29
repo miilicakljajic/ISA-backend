@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/api/producer")
 public class ProducerController {
@@ -18,10 +20,12 @@ public class ProducerController {
         this.template = template;
     }
     @PostMapping("/send")
-    public void produce(@RequestBody Contract contract) throws JsonProcessingException {
+    public void produce(@RequestBody ArrayList<Contract> contracts) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(contract);
-        System.out.println(json);
-        template.send("test-topic", json);
+        for(Contract contract: contracts) {
+            String json = objectMapper.writeValueAsString(contract);
+            System.out.println(json);
+            template.send("test-topic", json);
+        }
     }
 }

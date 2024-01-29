@@ -56,8 +56,6 @@ public class HospitalSimulator implements CommandLineRunner {
             }
         }
 
-        for(Contract c : contracts){
-            controller.produce(c);
-        }
+        controller.produce(contracts);
     }
 }
