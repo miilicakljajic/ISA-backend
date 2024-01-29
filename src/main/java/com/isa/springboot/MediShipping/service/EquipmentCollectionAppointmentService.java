@@ -69,9 +69,9 @@ public class EquipmentCollectionAppointmentService {
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
                 // && a.getAdminLastname().equals(dto.getAdminLastname()
                 if(a.getDate().equals(dto.date)){
-                  //  System.out.println("Appointment in this timeslot already exists");
                     return true;
                 }else{
+                    
                     return !isTimeOverlaped(dto,a);
                 }
             }
