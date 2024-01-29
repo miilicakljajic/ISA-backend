@@ -204,6 +204,13 @@ public class EquipmentCollectionAppointmentService {
                 updatedAppointment.setStatus(AppointmentStatus.RESERVED);
                 updatedAppointment.setUser(user.get());
                 updatedAppointment.setCompany(comp.get());
+
+                for(EquipmentCollectionAppointment app : getAppointmentsByCompany(comp.get().getId())) {
+                    if(app.getDate().equals(updatedAppointment.getDate()) && app.getStatus() == AppointmentStatus.RESERVED) {
+                        return new ResponseDto(400, "You cannot make reservation at the same time.");
+                    }
+                }
+
                 equipmentCollectionAppointmentRepository.save(updatedAppointment);
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
@@ -232,6 +239,13 @@ public class EquipmentCollectionAppointmentService {
                 setAvailableAdmin(newApp, company.get());
                 if(newApp.getAdminFirstname() == null)
                     return new ResponseDto(400, "No available admins at that time");
+
+                for(EquipmentCollectionAppointment app : findByUser(userid)) {
+                    if(app.getDate().equals(dto.getDate())) {
+                        return new ResponseDto(400, "You cannot make reservation at the same time.");
+                    }
+                }
+
 
                 //newApp = mapper.convertToEntity(create(companyid, mapper.convertToDto(newApp)));
                 try {
