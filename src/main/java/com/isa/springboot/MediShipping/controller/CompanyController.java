@@ -3,11 +3,14 @@ package com.isa.springboot.MediShipping.controller;
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
+import com.isa.springboot.MediShipping.dto.ContractDto;
 import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.service.AuthService;
 import com.isa.springboot.MediShipping.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,5 +47,14 @@ public class CompanyController {
     @GetMapping("/manager/{id}")
     public Company getByManagerId(@PathVariable long id){
         return  companyService.getByManagerId(id);
+    }
+
+    @PostMapping("/sendEquipment")
+    public boolean sendEquipment(@RequestBody ContractDto contractDto){
+         return companyService.sendEquipment(contractDto);
+    }
+    @PostMapping("/canDeliver")
+    public ContractDto canDeliver(@RequestBody ContractDto contractDto){
+        return  companyService.canDeliver(contractDto);
     }
 }

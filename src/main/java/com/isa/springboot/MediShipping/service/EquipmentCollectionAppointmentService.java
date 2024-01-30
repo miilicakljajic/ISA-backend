@@ -16,6 +16,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -53,7 +54,6 @@ public class EquipmentCollectionAppointmentService {
         LocalDateTime goodFormat = LocalDateTime.parse(appointmentTime.format(formatter), formatter);
         int durationInHours = (int)Math.ceil(duration/60.0);
         String[] workingHours = getCompanyWorkingHours(companyId);
-
         if(goodFormat.getDayOfWeek() != DayOfWeek.SATURDAY && goodFormat.getDayOfWeek() != DayOfWeek.SUNDAY){
             if(goodFormat.getHour() > Integer.parseInt(workingHours[0]) && goodFormat.getHour() + durationInHours < Integer.parseInt(workingHours[1])) {
                 return true;
@@ -64,18 +64,30 @@ public class EquipmentCollectionAppointmentService {
 
     private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
-
+        System.out.println(dto.getDate());
         if(company.isPresent()){
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
-
-                if(a.getDate().equals(dto.date) && a.getAdminLastname().equals(dto.getAdminLastname())){
-                    System.out.println("Appointment in this timeslot already exists");
+                // && a.getAdminLastname().equals(dto.getAdminLastname()
+                if(a.getDate().equals(dto.date)){
+                  //  System.out.println("Appointment in this timeslot already exists");
                     return true;
+                }else{
+                    return !isTimeOverlaped(dto,a);
                 }
             }
         }
 
         return false;
+    }
+
+    public boolean isTimeOverlaped(EquipmentCollectionAppointmentDto newApp,EquipmentCollectionAppointment existing){
+        LocalDateTime newAppStart = newApp.getDate();
+        LocalDateTime newAppEnd = newAppStart.plus(newApp.getDuration(), ChronoUnit.MINUTES);
+
+        LocalDateTime existingStart = existing.getDate();
+        LocalDateTime existingEnd = existingStart.plus(existing.getDuration(), ChronoUnit.MINUTES);
+
+        return newAppEnd.isBefore(existingStart) && newAppStart.isAfter(existingEnd);
     }
 
     public List<EquipmentCollectionAppointment> findByUser(long userId)
@@ -157,6 +169,7 @@ public class EquipmentCollectionAppointmentService {
         boolean alreadyExists = alreadyExists(companyId,equipmentCollectionAppointmentDto);
 
         if(isValid && !alreadyExists && company.isPresent()) {
+            appointment.setCompany(company.get());
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
         }
         else{
