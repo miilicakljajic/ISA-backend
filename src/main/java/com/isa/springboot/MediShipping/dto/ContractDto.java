@@ -41,9 +41,13 @@ public class ContractDto {
         this.canDeliver = canDeliver;
     }
 
-    public ContractDto(long companyId, List<String> items, String deliveryDate) {
+    public ContractDto() {
+    }
+
+    public ContractDto(long companyId, List<String> items, String deliveryDate, boolean canDeliver) {
         this.companyId = companyId;
         this.items = items;
         this.deliveryDate = deliveryDate;
+        this.canDeliver = canDeliver;
     }
 }

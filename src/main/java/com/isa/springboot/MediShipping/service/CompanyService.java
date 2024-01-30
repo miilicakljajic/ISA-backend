@@ -103,7 +103,7 @@ public class CompanyService {
                 String eqName = s.split(";")[0];
                 Integer eqQuantity = Integer.parseInt(s.split(";")[1]);
                 for (Equipment e : company.get().getEquipment()) {
-                    if (e.getName() == eqName && e.getCount() >= eqQuantity) {
+                    if (e.getName().equals(eqName) && e.getCount() >= eqQuantity) {
                         avaliableItemCounter++;
                     }
                 }
@@ -121,22 +121,24 @@ public class CompanyService {
     public boolean sendEquipment(ContractDto contractDto) {
         Optional<Company> company = getCompanyById(contractDto.getCompanyId());
         if(company.isPresent()) {
-            if(contractDto.getCanDeliver() == true) {
-                String urlDoMetode = "http://localhost:4337/api/producer/notify";
-                String poruka = "Ne mogu da ti posaljem opremu";
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_JSON);
-
-                // Create an HttpEntity with the data and headers
-                HttpEntity<String> requestEntity = new HttpEntity<>(poruka, headers);
-
-                // Make the POST request
-                ResponseEntity<String> responseEntity = restTemplate.postForEntity(urlDoMetode, requestEntity, String.class);
-
-                // Process the response as needed
-                String responseData = responseEntity.getBody();
-                return true;
+            contractDto = canDeliver(contractDto);
+            String urlDoMetode = "http://localhost:4337/api/producer/notify";
+            String poruka = "Uspesno poslato";
+            if(contractDto.canDeliver == false) {
+                poruka = "Ne mogu da ti posaljem opremu";
             }
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // Create an HttpEntity with the data and headers
+            HttpEntity<String> requestEntity = new HttpEntity<>(poruka, headers);
+
+            // Make the POST request
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(urlDoMetode, requestEntity, String.class);
+
+            // Process the response as needed
+            String responseData = responseEntity.getBody();
+            return true;
         }
         return false;
     }

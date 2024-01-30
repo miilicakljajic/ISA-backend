@@ -58,7 +58,7 @@ public class ConsumerController {
     }
 
     @GetMapping("/get/{companyId}")
-    public ContractDto getActiveContract(long companyId){
+    public ContractDto getActiveContract(@PathVariable long companyId){
         try {
             getMessages(companyId);
         } catch (JsonProcessingException e) {

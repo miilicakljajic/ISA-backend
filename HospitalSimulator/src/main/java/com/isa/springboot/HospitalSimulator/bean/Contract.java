@@ -9,6 +9,7 @@ public class Contract {
     private long companyId;
     private ArrayList<String> items;
     private String deliveryDate;
+    private Boolean canDeliver;
 
     public long getCompanyId() {
         return companyId;
@@ -34,6 +35,14 @@ public class Contract {
         this.deliveryDate = deliveryDate;
     }
 
+    public Boolean getCanDeliver() {
+        return canDeliver;
+    }
+
+    public void setCanDeliver(Boolean canDeliver) {
+        this.canDeliver = canDeliver;
+    }
+
     public Contract(){
 
     }
@@ -41,6 +50,7 @@ public class Contract {
         this.companyId = companyId;
         this.items = items;
         this.deliveryDate = deliveryDate;
+        this.canDeliver = false;
     }
 
     @Override

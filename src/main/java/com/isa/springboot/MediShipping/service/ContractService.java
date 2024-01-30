@@ -1,5 +1,6 @@
 package com.isa.springboot.MediShipping.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.isa.springboot.MediShipping.bean.Contract;
@@ -14,9 +15,15 @@ import java.util.List;
 @Service
 public class ContractService {
     public static ArrayList<ContractDto> activeContracts = new ArrayList<>();
-    public ContractService() throws IOException {
-        activeContracts = loadFromFile();
+    public ContractService() {
+        try {
+            activeContracts = loadFromFile();
+        }
+        catch(IOException e) {
+            activeContracts = new ArrayList<ContractDto>();
+        }
     }
+
     public static ContractDto getActiveContract(long companyId){
         for(ContractDto c : activeContracts){
             if(c.getCompanyId() == companyId){
@@ -45,9 +52,16 @@ public class ContractService {
         }
     }
 
-    public ArrayList<ContractDto> loadFromFile() throws IOException {
+    public ArrayList<ContractDto> loadFromFile() throws JsonProcessingException {
         // Read the JSON content from the file
-        String jsonContent = readJsonFromFile("a.txt");
+        String jsonContent = "";
+        try {
+            jsonContent = readJsonFromFile("a.txt");
+        }
+        catch(IOException e)
+        {
+            jsonContent = "";
+        }
         // Deserialize the JSON content into a HashMap
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonContent, new TypeReference<ArrayList<ContractDto>>() {});
