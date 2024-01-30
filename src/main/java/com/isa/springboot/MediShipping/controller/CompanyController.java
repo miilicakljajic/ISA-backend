@@ -53,4 +53,8 @@ public class CompanyController {
     public boolean sendEquipment(@RequestBody ContractDto contractDto){
          return companyService.sendEquipment(contractDto);
     }
+    @PostMapping("/canDeliver")
+    public ContractDto canDeliver(@RequestBody ContractDto contractDto){
+        return  companyService.canDeliver(contractDto);
+    }
 }
