@@ -50,12 +50,14 @@ public class HospitalSimulator implements CommandLineRunner {
 
             System.out.println("One more round y/n");
             String stamina = scanner.nextLine();
+            controller.produce(newContract);
+
             if(stamina.equalsIgnoreCase("n")){
                 scanner.close();
                 break;
             }
         }
 
-        controller.produce(contracts);
+        //controller.produce(contracts);
     }
 }

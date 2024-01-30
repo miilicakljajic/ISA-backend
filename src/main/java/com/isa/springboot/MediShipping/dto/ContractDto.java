@@ -7,6 +7,7 @@ public class ContractDto {
     public long companyId;
     public List<String> items;
     public String deliveryDate;
+    public Boolean canDeliver;
 
     public long getCompanyId() {
         return companyId;
@@ -32,9 +33,21 @@ public class ContractDto {
         this.deliveryDate = deliveryDate;
     }
 
-    public ContractDto(long companyId, List<String> items, String deliveryDate) {
+    public Boolean getCanDeliver() {
+        return canDeliver;
+    }
+
+    public void setCanDeliver(Boolean canDeliver) {
+        this.canDeliver = canDeliver;
+    }
+
+    public ContractDto() {
+    }
+
+    public ContractDto(long companyId, List<String> items, String deliveryDate, boolean canDeliver) {
         this.companyId = companyId;
         this.items = items;
         this.deliveryDate = deliveryDate;
+        this.canDeliver = canDeliver;
     }
 }

@@ -2,11 +2,9 @@ package com.isa.springboot.MediShipping.service;
 
 import com.isa.springboot.MediShipping.bean.Company;
 import com.isa.springboot.MediShipping.bean.Equipment;
-import com.isa.springboot.MediShipping.bean.EquipmentCollectionAppointment;
 import com.isa.springboot.MediShipping.bean.User;
 import com.isa.springboot.MediShipping.dto.CompanyDto;
 import com.isa.springboot.MediShipping.dto.ContractDto;
-import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,34 +95,54 @@ public class CompanyService {
         return null;
     }
 
-    //ako je true onda je poslato, false nije
-    public boolean sendEquipment(ContractDto contractDto) {
+    public ContractDto canDeliver(ContractDto contractDto){
         Optional<Company> company = getCompanyById(contractDto.getCompanyId());
+        Integer avaliableItemCounter = 0;
         if(company.isPresent()) {
             for (String s : contractDto.getItems()) {
                 String eqName = s.split(";")[0];
                 Integer eqQuantity = Integer.parseInt(s.split(";")[1]);
                 for (Equipment e : company.get().getEquipment()) {
-                    if (e.getName() == eqName && e.getCount() >= eqQuantity) {
-                        String urlDoMetode = "http://localhost:4337/api/producer/notify";
-                        String poruka = "Ne mogu da ti posaljem opremu";
-                        HttpHeaders headers = new HttpHeaders();
-                        headers.setContentType(MediaType.APPLICATION_JSON);
-
-                        // Create an HttpEntity with the data and headers
-                        HttpEntity<String> requestEntity = new HttpEntity<>(poruka, headers);
-
-                        // Make the POST request
-                        ResponseEntity<String> responseEntity = restTemplate.postForEntity(urlDoMetode, requestEntity, String.class);
-
-                        // Process the response as needed
-                        String responseData = responseEntity.getBody();
-                        return true;
-                    } else {
-                        //salji poruku ovom da nema
-                        return false;
+                    if (e.getName().equals(eqName) && e.getCount() >= eqQuantity) {
+                        avaliableItemCounter++;
                     }
                 }
+            }
+
+            if(avaliableItemCounter == contractDto.getItems().size()){
+                contractDto.setCanDeliver(true);
+                ContractService.update(contractDto);
+            }else{
+                String methodUrl = "http://localhost:4337/api/producer/notify";
+                sendMessage("Equipment cannot be delivered",methodUrl);
+            }
+        }
+        return contractDto;
+    }
+
+    public void sendMessage(String message,String methodUrl){
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Create an HttpEntity with the data and headers
+        HttpEntity<String> requestEntity = new HttpEntity<>(message, headers);
+
+        // Make the POST request
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(methodUrl, requestEntity, String.class);
+
+        // Process the response as needed
+        String responseData = responseEntity.getBody();
+    }
+    public boolean sendEquipment(ContractDto contractDto) {
+        Optional<Company> company = getCompanyById(contractDto.getCompanyId());
+        if(company.isPresent()) {
+            contractDto = canDeliver(contractDto);
+            if(contractDto.getCanDeliver() == true) {
+                String methodUrl = "http://localhost:4337/api/producer/notify";
+                String poruka = "Your order will be arriving to";
+                sendMessage(poruka, methodUrl);
+
+                return true;
             }
         }
         return false;

@@ -20,13 +20,14 @@ public class ProducerController {
         this.template = template;
     }
     @PostMapping("/send")
-    public void produce(@RequestBody ArrayList<Contract> contracts) throws JsonProcessingException {
+    //public void produce(@RequestBody ArrayList<Contract> contract) throws JsonProcessingException {
+      public void produce(@RequestBody Contract contract) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        for(Contract contract: contracts) {
+        //for(Contract contract: contracts) {
             String json = objectMapper.writeValueAsString(contract);
             System.out.println(json);
             template.send("test-topic", json);
-        }
+        //}
     }
 
     @PostMapping("/notify")
