@@ -37,7 +37,7 @@ public class ProducerController {
         System.out.println(coords);
         CompletableFuture.runAsync(() -> {
             String fooResourceUrl
-                    = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62484c6ea22c8cf443c29c16b2d1fa248cc6&start=19.84243,45.254344&end=" + coords;
+                    = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=5b3ce3597851110001cf62484c6ea22c8cf443c29c16b2d1fa248cc6&start="+coords+"&end=19.84243,45.254344";
             ResponseEntity<String> response
                     = restTemplate.getForEntity(fooResourceUrl, String.class);
             JSONObject obj = new JSONObject(response.getBody());
