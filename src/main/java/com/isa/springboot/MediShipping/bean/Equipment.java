@@ -22,6 +22,9 @@ public class Equipment {
 
     private Integer count;
 
+    @Version
+    private Integer version;
+
     public long getId() {
         return id;
     }
@@ -67,6 +70,14 @@ public class Equipment {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

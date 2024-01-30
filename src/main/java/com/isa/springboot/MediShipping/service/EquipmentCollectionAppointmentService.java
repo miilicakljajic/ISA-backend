@@ -10,6 +10,8 @@ import com.isa.springboot.MediShipping.repository.*;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -161,6 +163,8 @@ public class EquipmentCollectionAppointmentService {
     public EquipmentCollectionAppointmentDto getById(long appointmentId){
         return mapper.convertToDto(equipmentCollectionAppointmentRepository.findById(appointmentId).get());
     }
+
+    @Transactional
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -176,6 +180,8 @@ public class EquipmentCollectionAppointmentService {
             return null;
         }
     }
+
+    @Transactional
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
