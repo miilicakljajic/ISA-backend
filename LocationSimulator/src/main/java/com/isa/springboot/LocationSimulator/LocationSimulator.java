@@ -44,9 +44,10 @@ public class LocationSimulator implements CommandLineRunner {
             // Ovde možete raditi šta god vam je potrebno sa svakim parom koordinata
             //System.out.println("Latitude: " + latitude + ", Longitude: " + longitude);
             System.out.println("Latitude: " + latitude + ", Longitude: " + longitude);
-            Thread.sleep(1000);
+            Thread.sleep(500);
             controller.produce(latitude+","+longitude);
         }
+        controller.produce("DONE");
         System.out.println("Done");
     }
 }
