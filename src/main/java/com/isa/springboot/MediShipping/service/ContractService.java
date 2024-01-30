@@ -41,6 +41,26 @@ public class ContractService {
             }
         }
     }
+
+    public static ContractDto update(ContractDto updatedContract){
+        ContractDto currentContract = null;
+
+        for(ContractDto c : activeContracts){
+            if(c.getCompanyId() == updatedContract.getCompanyId()){
+                c.setCanDeliver(updatedContract.getCanDeliver());
+                currentContract = c;
+                break;
+            }
+        }
+
+        try {
+            saveToFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return  currentContract;
+    }
     public static void saveToFile() throws IOException {
         // Serialize the HashMap to JSON
         ObjectMapper objectMapper = new ObjectMapper();
@@ -77,5 +97,4 @@ public class ContractService {
         }
         return content.toString();
     }
-
 }
