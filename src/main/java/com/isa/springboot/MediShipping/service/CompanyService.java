@@ -10,8 +10,13 @@ import com.isa.springboot.MediShipping.dto.UserAppointmentDto;
 import com.isa.springboot.MediShipping.mapper.CompanyMapper;
 import com.isa.springboot.MediShipping.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -25,6 +30,8 @@ public class CompanyService {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RestTemplate restTemplate;
 
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
@@ -99,7 +106,19 @@ public class CompanyService {
                 Integer eqQuantity = Integer.parseInt(s.split(";")[1]);
                 for (Equipment e : company.get().getEquipment()) {
                     if (e.getName() == eqName && e.getCount() >= eqQuantity) {
-                        //salji position simulatoru
+                        String urlDoMetode = "http://localhost:4337/api/producer/notify";
+                        String poruka = "Ne mogu da ti posaljem opremu";
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.setContentType(MediaType.APPLICATION_JSON);
+
+                        // Create an HttpEntity with the data and headers
+                        HttpEntity<String> requestEntity = new HttpEntity<>(poruka, headers);
+
+                        // Make the POST request
+                        ResponseEntity<String> responseEntity = restTemplate.postForEntity(urlDoMetode, requestEntity, String.class);
+
+                        // Process the response as needed
+                        String responseData = responseEntity.getBody();
                         return true;
                     } else {
                         //salji poruku ovom da nema

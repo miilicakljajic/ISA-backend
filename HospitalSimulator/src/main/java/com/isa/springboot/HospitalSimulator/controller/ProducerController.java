@@ -28,4 +28,9 @@ public class ProducerController {
             template.send("test-topic", json);
         }
     }
+
+    @PostMapping("/notify")
+    public void notify(@RequestBody String message){
+        System.out.println(message);
+    }
 }
