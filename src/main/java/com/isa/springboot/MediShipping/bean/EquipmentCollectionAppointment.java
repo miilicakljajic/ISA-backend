@@ -36,6 +36,9 @@ public class EquipmentCollectionAppointment {
     @JoinColumn(name="company_id", referencedColumnName = "id")
     private Company company;
 
+    @Version
+    private Integer version;
+
     public long getId() {
         return id;
     }
