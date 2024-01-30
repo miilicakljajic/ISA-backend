@@ -17,7 +17,6 @@ public class ContractService {
     public ContractService() throws IOException {
         activeContracts = loadFromFile();
     }
-
     public static ContractDto getActiveContract(long companyId){
         for(ContractDto c : activeContracts){
             if(c.getCompanyId() == companyId){

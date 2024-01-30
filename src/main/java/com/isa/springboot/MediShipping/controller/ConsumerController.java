@@ -19,9 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/consumer")
 public class ConsumerController {
-    @Autowired
-    private static ContractService contractService;
-
     private final Consumer myTopicConsumer;
 
     public ConsumerController(Consumer myTopicConsumer) {
