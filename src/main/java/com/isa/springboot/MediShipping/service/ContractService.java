@@ -18,6 +18,15 @@ public class ContractService {
         activeContracts = loadFromFile();
     }
 
+    public static ContractDto getActiveContract(long companyId){
+        for(ContractDto c : activeContracts){
+            if(c.getCompanyId() == companyId){
+                return  c;
+            }
+        }
+        return null;
+    }
+
      public static void removeOldContract(long companyId){
         for(ContractDto c : activeContracts){
             if(c.getCompanyId() == companyId){

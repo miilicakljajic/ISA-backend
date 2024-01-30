@@ -28,13 +28,13 @@ public class ConsumerController {
         this.myTopicConsumer = myTopicConsumer;
     }
 
-    @GetMapping("/get/{companyId}")
-    public ContractDto getMessages(@PathVariable long companyId) throws JsonProcessingException {
+
+    public void getMessages(long companyId) throws JsonProcessingException {
         List<String> jsonMessages = myTopicConsumer.getMessages();
 
         if(jsonMessages.isEmpty())
         {
-            return null;
+            return;
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -58,7 +58,15 @@ public class ConsumerController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return activeContract;
+    @GetMapping("/get/{companyId}")
+    public ContractDto getActiveContract(long companyId){
+        try {
+            getMessages(companyId);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        return ContractService.getActiveContract(companyId);
     }
 }
