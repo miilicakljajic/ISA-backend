@@ -141,6 +141,7 @@ public class CompanyService {
                 String methodUrl = "http://localhost:4337/api/producer/notify";
                 String poruka = "Your order will be arriving to";
                 sendMessage(poruka, methodUrl);
+
                 return true;
             }
         }
