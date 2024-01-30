@@ -1,1 +1,1 @@
-[{"companyId":3,"items":["Nebulizer;3","Defibrilator;1"],"deliveryDate":"1-2-2024","canDeliver":false},{"companyId":1,"items":["Nebulizer;1"],"deliveryDate":"1-2-2024","canDeliver":false}]
+[{"companyId":3,"items":["Nebulizer;3","Defibrilator;1"],"deliveryDate":"1-2-2024","canDeliver":false},{"companyId":1,"items":["ECG Machine;1"],"deliveryDate":"3-2-2024","canDeliver":true}]
