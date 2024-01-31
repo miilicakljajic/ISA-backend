@@ -66,4 +66,11 @@ public class EquipmentCollectionAppointmentController {
     public List<EquipmentCollectionAppointment> getCompanyAppointments(@PathVariable long id) {
         return service.getAppointmentsByCompany(id);
     }
+
+
+    @PostMapping("/qrpickup")
+    public ResponseDto test(@RequestBody byte[] qrCode)
+    {
+        return service.approveAppointment(qrCode);
+    }
 }

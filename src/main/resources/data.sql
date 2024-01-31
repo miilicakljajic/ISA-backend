@@ -262,3 +262,23 @@ VALUES ('Admin', 'Kompanijski1', '2024-12-23T12:00:00', '30', 0, 1, 0);
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
 VALUES ('Admin', 'Kompanijski1', '2023-12-23T12:30:00', '30', 1, 1, 21, 0);
+
+
+
+INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
+VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 500, 9, 3);
+
+INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
+VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 23000, 2, 4);
+
+INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
+VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 2000, 5, 5);
+
+INSERT INTO public.appointment_items(appointment_id, orderitem_id)
+VALUES (1, 1);
+
+INSERT INTO public.appointment_items(appointment_id, orderitem_id)
+VALUES (1, 2);
+
+INSERT INTO public.appointment_items(appointment_id, orderitem_id)
+VALUES (1, 3);
