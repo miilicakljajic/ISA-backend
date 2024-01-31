@@ -13,6 +13,7 @@ import javax.mail.MessagingException;
 public class MailController {
     @Autowired
     MailService service;
+    // ne radi, izbaciti kasnije
     @PostMapping("/{userId}")
     public void sendCollectionMail(@PathVariable String userId,@RequestBody EquipmentCollectionAppointmentDto appointmentDto){
         try {

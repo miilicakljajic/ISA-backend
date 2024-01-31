@@ -8,6 +8,7 @@ import com.isa.springboot.MediShipping.service.EquipmentCollectionAppointmentSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -66,8 +67,14 @@ public class EquipmentCollectionAppointmentController {
     public List<EquipmentCollectionAppointment> getCompanyAppointments(@PathVariable long id) {
         return service.getAppointmentsByCompany(id);
     }
-
-
+    @PostMapping("/confirmation")
+    public void sendCollectionMail(@RequestBody EquipmentCollectionAppointmentDto appointmentDto) {
+        try {
+            service.sendConfirmationMail(appointmentDto);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @PostMapping("/qrpickup")
     public ResponseDto test(@RequestBody byte[] qrCode)
     {

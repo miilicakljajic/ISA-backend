@@ -97,6 +97,8 @@ public class CompanyService {
                 contractDto.setCanDeliver(true);
                 ContractService.update(contractDto);
             }else{
+                contractDto.setCanDeliver(false);
+                ContractService.update(contractDto);
                 String methodUrl = "http://localhost:4337/api/producer/notify";
                 sendMessage("Equipment can not be delivered",methodUrl);
             }

@@ -390,6 +390,14 @@ public class EquipmentCollectionAppointmentService {
 
         return  list;
     }
+    public void sendConfirmationMail(EquipmentCollectionAppointmentDto a) throws MessagingException {
+        Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(a.getId());
+        if (app.isPresent()) {
+            if (app.get().getUser() != null) {
+                mailService.sendAppointmentMail(app.get().getUser().getEmail(), app.get());
+            }
+        }
+    }
 
     public ResponseDto approveAppointment(byte[] qr)
     {
