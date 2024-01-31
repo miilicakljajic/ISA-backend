@@ -66,7 +66,7 @@ public class EquipmentCollectionAppointmentService {
 
     private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
-        
+
         if(company.isPresent()){
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
                 // && a.getAdminLastname().equals(dto.getAdminLastname()
@@ -368,7 +368,7 @@ public class EquipmentCollectionAppointmentService {
             }
         }
     }
-
+    
     public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
         ArrayList<EquipmentCollectionAppointment> list = new ArrayList<EquipmentCollectionAppointment>();
 
