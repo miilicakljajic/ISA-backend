@@ -18,6 +18,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class EquipmentCollectionAppointmentService {
@@ -39,6 +41,8 @@ public class EquipmentCollectionAppointmentService {
     AuthService authService;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    QrService qrService;
 
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
@@ -375,5 +379,48 @@ public class EquipmentCollectionAppointmentService {
         }
 
         return  list;
+    }
+
+    public ResponseDto approveAppointment(byte[] qr)
+    {
+        String appointment = qrService.readQRCode(qr);
+        //EquipmentCollectionAppointment{id=0, adminFirstname='Petar', status=RESERVED, user=null}
+        //String id = appointment.split("\\{",2)[1].split("=",1)[1];
+        int id = extractId(appointment);
+        if(id != -1)
+        {
+            Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(Long.valueOf(id));
+            app.get().setStatus(AppointmentStatus.DONE);
+            equipmentCollectionAppointmentRepository.save(app.get());
+            //todo pozvati mejl ovde
+            return new ResponseDto(200, "Appointment finished!");
+        }
+        else
+            return new ResponseDto(200, "Invalid QR");
+        //pozvati djaju ovde (update)
+    }
+
+    public static int extractId(String input) {
+        // Regularni izraz za izdvajanje id-a
+        String regex = "id=(\\d+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+
+        // Ako se podudara regularni izraz
+        if (matcher.find()) {
+            // Dobijamo prvi grupisani deo koji predstavlja id
+            String idString = matcher.group(1);
+
+            // Pretvaramo string u integer
+            try {
+                return Integer.parseInt(idString);
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing ID: " + e.getMessage());
+            }
+        }
+
+        // Ako ne pronađemo id, možete vratiti neku podrazumevanu vrednost ili
+        // izbaciti izuzetak u zavisnosti od vaših zahteva
+        return -1;
     }
 }
