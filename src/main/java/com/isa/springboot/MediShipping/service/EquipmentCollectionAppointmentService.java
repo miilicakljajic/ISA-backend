@@ -8,6 +8,7 @@ import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapp
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.*;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,20 +102,15 @@ public class EquipmentCollectionAppointmentService {
         return found;
     }
 
-    private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
+    private boolean equipmentOverlap(EquipmentCollectionAppointment newApp, Company comp)
     {
-        //FIX LATER
-        /*
-        for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
-        {
-            boolean upperBound = newApp.getDate().toEpochSecond(ZoneOffset.UTC) < (app.getDate().toEpochSecond(ZoneOffset.UTC) + app.getDuration()*60);
-            boolean lowerBound = app.getDate().toEpochSecond(ZoneOffset.UTC) < newApp.getDate().toEpochSecond(ZoneOffset.UTC);
-            if(app.getDate().equals(newApp.getDate()) || (upperBound && lowerBound))
-                for(Equipment eq: app.getEquipment())
-                    for(Equipment eq2: newApp.getEquipment())
-                        if(eq.getId() == eq2.getId())
-                            return true;
-        }*/
+        for(OrderItem item : newApp.getItems()) {
+            for(Equipment eq : comp.getEquipment())
+            {
+                if(item.getEquipmentId() == eq.getId() && eq.getCount() < item.getCount())
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -219,10 +215,17 @@ public class EquipmentCollectionAppointmentService {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
+                if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
+                    return new ResponseDto(400, "Appointment already reserved");
+
+                if(equipmentOverlap(updatedAppointment, comp.get()))
+                    return new ResponseDto(400, "Equipment reserved");
                 appointment.get().setStatus(AppointmentStatus.RESERVED);
                 appointment.get().setUser(user.get());
                 appointment.get().setCompany(comp.get());
+                appointment.get().setItems(updatedAppointment.getItems());
                 //update1(appointment.get());
+
                 equipmentCollectionAppointmentRepository.save(appointment.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
@@ -237,14 +240,17 @@ public class EquipmentCollectionAppointmentService {
     public ResponseDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
-        boolean overlap = equipmentOverlap(newApp);
+       // boolean overlap = equipmentOverlap(newApp);
         boolean dateValid = isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration());
-        if(!overlap && dateValid) {
+        if(dateValid) {
             Optional<User> user = userRepository.findById(userid);
             Optional<Company> company = companyService.getCompanyById(companyid);
 
             if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
                 return new ResponseDto(400, "Too many penalty points!");
+
+            if(equipmentOverlap(newApp, company.get()))
+                return new ResponseDto(400, "Equipment reserved");
 
             if (user.isPresent() && company.isPresent()) {
 
@@ -273,8 +279,8 @@ public class EquipmentCollectionAppointmentService {
             }
             return new ResponseDto(200, "OK");
         }
-        if(overlap)
-            return new ResponseDto(400, "Failed: overlaps with existing appointment");
+        //if(overlap)
+            //return new ResponseDto(400, "Failed: overlaps with existing appointment");
         else if(!dateValid)
             return new ResponseDto(400, "Company not available at that time");
         else
