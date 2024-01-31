@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,7 @@ public interface EquipmentCollectionAppointmentRepository extends JpaRepository<
     @Lock(LockModeType.OPTIMISTIC)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Optional<EquipmentCollectionAppointment> findById(@Param("id")Long id);
+    @Lock(LockModeType.OPTIMISTIC)
+    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
+    public List<EquipmentCollectionAppointment> findAll();
 }

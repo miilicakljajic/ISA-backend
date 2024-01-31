@@ -66,15 +66,12 @@ public class EquipmentCollectionAppointmentService {
 
     private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
-        System.out.println(dto.getDate());
+        
         if(company.isPresent()){
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
                 // && a.getAdminLastname().equals(dto.getAdminLastname()
                 if(a.getDate().equals(dto.date)){
                     return true;
-                }else{
-                    return false;
-                    //return !isTimeOverlaped(dto,a);
                 }
             }
         }
