@@ -123,7 +123,7 @@ public class CompanyService {
             contractDto = canDeliver(contractDto);
             if(contractDto.getCanDeliver() == true) {
                 String methodUrl = "http://localhost:4337/api/producer/notify";
-                String poruka = "Your order will be arriving to";
+                String poruka = "Your order is on the way";
                 sendMessage(poruka, methodUrl);
 
                 return true;
