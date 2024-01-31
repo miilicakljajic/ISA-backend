@@ -90,17 +90,6 @@ public class EquipmentCollectionAppointmentService {
         return newAppEnd.isBefore(existingStart) && newAppStart.isAfter(existingEnd);
     }
 
-    public List<EquipmentCollectionAppointment> findByUser(long userId)
-    {
-        ArrayList<EquipmentCollectionAppointment> found = new ArrayList<EquipmentCollectionAppointment>();
-        for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll())
-        {
-            if(a.getUser() != null)
-                if(a.getUser().getId() == userId)
-                    found.add(a);
-        }
-        return found;
-    }
 
     private boolean equipmentOverlap(EquipmentCollectionAppointment newApp, Company comp)
     {
@@ -194,11 +183,13 @@ public class EquipmentCollectionAppointmentService {
         return  null;
     }
 
+    @Transactional
     public void update1(EquipmentCollectionAppointment app)
     {
         equipmentCollectionAppointmentRepository.save(app);
     }
 
+    @Transactional
     public ResponseDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         Optional<Company> comp = companyService.getCompanyById(companyid);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -224,9 +215,9 @@ public class EquipmentCollectionAppointmentService {
                 appointment.get().setUser(user.get());
                 appointment.get().setCompany(comp.get());
                 appointment.get().setItems(updatedAppointment.getItems());
-                //update1(appointment.get());
+                update1(appointment.get());
 
-                equipmentCollectionAppointmentRepository.save(appointment.get());
+                //equipmentCollectionAppointmentRepository.save(appointment.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
             } catch (MessagingException e) {
@@ -291,6 +282,7 @@ public class EquipmentCollectionAppointmentService {
         equipmentCollectionAppointmentRepository.deleteById(id);
     }
 
+    @Transactional
     public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
         Optional<Company> company = companyService.getCompanyById(companyId);
         List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
@@ -375,7 +367,7 @@ public class EquipmentCollectionAppointmentService {
         }
     }
     
-    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
+    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(Long id){
         ArrayList<EquipmentCollectionAppointment> list = new ArrayList<EquipmentCollectionAppointment>();
 
         for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll()){
@@ -385,5 +377,16 @@ public class EquipmentCollectionAppointmentService {
         }
 
         return  list;
+    }
+    public List<EquipmentCollectionAppointment> findByUser(long userId)
+    {
+        ArrayList<EquipmentCollectionAppointment> found = new ArrayList<EquipmentCollectionAppointment>();
+        for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll())
+        {
+            if(a.getUser() != null)
+                if(a.getUser().getId() == userId)
+                    found.add(a);
+        }
+        return found;
     }
 }

@@ -18,7 +18,7 @@ public interface CompanyRepository extends JpaRepository<Company,Long> {
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Company save(Company company);
 
-    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Optional<Company> findById(@Param("id")Long id);
 }

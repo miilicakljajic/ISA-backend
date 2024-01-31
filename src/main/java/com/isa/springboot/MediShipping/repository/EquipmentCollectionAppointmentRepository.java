@@ -18,11 +18,11 @@ public interface EquipmentCollectionAppointmentRepository extends JpaRepository<
     @Lock(LockModeType.OPTIMISTIC)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public EquipmentCollectionAppointment save(EquipmentCollectionAppointment appointment);
-
-    @Lock(LockModeType.OPTIMISTIC)
+    @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Optional<EquipmentCollectionAppointment> findById(@Param("id")Long id);
-    @Lock(LockModeType.OPTIMISTIC)
+
+    /*@Lock(LockModeType.OPTIMISTIC)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
-    public List<EquipmentCollectionAppointment> findAll();
+    public List<EquipmentCollectionAppointment> findAll();*/
 }
