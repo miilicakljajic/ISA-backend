@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EquipmentRepository extends JpaRepository<Equipment,Long> {
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    /*@Lock(LockModeType.OPTIMISTIC)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Equipment save(Equipment equipment);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Lock(LockModeType.OPTIMISTIC)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
-    public Optional<Equipment> findById(@Param("id")Long id);
+    public Optional<Equipment> findById(@Param("id")Long id);*/
 }

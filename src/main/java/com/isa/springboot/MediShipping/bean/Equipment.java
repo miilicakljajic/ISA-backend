@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Table(name = "equipment")
 public class Equipment {
-    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,10 +22,6 @@ public class Equipment {
     private Double price;
 
     private Integer count;
-
-    @Version
-    private Integer version;
-
     public long getId() {
         return id;
     }
@@ -72,14 +67,6 @@ public class Equipment {
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
     }
 
     @Override

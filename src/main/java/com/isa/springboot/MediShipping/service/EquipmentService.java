@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.*;
 
 @Service
-@Transactional
 public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;

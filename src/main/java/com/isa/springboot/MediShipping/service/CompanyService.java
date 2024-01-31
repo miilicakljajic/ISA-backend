@@ -31,7 +31,6 @@ public class CompanyService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RestTemplate restTemplate;
-
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
         for(User u: company.getCompanyManagers()) {
@@ -57,29 +56,12 @@ public class CompanyService {
             existingCompany.get().setDescription(updatedCompany.getDescription());
             existingCompany.get().setAverageRating(updatedCompany.getAverageRating());
             existingCompany.get().setEquipment(updatedCompany.getEquipment());
-            existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
+            //existingCompany.get().setCompanyManagers(updatedCompany.getCompanyManagers());
 
             return mapper.convertToCompanyDto(companyRepository.save(existingCompany.get()));
         }
         return null;
     }
-
-    public Company updateCompanyRegular(Long id, Company company) {
-        Optional<Company> existingCompany = getCompanyById(id);
-
-        if(existingCompany.isPresent()) {
-            existingCompany.get().setName(company.getName());
-            existingCompany.get().setAddress(company.getAddress());
-            existingCompany.get().setDescription(company.getDescription());
-            existingCompany.get().setAverageRating(company.getAverageRating());
-            existingCompany.get().setEquipment(company.getEquipment());
-            existingCompany.get().setCompanyManagers(company.getCompanyManagers());
-
-            return companyRepository.save(company);
-        }
-        return null;
-    }
-
     public void deleteAllCompanies() { companyRepository.deleteAll(); }
 
     public void deleteCompany(Long id) { companyRepository.deleteById(id); }

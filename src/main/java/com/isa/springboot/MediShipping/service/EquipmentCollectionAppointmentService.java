@@ -164,7 +164,7 @@ public class EquipmentCollectionAppointmentService {
         return mapper.convertToDto(equipmentCollectionAppointmentRepository.findById(appointmentId).get());
     }
 
-    //@Transactional(readOnly = false)
+    @Transactional
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
