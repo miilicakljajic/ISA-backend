@@ -199,7 +199,9 @@ INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
 VALUES (27, 'Changing genes - changing future', 'milicakljajic1@gmail.com', true, 'Milica', 'Kljajic', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 0);
 
-
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
+VALUES (28, 'Changing genes - changing future', 'usr2@m.com', true, 'User', 'Test', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 0);
 
 INSERT INTO public.user_role(
     user_id, role_id)
@@ -229,33 +231,37 @@ INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (27, 1);
 
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (28, 1);
+
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, version)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1, 0);
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T11:30:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
-VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 1, 1, 26, 0);
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T10:30:00', '30', 1, 1, 26, 0);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, version)
-VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3, 0);
+VALUES ('Admin', 'Kompanijski1', '2024-12-24T11:00:00', '30', 0, 3, 0);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, version)
-VALUES ('Admin', 'Peric', '2024-12-25T11:30:00', '30', 0, 3, 0);
+VALUES ('Admin', 'Kompanijski1', '2024-12-25T11:30:00', '30', 0, 3, 0);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, version)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1, 0);
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T11:30:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, version)
-VALUES ('Admin', 'Peric', '2024-12-23T12:00:00', '30', 0, 1, 0);
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T12:00:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
     admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
-VALUES ('Admin', 'Peric', '2023-12-23T12:30:00', '30', 1, 1, 21, 0);
+VALUES ('Admin', 'Kompanijski1', '2023-12-23T12:30:00', '30', 1, 1, 21, 0);
 
 
 
