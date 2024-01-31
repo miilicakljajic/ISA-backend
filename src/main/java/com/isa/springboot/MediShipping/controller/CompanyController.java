@@ -34,7 +34,7 @@ public class CompanyController {
 
     @PutMapping("/{id}")
     public CompanyDto updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDetails) {
-        return companyService.updateCompany(id, companyDetails);
+        return companyService.update(id, companyDetails);
     }
     @DeleteMapping
     public String deleteAllCompanies() {

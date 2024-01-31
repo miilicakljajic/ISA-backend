@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.*;
 
 @Service
-@Transactional
 public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
@@ -47,7 +46,8 @@ public class CompanyService {
 
     public Optional<Company> getCompanyById(Long id) { return companyRepository.findById(id); }
 
-    public CompanyDto updateCompany(Long id, CompanyDto companyDto) {
+    @Transactional
+    public CompanyDto update(Long id, CompanyDto companyDto) {
         Optional<Company> existingCompany = getCompanyById(id);
         Company updatedCompany = mapper.convertToEntity(companyDto);
 
@@ -116,7 +116,7 @@ public class CompanyService {
                 ContractService.update(contractDto);
             }else{
                 String methodUrl = "http://localhost:4337/api/producer/notify";
-                sendMessage("Equipment cannot be delivered",methodUrl);
+                sendMessage("Equipment can not be delivered",methodUrl);
             }
         }
         return contractDto;

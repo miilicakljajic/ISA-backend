@@ -22,7 +22,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
-@Transactional
 public class EquipmentCollectionAppointmentService {
     @Autowired
     private EquipmentCollectionAppointmentRepository equipmentCollectionAppointmentRepository;
@@ -182,7 +181,7 @@ public class EquipmentCollectionAppointmentService {
         }
     }
 
-    //@Transactional
+    @Transactional
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
