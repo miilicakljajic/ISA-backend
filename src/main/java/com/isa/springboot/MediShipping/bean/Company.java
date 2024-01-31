@@ -13,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "companies")
 public class Company {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,6 +33,10 @@ public class Company {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "company_id")
     private Set<User> companyManagers;
+
+    @Version
+    private Integer version;
+
     public Company(){
         this.equipment = new HashSet<>();
     }
@@ -108,6 +113,15 @@ public class Company {
     public void setCompanyManagers(Set<User> companyManagers) {
         this.companyManagers = companyManagers;
     }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

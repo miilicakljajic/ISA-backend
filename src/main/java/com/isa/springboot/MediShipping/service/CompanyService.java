@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -30,7 +31,6 @@ public class CompanyService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RestTemplate restTemplate;
-
     public Company createCompany(CompanyDto companyDto) {
         Company company = mapper.convertToEntity(companyDto);
         for(User u: company.getCompanyManagers()) {
@@ -45,7 +45,8 @@ public class CompanyService {
 
     public Optional<Company> getCompanyById(Long id) { return companyRepository.findById(id); }
 
-    public CompanyDto updateCompany(Long id, CompanyDto companyDto) {
+    @Transactional
+    public CompanyDto update(Long id, CompanyDto companyDto) {
         Optional<Company> existingCompany = getCompanyById(id);
         Company updatedCompany = mapper.convertToEntity(companyDto);
 
@@ -61,23 +62,6 @@ public class CompanyService {
         }
         return null;
     }
-
-    public Company updateCompanyRegular(Long id, Company company) {
-        Optional<Company> existingCompany = getCompanyById(id);
-
-        if(existingCompany.isPresent()) {
-            existingCompany.get().setName(company.getName());
-            existingCompany.get().setAddress(company.getAddress());
-            existingCompany.get().setDescription(company.getDescription());
-            existingCompany.get().setAverageRating(company.getAverageRating());
-            existingCompany.get().setEquipment(company.getEquipment());
-            existingCompany.get().setCompanyManagers(company.getCompanyManagers());
-
-            return companyRepository.save(company);
-        }
-        return null;
-    }
-
     public void deleteAllCompanies() { companyRepository.deleteAll(); }
 
     public void deleteCompany(Long id) { companyRepository.deleteById(id); }
@@ -116,7 +100,7 @@ public class CompanyService {
                 contractDto.setCanDeliver(false);
                 ContractService.update(contractDto);
                 String methodUrl = "http://localhost:4337/api/producer/notify";
-                sendMessage("Equipment cannot be delivered",methodUrl);
+                sendMessage("Equipment can not be delivered",methodUrl);
             }
         }
         return contractDto;

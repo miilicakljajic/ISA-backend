@@ -8,8 +8,11 @@ import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapp
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.*;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -18,6 +21,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class EquipmentCollectionAppointmentService {
@@ -39,6 +44,8 @@ public class EquipmentCollectionAppointmentService {
     AuthService authService;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    QrService qrService;
 
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
@@ -64,15 +71,12 @@ public class EquipmentCollectionAppointmentService {
 
     private boolean alreadyExists(long companyId,EquipmentCollectionAppointmentDto dto){
         Optional<Company> company = companyService.getCompanyById(companyId);
-        System.out.println(dto.getDate());
+
         if(company.isPresent()){
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
                 // && a.getAdminLastname().equals(dto.getAdminLastname()
                 if(a.getDate().equals(dto.date)){
-                  //  System.out.println("Appointment in this timeslot already exists");
                     return true;
-                }else{
-                    return !isTimeOverlaped(dto,a);
                 }
             }
         }
@@ -102,20 +106,15 @@ public class EquipmentCollectionAppointmentService {
         return found;
     }
 
-    private boolean equipmentOverlap(EquipmentCollectionAppointment newApp)
+    private boolean equipmentOverlap(EquipmentCollectionAppointment newApp, Company comp)
     {
-        //FIX LATER
-        /*
-        for(EquipmentCollectionAppointment app : equipmentCollectionAppointmentRepository.findAll())
-        {
-            boolean upperBound = newApp.getDate().toEpochSecond(ZoneOffset.UTC) < (app.getDate().toEpochSecond(ZoneOffset.UTC) + app.getDuration()*60);
-            boolean lowerBound = app.getDate().toEpochSecond(ZoneOffset.UTC) < newApp.getDate().toEpochSecond(ZoneOffset.UTC);
-            if(app.getDate().equals(newApp.getDate()) || (upperBound && lowerBound))
-                for(Equipment eq: app.getEquipment())
-                    for(Equipment eq2: newApp.getEquipment())
-                        if(eq.getId() == eq2.getId())
-                            return true;
-        }*/
+        for(OrderItem item : newApp.getItems()) {
+            for(Equipment eq : comp.getEquipment())
+            {
+                if(item.getEquipmentId() == eq.getId() && eq.getCount() < item.getCount())
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -161,6 +160,8 @@ public class EquipmentCollectionAppointmentService {
     public EquipmentCollectionAppointmentDto getById(long appointmentId){
         return mapper.convertToDto(equipmentCollectionAppointmentRepository.findById(appointmentId).get());
     }
+
+    @Transactional
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -176,11 +177,15 @@ public class EquipmentCollectionAppointmentService {
             return null;
         }
     }
+
+    @Transactional
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
-
         if(appointment.isPresent()){
+            if(appointment.get().getStatus() == AppointmentStatus.RESERVED){
+                return null;
+            }
             Optional<Company> company = companyService.getCompanyById(companyId);
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
@@ -208,16 +213,24 @@ public class EquipmentCollectionAppointmentService {
         if(appointment.isPresent() && user.isPresent() && comp.isPresent()){
             try {
                 try {
-                    updatedAppointment.setQr(QrService.getQRCodeImage(updatedAppointment.toString(), 300, 300));
+                    appointment.get().setQr(QrService.getQRCodeImage(updatedAppointment.toString(), 300, 300));
                 } catch (WriterException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                updatedAppointment.setStatus(AppointmentStatus.RESERVED);
-                updatedAppointment.setUser(user.get());
-                updatedAppointment.setCompany(comp.get());
-                equipmentCollectionAppointmentRepository.save(updatedAppointment);
+                if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
+                    return new ResponseDto(400, "Appointment already reserved");
+
+                if(equipmentOverlap(updatedAppointment, comp.get()))
+                    return new ResponseDto(400, "Equipment reserved");
+                appointment.get().setStatus(AppointmentStatus.RESERVED);
+                appointment.get().setUser(user.get());
+                appointment.get().setCompany(comp.get());
+                appointment.get().setItems(updatedAppointment.getItems());
+                //update1(appointment.get());
+
+                equipmentCollectionAppointmentRepository.save(appointment.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
             } catch (MessagingException e) {
@@ -231,14 +244,17 @@ public class EquipmentCollectionAppointmentService {
     public ResponseDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
-        boolean overlap = equipmentOverlap(newApp);
+       // boolean overlap = equipmentOverlap(newApp);
         boolean dateValid = isDateTimeValid(companyid,newApp.getDate(), newApp.getDuration());
-        if(!overlap && dateValid) {
+        if(dateValid) {
             Optional<User> user = userRepository.findById(userid);
             Optional<Company> company = companyService.getCompanyById(companyid);
 
             if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
                 return new ResponseDto(400, "Too many penalty points!");
+
+            if(equipmentOverlap(newApp, company.get()))
+                return new ResponseDto(400, "Equipment reserved");
 
             if (user.isPresent() && company.isPresent()) {
 
@@ -267,8 +283,8 @@ public class EquipmentCollectionAppointmentService {
             }
             return new ResponseDto(200, "OK");
         }
-        if(overlap)
-            return new ResponseDto(400, "Failed: overlaps with existing appointment");
+        //if(overlap)
+            //return new ResponseDto(400, "Failed: overlaps with existing appointment");
         else if(!dateValid)
             return new ResponseDto(400, "Company not available at that time");
         else
@@ -362,7 +378,7 @@ public class EquipmentCollectionAppointmentService {
             }
         }
     }
-
+    
     public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
         ArrayList<EquipmentCollectionAppointment> list = new ArrayList<EquipmentCollectionAppointment>();
 
@@ -374,14 +390,55 @@ public class EquipmentCollectionAppointmentService {
 
         return  list;
     }
-
     public void sendConfirmationMail(EquipmentCollectionAppointmentDto a) throws MessagingException {
         Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(a.getId());
-        if(app.isPresent())
-        {
-            if(app.get().getUser() != null) {
+        if (app.isPresent()) {
+            if (app.get().getUser() != null) {
                 mailService.sendAppointmentMail(app.get().getUser().getEmail(), app.get());
             }
         }
+    }
+
+    public ResponseDto approveAppointment(byte[] qr)
+    {
+        String appointment = qrService.readQRCode(qr);
+        //EquipmentCollectionAppointment{id=0, adminFirstname='Petar', status=RESERVED, user=null}
+        //String id = appointment.split("\\{",2)[1].split("=",1)[1];
+        int id = extractId(appointment);
+        if(id != -1)
+        {
+            Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(Long.valueOf(id));
+            app.get().setStatus(AppointmentStatus.DONE);
+            equipmentCollectionAppointmentRepository.save(app.get());
+            //todo pozvati mejl ovde
+            return new ResponseDto(200, "Appointment finished!");
+        }
+        else
+            return new ResponseDto(200, "Invalid QR");
+        //pozvati djaju ovde (update)
+    }
+
+    public static int extractId(String input) {
+        // Regularni izraz za izdvajanje id-a
+        String regex = "id=(\\d+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+
+        // Ako se podudara regularni izraz
+        if (matcher.find()) {
+            // Dobijamo prvi grupisani deo koji predstavlja id
+            String idString = matcher.group(1);
+
+            // Pretvaramo string u integer
+            try {
+                return Integer.parseInt(idString);
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing ID: " + e.getMessage());
+            }
+        }
+
+        // Ako ne pronađemo id, možete vratiti neku podrazumevanu vrednost ili
+        // izbaciti izuzetak u zavisnosti od vaših zahteva
+        return -1;
     }
 }

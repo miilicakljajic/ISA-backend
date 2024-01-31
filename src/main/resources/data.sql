@@ -19,35 +19,74 @@ INSERT INTO addresses(city, country, "number", street_name) VALUES ('Žabalj', '
 INSERT INTO addresses(city, country, "number", street_name) VALUES ('Bačka Palanka', 'Srbija', '22', 'Jovana Dučića');
 INSERT INTO addresses(city, country, "number", street_name) VALUES ('Sombor', 'Srbija', '20', 'Nikole Tesle');
 
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (5.5, 'Providing cutting-edge healthcare solutions and medical services.', 'MediCare', 12, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.2, 'Innovative technology solutions for medical diagnostics and treatment.', 'MedTech Solutions', 5, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.7, 'Specializing in pharmaceutical research and development.', 'Pharma Innovations', 17, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.9, 'Offering comprehensive healthcare products and services.', 'HealthCorp', 3, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.6, 'Global leader in medical equipment manufacturing and distribution.', 'MedEquip', 14, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing medical expertise and healthcare consulting services.', 'MedConsult', 6, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.7, 'Developing state-of-the-art medical software solutions.', 'MediSoft', 4, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.8, 'Focused on medical research and innovative therapies.', 'MediResearch', 19, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.1, 'Delivering high-quality medical supplies and equipment.', 'MedSupply Co.', 7, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.5, 'Specializing in medical training programs and education.', 'MedEdu Solutions', 2, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.4, 'Offering advanced medical imaging and diagnostic services.', 'MedImaging', 16, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.6, 'Providing healthcare technology solutions and support.', 'MedTech Support', 1, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.0, 'Specialized in medical data management and analytics.', 'MediAnalytics', 10, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.5, 'Developing cutting-edge medical devices and technologies.', 'MedDevices Inc.', 20, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.9, 'Committed to providing accessible healthcare solutions.', 'MedAccess', 15, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.2, 'Offering personalized healthcare services and consultations.', 'MediCare Consult', 13, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.8, 'Specializing in pharmaceutical manufacturing and distribution.', 'Pharma Solutions', 11, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.7, 'Innovative medical research and drug development.', 'MediPharma Research', 9, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (5.5, 'Providing cutting-edge healthcare solutions and medical services.', 'MediCare', 12, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.2, 'Innovative technology solutions for medical diagnostics and treatment.', 'MedTech Solutions', 5, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.7, 'Specializing in pharmaceutical research and development.', 'Pharma Innovations', 17, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.9, 'Offering comprehensive healthcare products and services.', 'HealthCorp', 3, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.6, 'Global leader in medical equipment manufacturing and distribution.', 'MedEquip', 14, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.3, 'Providing medical expertise and healthcare consulting services.', 'MedConsult', 6, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.7, 'Developing state-of-the-art medical software solutions.', 'MediSoft', 4, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.8, 'Focused on medical research and innovative therapies.', 'MediResearch', 19, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.1, 'Delivering high-quality medical supplies and equipment.', 'MedSupply Co.', 7, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.5, 'Specializing in medical training programs and education.', 'MedEdu Solutions', 2, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.4, 'Offering advanced medical imaging and diagnostic services.', 'MedImaging', 16, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.6, 'Providing healthcare technology solutions and support.', 'MedTech Support', 1, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.0, 'Specialized in medical data management and analytics.', 'MediAnalytics', 10, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.5, 'Developing cutting-edge medical devices and technologies.', 'MedDevices Inc.', 20, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.9, 'Committed to providing accessible healthcare solutions.', 'MedAccess', 15, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.2, 'Offering personalized healthcare services and consultations.', 'MediCare Consult', 13, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.8, 'Specializing in pharmaceutical manufacturing and distribution.', 'Pharma Solutions', 11, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.7, 'Innovative medical research and drug development.', 'MediPharma Research', 9, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16', 0);
 
 
 INSERT INTO public.equipment(description, name, type, company_id, price, count)
 VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 1, 1000, 7);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
+INSERT INTO public.equipment(description, name, type, company_id, price, count )
 VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 1, 1000, 4);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
+INSERT INTO public.equipment(description, name, type, company_id, price, count )
 VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 1, 1000, 9);
 
 INSERT INTO public.equipment(description, name, type, company_id, price, count)
@@ -160,7 +199,9 @@ INSERT INTO public.users(
     id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
 VALUES (27, 'Changing genes - changing future', 'milicakljajic1@gmail.com', true, 'Milica', 'Kljajic', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 0);
 
-
+INSERT INTO public.users(
+    id, company_info, email, enabled, first_name, last_name, last_password_reset_date, occupation, password, phone_number, picture_link, company_id, address_id, penalty_points)
+VALUES (28, 'Changing genes - changing future', 'usr2@m.com', true, 'User', 'Test', to_timestamp(1639619463), 'Programmer', '$2a$12$yaElZaO65G7HhHNYcn8HkusyQtTt0lN.WL6GUtWR9RO8d5dSNosOq', '+381 62 111 1111', 'https://m.media-amazon.com/images/I/51DBd7O6GEL._AC_SL1500_.jpg', null, 1, 0);
 
 INSERT INTO public.user_role(
     user_id, role_id)
@@ -190,33 +231,39 @@ INSERT INTO public.user_role(
     user_id, role_id)
 VALUES (27, 1);
 
-INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1);
+INSERT INTO public.user_role(
+    user_id, role_id)
+VALUES (28, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status,company_id,user_id)
-VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 1, 1,26);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T11:30:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T10:30:00', '30', 1, 1, 26, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-25T11:30:00', '30', 0, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Kompanijski1', '2024-12-24T11:00:00', '30', 0, 3, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Kompanijski1', '2024-12-25T11:30:00', '30', 0, 3, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-23T12:00:00', '30', 0, 1);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T11:30:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Admin', 'Peric', '2023-12-23T12:30:00', '30', 1, 1, 21);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Kompanijski1', '2024-12-23T12:00:00', '30', 0, 1, 0);
+
+INSERT INTO public.appointments(
+    admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
+VALUES ('Admin', 'Kompanijski1', '2023-12-23T12:30:00', '30', 1, 1, 21, 0);
+
+
 
 INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
 VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 500, 9, 3);

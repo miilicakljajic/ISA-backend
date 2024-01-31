@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "appointments")
 public class EquipmentCollectionAppointment {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -35,6 +36,9 @@ public class EquipmentCollectionAppointment {
     @ManyToOne
     @JoinColumn(name="company_id", referencedColumnName = "id")
     private Company company;
+
+    @Version
+    private Integer version;
 
     public long getId() {
         return id;
@@ -114,6 +118,14 @@ public class EquipmentCollectionAppointment {
 
     public void setCompany(Company company) {
         this.company = company;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     @Override

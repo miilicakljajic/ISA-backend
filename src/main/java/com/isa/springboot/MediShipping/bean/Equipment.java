@@ -11,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "equipment")
 public class Equipment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,7 +22,6 @@ public class Equipment {
     private Double price;
 
     private Integer count;
-
     public long getId() {
         return id;
     }
