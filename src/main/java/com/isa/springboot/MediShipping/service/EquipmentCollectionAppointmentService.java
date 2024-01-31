@@ -22,6 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
+@Transactional
 public class EquipmentCollectionAppointmentService {
     @Autowired
     private EquipmentCollectionAppointmentRepository equipmentCollectionAppointmentRepository;
@@ -164,7 +165,7 @@ public class EquipmentCollectionAppointmentService {
         return mapper.convertToDto(equipmentCollectionAppointmentRepository.findById(appointmentId).get());
     }
 
-    @Transactional
+    //@Transactional(readOnly = false)
     public EquipmentCollectionAppointmentDto create(long companyId,EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
 
         EquipmentCollectionAppointment appointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
@@ -181,7 +182,7 @@ public class EquipmentCollectionAppointmentService {
         }
     }
 
-    @Transactional
+    //@Transactional
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
@@ -216,16 +217,17 @@ public class EquipmentCollectionAppointmentService {
         if(appointment.isPresent() && user.isPresent() && comp.isPresent()){
             try {
                 try {
-                    updatedAppointment.setQr(QrService.getQRCodeImage(updatedAppointment.toString(), 300, 300));
+                    appointment.get().setQr(QrService.getQRCodeImage(updatedAppointment.toString(), 300, 300));
                 } catch (WriterException e) {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                updatedAppointment.setStatus(AppointmentStatus.RESERVED);
-                updatedAppointment.setUser(user.get());
-                updatedAppointment.setCompany(comp.get());
-                equipmentCollectionAppointmentRepository.save(updatedAppointment);
+                appointment.get().setStatus(AppointmentStatus.RESERVED);
+                appointment.get().setUser(user.get());
+                appointment.get().setCompany(comp.get());
+                //update1(appointment.get());
+                equipmentCollectionAppointmentRepository.save(appointment.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
             } catch (MessagingException e) {

@@ -19,111 +19,150 @@ INSERT INTO addresses(city, country, "number", street_name) VALUES ('Žabalj', '
 INSERT INTO addresses(city, country, "number", street_name) VALUES ('Bačka Palanka', 'Srbija', '22', 'Jovana Dučića');
 INSERT INTO addresses(city, country, "number", street_name) VALUES ('Sombor', 'Srbija', '20', 'Nikole Tesle');
 
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (5.5, 'Providing cutting-edge healthcare solutions and medical services.', 'MediCare', 12, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.2, 'Innovative technology solutions for medical diagnostics and treatment.', 'MedTech Solutions', 5, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.7, 'Specializing in pharmaceutical research and development.', 'Pharma Innovations', 17, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.9, 'Offering comprehensive healthcare products and services.', 'HealthCorp', 3, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.6, 'Global leader in medical equipment manufacturing and distribution.', 'MedEquip', 14, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing medical expertise and healthcare consulting services.', 'MedConsult', 6, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.7, 'Developing state-of-the-art medical software solutions.', 'MediSoft', 4, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.8, 'Focused on medical research and innovative therapies.', 'MediResearch', 19, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.1, 'Delivering high-quality medical supplies and equipment.', 'MedSupply Co.', 7, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.5, 'Specializing in medical training programs and education.', 'MedEdu Solutions', 2, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.4, 'Offering advanced medical imaging and diagnostic services.', 'MedImaging', 16, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.6, 'Providing healthcare technology solutions and support.', 'MedTech Support', 1, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.0, 'Specialized in medical data management and analytics.', 'MediAnalytics', 10, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.5, 'Developing cutting-edge medical devices and technologies.', 'MedDevices Inc.', 20, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.9, 'Committed to providing accessible healthcare solutions.', 'MedAccess', 15, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.2, 'Offering personalized healthcare services and consultations.', 'MediCare Consult', 13, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (3.8, 'Specializing in pharmaceutical manufacturing and distribution.', 'Pharma Solutions', 11, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.7, 'Innovative medical research and drug development.', 'MediPharma Research', 9, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18, '9-16');
-INSERT INTO public.companies(average_rating, description, name, address_id, working_hours) VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16');
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (5.5, 'Providing cutting-edge healthcare solutions and medical services.', 'MediCare', 12, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.2, 'Innovative technology solutions for medical diagnostics and treatment.', 'MedTech Solutions', 5, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.7, 'Specializing in pharmaceutical research and development.', 'Pharma Innovations', 17, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.9, 'Offering comprehensive healthcare products and services.', 'HealthCorp', 3, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.6, 'Global leader in medical equipment manufacturing and distribution.', 'MedEquip', 14, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.3, 'Providing medical expertise and healthcare consulting services.', 'MedConsult', 6, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.7, 'Developing state-of-the-art medical software solutions.', 'MediSoft', 4, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.8, 'Focused on medical research and innovative therapies.', 'MediResearch', 19, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.1, 'Delivering high-quality medical supplies and equipment.', 'MedSupply Co.', 7, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.5, 'Specializing in medical training programs and education.', 'MedEdu Solutions', 2, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.4, 'Offering advanced medical imaging and diagnostic services.', 'MedImaging', 16, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.6, 'Providing healthcare technology solutions and support.', 'MedTech Support', 1, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.0, 'Specialized in medical data management and analytics.', 'MediAnalytics', 10, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.5, 'Developing cutting-edge medical devices and technologies.', 'MedDevices Inc.', 20, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.9, 'Committed to providing accessible healthcare solutions.', 'MedAccess', 15, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.2, 'Offering personalized healthcare services and consultations.', 'MediCare Consult', 13, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (3.8, 'Specializing in pharmaceutical manufacturing and distribution.', 'Pharma Solutions', 11, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.7, 'Innovative medical research and drug development.', 'MediPharma Research', 9, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.0, 'Focused on healthcare technology and patient care.', 'MedTechCare', 18, '9-16', 0);
+
+INSERT INTO public.companies(average_rating, description, name, address_id, working_hours, version)
+VALUES (4.3, 'Providing telemedicine solutions and remote healthcare.', 'TeleHealth Solutions', 8, '9-16', 0);
 
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 1, 1000, 7);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 1, 1000, 7, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 1, 1000, 4);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 1, 1000, 4, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 1, 1000, 9);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 1, 1000, 9, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 1, 1000, 2);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 1, 1000, 2, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 1, 1000, 5);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 1, 1000, 5, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 1, 1000, 8);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 1, 1000, 8, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 1, 1000, 3);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 1, 1000, 3, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 1, 1000, 6);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 1, 1000, 6, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Surgical microscope for precise visualization', 'Surgical Microscope', 'Surgical Equipment', 2, 1000, 1);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Surgical microscope for precise visualization', 'Surgical Microscope', 'Surgical Equipment', 2, 1000, 1, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Anesthesia machine for administering anesthesia', 'Anesthesia Machine', 'Anesthesia Equipment', 2, 1000, 10);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Anesthesia machine for administering anesthesia', 'Anesthesia Machine', 'Anesthesia Equipment', 2, 1000, 10, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Blood pressure monitor for hypertension evaluation', 'Blood Pressure Monitor', 'Diagnostic Device', 2, 1000, 7);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Blood pressure monitor for hypertension evaluation', 'Blood Pressure Monitor', 'Diagnostic Device', 2, 1000, 7, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('X-ray machine for radiographic imaging', 'X-ray Machine', 'Radiology Equipment', 3, 1000, 4);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('X-ray machine for radiographic imaging', 'X-ray Machine', 'Radiology Equipment', 3, 1000, 4, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Ophthalmoscope for eye examinations', 'Ophthalmoscope', 'Diagnostic Tool', 3, 1000, 9);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Ophthalmoscope for eye examinations', 'Ophthalmoscope', 'Diagnostic Tool', 3, 1000, 9, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Dental chair for dental procedures', 'Dental Chair', 'Dental Equipment', 3, 1000, 2);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Dental chair for dental procedures', 'Dental Chair', 'Dental Equipment', 3, 1000, 2, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Ventilator for respiratory support', 'Ventilator', 'Life Support Equipment', 4, 1000, 5);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Ventilator for respiratory support', 'Ventilator', 'Life Support Equipment', 4, 1000, 5, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Surgical scalpel for precise incisions', 'Surgical Scalpel', 'Surgical Instrument', 4, 1000, 8);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Surgical scalpel for precise incisions', 'Surgical Scalpel', 'Surgical Instrument', 4, 1000, 8, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('CT scanner for detailed imaging', 'CT Scanner', 'Diagnostic Equipment', 4, 1000, 3);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('CT scanner for detailed imaging', 'CT Scanner', 'Diagnostic Equipment', 4, 1000, 3, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Blood glucose meter for monitoring sugar levels', 'Glucose Meter', 'Diagnostic Device', 4, 1000, 6);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Blood glucose meter for monitoring sugar levels', 'Glucose Meter', 'Diagnostic Device', 4, 1000, 6, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Dialysis machine for renal therapy', 'Dialysis Machine', 'Renal Equipment', 3, 1000, 1);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Dialysis machine for renal therapy', 'Dialysis Machine', 'Renal Equipment', 3, 1000, 1, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Orthopedic drill for bone surgeries', 'Orthopedic Drill', 'Surgical Instrument', 3, 1000, 10);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Orthopedic drill for bone surgeries', 'Orthopedic Drill', 'Surgical Instrument', 3, 1000, 10, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 3, 1000, 7);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Stethoscope for auscultation', 'Stethoscope', 'Medical Equipment', 3, 1000, 7, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 3, 1000, 4);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('MRI machine for diagnostic imaging', 'MRI Machine', 'Diagnostic Equipment', 3, 1000, 4, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 3, 1000, 9);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 3, 1000, 9, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 3, 1000, 2);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Ultrasound device for imaging', 'Ultrasound Machine', 'Imaging Equipment', 3, 1000, 2, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 3, 1000, 5);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Infusion pump for drug delivery', 'Infusion Pump', 'Medical Device', 3, 1000, 5, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 3, 1000, 8);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Electrocardiogram machine for heart monitoring', 'ECG Machine', 'Monitoring Equipment', 3, 1000, 8, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 3, 1000, 3);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Pulse oximeter for oxygen saturation measurement', 'Pulse Oximeter', 'Diagnostic Tool', 3, 1000, 3, 0);
 
-INSERT INTO public.equipment(description, name, type, company_id, price, count)
-VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 3, 1000, 6);
+INSERT INTO public.equipment(description, name, type, company_id, price, count, version)
+VALUES ('Nebulizer for respiratory therapy', 'Nebulizer', 'Respiratory Equipment', 3, 1000, 6, 0);
 
 INSERT INTO public.ROLE (name) VALUES ('ROLE_USER');
 INSERT INTO public.ROLE (name) VALUES ('ROLE_SYSTEM_ADMIN');
@@ -191,32 +230,34 @@ INSERT INTO public.user_role(
 VALUES (27, 1);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status,company_id,user_id)
-VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 1, 1,26);
+    admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
+VALUES ('Admin', 'Peric', '2024-12-23T10:30:00', '30', 1, 1, 26, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Peric', '2024-12-24T11:00:00', '30', 0, 3, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-25T11:30:00', '30', 0, 3);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Peric', '2024-12-25T11:30:00', '30', 0, 3, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Peric', '2024-12-23T11:30:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id)
-VALUES ('Admin', 'Peric', '2024-12-23T12:00:00', '30', 0, 1);
+    admin_firstname, admin_lastname, date, duration, status, company_id, version)
+VALUES ('Admin', 'Peric', '2024-12-23T12:00:00', '30', 0, 1, 0);
 
 INSERT INTO public.appointments(
-    admin_firstname, admin_lastname, date, duration, status, company_id, user_id)
-VALUES ('Admin', 'Peric', '2023-12-23T12:30:00', '30', 1, 1, 21);
+    admin_firstname, admin_lastname, date, duration, status, company_id, user_id, version)
+VALUES ('Admin', 'Peric', '2023-12-23T12:30:00', '30', 1, 1, 21, 0);
+
+
 
 INSERT INTO public.orderitem(description, name, type, price, count, equipment_id)
 VALUES ('Defibrillator for cardiac emergencies', 'Defibrillator', 'Emergency Equipment', 500, 9, 3);
