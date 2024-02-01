@@ -13,6 +13,7 @@ import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
@@ -80,8 +81,22 @@ public class EquipmentCollectionAppointmentService {
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
                 // && a.getAdminLastname().equals(dto.getAdminLastname()
                 if(a.getDate().equals(dto.date)){
-                    return true;//a gde je uradjeno za preklapajuce a to, nema preklapanja ako je fiksna duzina
-                    //tj svi su pokazi  u kody
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean alreadyExistsForUser(long companyId, long userId, EquipmentCollectionAppointmentDto dto){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+
+        if(company.isPresent()){
+            for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
+                // && a.getAdminLastname().equals(dto.getAdminLastname()
+                if(a.getDate().equals(dto.date) && a.getUser().getId() == userId){
+                    return true;
                 }
             }
         }
@@ -186,12 +201,13 @@ public class EquipmentCollectionAppointmentService {
             if (appointment.isEmpty() || appointment.get().getStatus() == AppointmentStatus.RESERVED)
                 return null;
 
-            Optional<Company> company = companyService.getCompanyById(companyId);
+            //Optional<Company> company = companyService.getCompanyById(companyId);
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setItems(updatedAppointment.getItems());
             appointment.get().setDate(updatedAppointment.getDate());
             appointment.get().setStatus(updatedAppointment.getStatus());
+            //appointment.get().setCompany(company.get());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
 
@@ -224,7 +240,7 @@ public class EquipmentCollectionAppointmentService {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
-                }
+                }//jel se nesto sjebalo? fali provera da ako ima termin u to vreme da ne moze, jel imas ti to?
                 if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
                     return new ResponseDto(400, "Appointment already reserved");
 
@@ -264,6 +280,9 @@ public class EquipmentCollectionAppointmentService {
 
             if(equipmentOverlap(newApp, company.get()))
                 return new ResponseDto(400, "Equipment reserved");
+
+            if(alreadyExistsForUser(companyid, userid, mapper.convertToDto(newApp)))
+                return new ResponseDto(400, "You already made a reservation for this time");
 
             if (user.isPresent() && company.isPresent()) {
 
@@ -431,23 +450,22 @@ public class EquipmentCollectionAppointmentService {
         }
     }
 
-    public ResponseDto approveAppointment(byte[] qr)
-    {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ResponseDto approveAppointment(byte[] qr) throws MessagingException {
         String appointment = qrService.readQRCode(qr);
-        //EquipmentCollectionAppointment{id=0, adminFirstname='Petar', status=RESERVED, user=null}
-        //String id = appointment.split("\\{",2)[1].split("=",1)[1];
         int id = extractId(appointment);
         if(id != -1)
         {
             Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(Long.valueOf(id));
-            app.get().setStatus(AppointmentStatus.DONE);
-            equipmentCollectionAppointmentRepository.save(app.get());
-            //todo pozvati mejl ovde
+            if(app.get().getStatus() == AppointmentStatus.RESERVED) {
+                mailService.sendCollectionMail(app.get().getUser().getId(), mapper.convertToDto(app.get()));
+                app.get().setStatus(AppointmentStatus.DONE);
+                update1(app.get());
+            }
             return new ResponseDto(200, "Appointment finished!");
         }
         else
             return new ResponseDto(200, "Invalid QR");
-        //pozvati djaju ovde (update)
     }
 
     public static int extractId(String input) {

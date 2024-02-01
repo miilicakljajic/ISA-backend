@@ -76,8 +76,7 @@ public class EquipmentCollectionAppointmentController {
         }
     }
     @PostMapping("/qrpickup")
-    public ResponseDto test(@RequestBody byte[] qrCode)
-    {
+    public ResponseDto test(@RequestBody byte[] qrCode) throws MessagingException {
         return service.approveAppointment(qrCode);
     }
 }
