@@ -206,8 +206,8 @@ public class EquipmentCollectionAppointmentService {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
-                    return new ResponseDto(400, "Appointment already reserved");
+                //if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
+                    //return new ResponseDto(400, "Appointment already reserved");
 
                 if(equipmentOverlap(updatedAppointment, comp.get()))
                     return new ResponseDto(400, "Equipment reserved");

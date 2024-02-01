@@ -15,8 +15,6 @@ import java.util.Optional;
 
 @Repository
 public interface EquipmentCollectionAppointmentRepository extends JpaRepository<EquipmentCollectionAppointment,Long> {
-    @Lock(LockModeType.OPTIMISTIC)
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public EquipmentCollectionAppointment save(EquipmentCollectionAppointment appointment);
     @Lock(LockModeType.PESSIMISTIC_READ)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
