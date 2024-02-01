@@ -20,5 +20,4 @@ public interface EquipmentCollectionAppointmentRepository extends JpaRepository<
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Optional<EquipmentCollectionAppointment> findById(@Param("id")Long id);
 
-
 }
