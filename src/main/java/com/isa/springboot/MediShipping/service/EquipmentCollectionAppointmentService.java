@@ -8,9 +8,12 @@ import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapp
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.*;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
+import org.hibernate.PessimisticLockException;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
@@ -39,13 +42,15 @@ public class EquipmentCollectionAppointmentService {
     @Autowired
     private OrderItemRepository orderItemRepository;
     @Autowired
-    MailService mailService;
+    private MailService mailService;
     @Autowired
-    AuthService authService;
+    private AuthService authService;
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
-    QrService qrService;
+    private CompanyMapper companyMapper;
+    @Autowired
+    private QrService qrService;
 
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
@@ -84,6 +89,21 @@ public class EquipmentCollectionAppointmentService {
         return false;
     }
 
+    private boolean alreadyExistsForUser(long companyId, long userId, EquipmentCollectionAppointmentDto dto){
+        Optional<Company> company = companyService.getCompanyById(companyId);
+
+        if(company.isPresent()){
+            for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
+                // && a.getAdminLastname().equals(dto.getAdminLastname()
+                if(a.getDate().equals(dto.date) && a.getUser().getId() == userId){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public boolean isTimeOverlaped(EquipmentCollectionAppointmentDto newApp,EquipmentCollectionAppointment existing){
         LocalDateTime newAppStart = newApp.getDate();
         LocalDateTime newAppEnd = newAppStart.plus(newApp.getDuration(), ChronoUnit.MINUTES);
@@ -94,17 +114,6 @@ public class EquipmentCollectionAppointmentService {
         return newAppEnd.isBefore(existingStart) && newAppStart.isAfter(existingEnd);
     }
 
-    public List<EquipmentCollectionAppointment> findByUser(long userId)
-    {
-        ArrayList<EquipmentCollectionAppointment> found = new ArrayList<EquipmentCollectionAppointment>();
-        for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll())
-        {
-            if(a.getUser() != null)
-                if(a.getUser().getId() == userId)
-                    found.add(a);
-        }
-        return found;
-    }
 
     private boolean equipmentOverlap(EquipmentCollectionAppointment newApp, Company comp)
     {
@@ -171,7 +180,12 @@ public class EquipmentCollectionAppointmentService {
 
         if(isValid && !alreadyExists && company.isPresent()) {
             appointment.setCompany(company.get());
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+            try {
+                return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+            }catch (OptimisticLockingFailureException | PessimisticLockException  ex){
+                System.out.println(ex.getMessage());
+                return null;
+            }
         }
         else{
             return null;
@@ -180,32 +194,40 @@ public class EquipmentCollectionAppointmentService {
 
     @Transactional
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
-        EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
-        Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
-        if(appointment.isPresent()){
-            if(appointment.get().getStatus() == AppointmentStatus.RESERVED){
+        try {
+            EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
+            Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
+
+            if (appointment.isEmpty() || appointment.get().getStatus() == AppointmentStatus.RESERVED)
                 return null;
-            }
-            Optional<Company> company = companyService.getCompanyById(companyId);
+
+            //Optional<Company> company = companyService.getCompanyById(companyId);
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
             appointment.get().setItems(updatedAppointment.getItems());
             appointment.get().setDate(updatedAppointment.getDate());
             appointment.get().setStatus(updatedAppointment.getStatus());
+            //appointment.get().setCompany(company.get());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
+
+        }catch (PessimisticLockException | OptimisticLockingFailureException ex){
+            System.out.println(ex.getMessage());
+            return null;
         }
-        return  null;
     }
 
+    @Transactional
     public void update1(EquipmentCollectionAppointment app)
     {
         equipmentCollectionAppointmentRepository.save(app);
     }
 
+    @Transactional
     public ResponseDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         Optional<Company> comp = companyService.getCompanyById(companyid);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
+
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
         Optional<User> user = authService.getUserById(userid);
         if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
@@ -218,7 +240,7 @@ public class EquipmentCollectionAppointmentService {
                     throw new RuntimeException(e);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
-                }
+                }//jel se nesto sjebalo? fali provera da ako ima termin u to vreme da ne moze, jel imas ti to?
                 if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
                     return new ResponseDto(400, "Appointment already reserved");
 
@@ -228,19 +250,22 @@ public class EquipmentCollectionAppointmentService {
                 appointment.get().setUser(user.get());
                 appointment.get().setCompany(comp.get());
                 appointment.get().setItems(updatedAppointment.getItems());
-                //update1(appointment.get());
 
-                equipmentCollectionAppointmentRepository.save(appointment.get());
+                update1(appointment.get());
+                updateCompanyEquipment(comp, updatedAppointment);
+                companyService.update(companyid,companyMapper.convertToCompanyDto(comp.get()));
+                //equipmentCollectionAppointmentRepository.save(appointment.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
+            } catch (PessimisticLockException | OptimisticLockingFailureException | MessagingException e) {
+                System.out.println(e.getMessage());
             }
             return new ResponseDto(200, "OK");
         }
         return new ResponseDto(400, "Unknown error");
     }
 
+    @Transactional
     public ResponseDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
@@ -255,6 +280,9 @@ public class EquipmentCollectionAppointmentService {
 
             if(equipmentOverlap(newApp, company.get()))
                 return new ResponseDto(400, "Equipment reserved");
+
+            if(alreadyExistsForUser(companyid, userid, mapper.convertToDto(newApp)))
+                return new ResponseDto(400, "You already made a reservation for this time");
 
             if (user.isPresent() && company.isPresent()) {
 
@@ -273,11 +301,13 @@ public class EquipmentCollectionAppointmentService {
 
                 newApp.setCompany(company.get());
                 newApp.setUser(user.get());
-                //companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
+                try{
+                updateCompanyEquipment(company, newApp);
+                companyService.update(companyid, companyMapper.convertToCompanyDto(company.get()));
                 equipmentCollectionAppointmentRepository.save(newApp);
-                try {
+
                     mailService.sendAppointmentMail(user.get().getEmail(), newApp);
-                } catch (MessagingException e) {
+                } catch (PessimisticLockException | OptimisticLockingFailureException |MessagingException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -295,6 +325,17 @@ public class EquipmentCollectionAppointmentService {
         equipmentCollectionAppointmentRepository.deleteById(id);
     }
 
+    public void updateCompanyEquipment(Optional<Company> comp, EquipmentCollectionAppointment app)
+    {
+        for(OrderItem newItem : app.getItems())
+        {
+            for(Equipment eq : comp.get().getEquipment())
+                if(newItem.getEquipmentId() == eq.getId() && ((eq.getCount() - newItem.getCount()) >= 0))
+                    eq.setCount(eq.getCount() - newItem.getCount());
+        }
+    }
+
+    @Transactional
     public  List<UserAppointmentDto> getUsersWithUpcomingAppointments(long companyId){
         Optional<Company> company = companyService.getCompanyById(companyId);
         List<UserAppointmentDto> usersWithAppointments = new ArrayList<UserAppointmentDto>();
@@ -379,7 +420,7 @@ public class EquipmentCollectionAppointmentService {
         }
     }
     
-    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(long id){
+    public List<EquipmentCollectionAppointment> getAppointmentsByCompany(Long id){
         ArrayList<EquipmentCollectionAppointment> list = new ArrayList<EquipmentCollectionAppointment>();
 
         for(EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll()){
@@ -390,6 +431,7 @@ public class EquipmentCollectionAppointmentService {
 
         return  list;
     }
+
     public void sendConfirmationMail(EquipmentCollectionAppointmentDto a) throws MessagingException {
         Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(a.getId());
         if (app.isPresent()) {
@@ -399,23 +441,34 @@ public class EquipmentCollectionAppointmentService {
         }
     }
 
-    public ResponseDto approveAppointment(byte[] qr)
-    {
+    public List<EquipmentCollectionAppointment> findByUser(long userId) {
+        ArrayList<EquipmentCollectionAppointment> found = new ArrayList<EquipmentCollectionAppointment>();
+        for (EquipmentCollectionAppointment a : equipmentCollectionAppointmentRepository.findAll()) {
+            if (a.getUser() != null)
+                if (a.getUser().getId() == userId)
+                    found.add(a);
+        }
+        return found;
+
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public ResponseDto approveAppointment(byte[] qr) throws MessagingException {
         String appointment = qrService.readQRCode(qr);
-        //EquipmentCollectionAppointment{id=0, adminFirstname='Petar', status=RESERVED, user=null}
-        //String id = appointment.split("\\{",2)[1].split("=",1)[1];
         int id = extractId(appointment);
         if(id != -1)
         {
             Optional<EquipmentCollectionAppointment> app = equipmentCollectionAppointmentRepository.findById(Long.valueOf(id));
-            app.get().setStatus(AppointmentStatus.DONE);
-            equipmentCollectionAppointmentRepository.save(app.get());
-            //todo pozvati mejl ovde
+            if(app.get().getStatus() == AppointmentStatus.RESERVED) {
+                mailService.sendCollectionMail(app.get().getUser().getId(), mapper.convertToDto(app.get()));
+                app.get().setStatus(AppointmentStatus.DONE);
+                update1(app.get());
+            }
             return new ResponseDto(200, "Appointment finished!");
         }
         else
             return new ResponseDto(200, "Invalid QR");
-        //pozvati djaju ovde (update)
     }
 
     public static int extractId(String input) {
