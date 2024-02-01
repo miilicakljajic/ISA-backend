@@ -16,11 +16,9 @@ import java.util.Optional;
 @Repository
 public interface EquipmentCollectionAppointmentRepository extends JpaRepository<EquipmentCollectionAppointment,Long> {
     public EquipmentCollectionAppointment save(EquipmentCollectionAppointment appointment);
-    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
     public Optional<EquipmentCollectionAppointment> findById(@Param("id")Long id);
 
-    /*@Lock(LockModeType.OPTIMISTIC)
-    @QueryHints({@QueryHint(name = "javax.persistence.lock.timeout",value = "0")})
-    public List<EquipmentCollectionAppointment> findAll();*/
+
 }

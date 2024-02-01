@@ -8,8 +8,10 @@ import com.isa.springboot.MediShipping.mapper.EquipmentCollectionAppointmentMapp
 import com.isa.springboot.MediShipping.mapper.UserMapper;
 import com.isa.springboot.MediShipping.repository.*;
 import com.isa.springboot.MediShipping.util.AppointmentStatus;
+import org.hibernate.PessimisticLockException;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,8 @@ public class EquipmentCollectionAppointmentService {
     AuthService authService;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CompanyMapper companyMapper;
 
     private String[] getCompanyWorkingHours(long id){
         Optional<Company> company = companyService.getCompanyById(id);
@@ -72,7 +76,8 @@ public class EquipmentCollectionAppointmentService {
             for (EquipmentCollectionAppointment a : getAppointmentsByCompany(companyId)){
                 // && a.getAdminLastname().equals(dto.getAdminLastname()
                 if(a.getDate().equals(dto.date)){
-                    return true;
+                    return true;//a gde je uradjeno za preklapajuce a to, nema preklapanja ako je fiksna duzina
+                    //tj svi su pokazi  u kody
                 }
             }
         }
@@ -193,6 +198,7 @@ public class EquipmentCollectionAppointmentService {
     public ResponseDto finalizeAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto){
         Optional<Company> comp = companyService.getCompanyById(companyid);
         EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
+
         Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
         Optional<User> user = authService.getUserById(userid);
         if(user.isPresent() && user.get().getPenaltyPoints() >= 3)
@@ -206,8 +212,8 @@ public class EquipmentCollectionAppointmentService {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                //if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
-                    //return new ResponseDto(400, "Appointment already reserved");
+                if(appointment.get().getStatus() != AppointmentStatus.AVAILABLE)
+                    return new ResponseDto(400, "Appointment already reserved");
 
                 if(equipmentOverlap(updatedAppointment, comp.get()))
                     return new ResponseDto(400, "Equipment reserved");
@@ -215,13 +221,15 @@ public class EquipmentCollectionAppointmentService {
                 appointment.get().setUser(user.get());
                 appointment.get().setCompany(comp.get());
                 appointment.get().setItems(updatedAppointment.getItems());
-                update1(appointment.get());
 
+                update1(appointment.get());
+                updateCompanyEquipment(comp, updatedAppointment);
+                companyService.update(companyid,companyMapper.convertToCompanyDto(comp.get()));
                 //equipmentCollectionAppointmentRepository.save(appointment.get());
                 mailService.sendAppointmentMail(user.get().getEmail(),updatedAppointment);
 
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
+            } catch (PessimisticLockException | OptimisticLockingFailureException | MessagingException e) {
+                System.out.println(e.getMessage());
             }
             return new ResponseDto(200, "OK");
         }
@@ -280,6 +288,16 @@ public class EquipmentCollectionAppointmentService {
 
     public void deleteById(long id){
         equipmentCollectionAppointmentRepository.deleteById(id);
+    }
+
+    public void updateCompanyEquipment(Optional<Company> comp, EquipmentCollectionAppointment app)
+    {
+        for(OrderItem newItem : app.getItems())
+        {
+            for(Equipment eq : comp.get().getEquipment())
+                if(newItem.getEquipmentId() == eq.getId() && ((eq.getCount() - newItem.getCount()) >= 0))
+                    eq.setCount(eq.getCount() - newItem.getCount());
+        }
     }
 
     @Transactional
