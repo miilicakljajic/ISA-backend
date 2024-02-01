@@ -161,7 +161,12 @@ public class EquipmentCollectionAppointmentService {
 
         if(isValid && !alreadyExists && company.isPresent()) {
             appointment.setCompany(company.get());
-            return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+            try {
+                return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment));
+            }catch (OptimisticLockingFailureException | PessimisticLockException  ex){
+                System.out.println(ex.getMessage());
+                return null;
+            }
         }
         else{
             return null;
@@ -170,12 +175,13 @@ public class EquipmentCollectionAppointmentService {
 
     @Transactional
     public EquipmentCollectionAppointmentDto update(EquipmentCollectionAppointmentDto equipmentCollectionAppointmentDto, long companyId){
-        EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
-        Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
-        if(appointment.isPresent()){
-            if(appointment.get().getStatus() == AppointmentStatus.RESERVED){
+        try {
+            EquipmentCollectionAppointment updatedAppointment = mapper.convertToEntity(equipmentCollectionAppointmentDto);
+            Optional<EquipmentCollectionAppointment> appointment = equipmentCollectionAppointmentRepository.findById(equipmentCollectionAppointmentDto.id);
+
+            if (appointment.isEmpty() || appointment.get().getStatus() == AppointmentStatus.RESERVED)
                 return null;
-            }
+
             Optional<Company> company = companyService.getCompanyById(companyId);
             appointment.get().setAdminFirstname(updatedAppointment.getAdminFirstname());
             appointment.get().setAdminLastname(updatedAppointment.getAdminLastname());
@@ -184,8 +190,11 @@ public class EquipmentCollectionAppointmentService {
             appointment.get().setStatus(updatedAppointment.getStatus());
 
             return mapper.convertToDto(equipmentCollectionAppointmentRepository.save(appointment.get()));
+
+        }catch (PessimisticLockException | OptimisticLockingFailureException ex){
+            System.out.println(ex.getMessage());
+            return null;
         }
-        return  null;
     }
 
     @Transactional
@@ -236,6 +245,7 @@ public class EquipmentCollectionAppointmentService {
         return new ResponseDto(400, "Unknown error");
     }
 
+    @Transactional
     public ResponseDto finalizeEmergencyAppointment(long companyid, long userid, EquipmentCollectionAppointmentDto dto)
     {
         EquipmentCollectionAppointment newApp = mapper.convertToEntity(dto);
@@ -268,11 +278,13 @@ public class EquipmentCollectionAppointmentService {
 
                 newApp.setCompany(company.get());
                 newApp.setUser(user.get());
-                //companyService.updateCompany(companyid, companyMapper.convertToCompanyDto(company.get()));
+                try{
+                updateCompanyEquipment(company, newApp);
+                companyService.update(companyid, companyMapper.convertToCompanyDto(company.get()));
                 equipmentCollectionAppointmentRepository.save(newApp);
-                try {
+
                     mailService.sendAppointmentMail(user.get().getEmail(), newApp);
-                } catch (MessagingException e) {
+                } catch (PessimisticLockException | OptimisticLockingFailureException |MessagingException e) {
                     throw new RuntimeException(e);
                 }
             }
